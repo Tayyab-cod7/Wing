@@ -644,7 +644,7 @@
     </script>
 
     <script>
-        const API_URL = 'http://69.62.119.91';
+        const API_URL = 'http://69.62.119.91:5000';
 
         // Check Authentication
         function checkAuth() {
@@ -771,4 +771,69 @@
                 `⚠️ Important Notice:\n\n` +
                 `You are about to purchase a Basic Package:\n` +
                 `💰 Investment Amount: Rs. ${amount}\n` +
-                `⏱️ Duration: 30 Days\n\n`
+                `⏱️ Duration: 30 Days\n\n` +
+                `Please note:\n` +
+                `• This is a one-time investment\n` +
+                `• Package will expire after 30 days\n` +
+                `• Investment amount is non-refundable\n\n` +
+                `Click OK to proceed with the purchase.`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${API_URL}/api/earnings/purchase`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        packageId,
+                        amount
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Reset timer state
+                    localStorage.removeItem('lastEarnTime');
+                    showSuccess('🎉 Congratulations! Package purchased successfully!\n\nRedirecting to earning page...');
+                    loadBalance(); // Refresh the balance display
+                    setTimeout(() => {
+                        window.location.href = 'earn.html';
+                    }, 2000);
+                } else {
+                    if (data.message && data.message.toLowerCase().includes('insufficient')) {
+                        showError('Insufficient balance. Redirecting to recharge page...');
+                        setTimeout(() => {
+                            window.location.href = 'recharge.html';
+                        }, 2000);
+                    } else {
+                        showError(data.message || 'Failed to purchase package');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error purchasing package');
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!checkAuth()) return;
+            
+            // Load initial balance and package status
+            loadBalance();
+            
+            // Refresh balance and package status every 30 seconds
+            setInterval(loadBalance, 30000);
+        });
+    </script>
+</body>
+
+</html>

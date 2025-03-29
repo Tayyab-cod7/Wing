@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // API Base URL
-    const API_URL = 'http://localhost:5000';
+    const API_URL = 'http://69.62.119.91:5000';
 
     // Input validation functions
     const validatePhoneNumber = (phone) => {

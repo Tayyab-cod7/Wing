@@ -20,7 +20,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS
-app.use(cors());
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.indexOf('*') !== -1) {
+      return callback(null, true);
+    }
+    console.log('Origin blocked by CORS:', origin);
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true
+}));
 
 // Request logging middleware
 app.use((req, res, next) => {

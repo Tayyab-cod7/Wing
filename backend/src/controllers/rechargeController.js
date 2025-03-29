@@ -62,13 +62,16 @@ exports.submitRechargeRequest = async (req, res) => {
                 });
             }
 
+            // Store only the relative path to the uploads directory
+            const relativeImagePath = `uploads/receipts/${path.basename(req.file.path)}`;
+
             const recharge = new Recharge({
                 requestId,
                 userId: req.user.id,
                 amount,
                 paymentMethod,
                 tid,
-                receiptImage: req.file.path,
+                receiptImage: relativeImagePath,
                 receiptUploadDate: new Date()
             });
 
@@ -98,6 +101,7 @@ exports.getMyRechargeRecords = async (req, res) => {
         const rechargesWithUrls = recharges.map(recharge => {
             const rechargeObj = recharge.toObject();
             if (rechargeObj.receiptImage) {
+                // Make sure the path is correctly formed with the host
                 rechargeObj.receiptImage = `${req.protocol}://${req.get('host')}/${rechargeObj.receiptImage}`;
             }
             return rechargeObj;
@@ -127,6 +131,7 @@ exports.getAllRechargeRequests = async (req, res) => {
         const rechargesWithUrls = recharges.map(recharge => {
             const rechargeObj = recharge.toObject();
             if (rechargeObj.receiptImage) {
+                // Make sure the path is correctly formed with the host
                 rechargeObj.receiptImage = `${req.protocol}://${req.get('host')}/${rechargeObj.receiptImage}`;
             }
             return rechargeObj;
@@ -218,6 +223,7 @@ exports.deleteRechargeRequest = async (req, res) => {
         // Delete the receipt image file if it exists
         if (recharge.receiptImage) {
             try {
+                // Ensure we're using the correct path relative to the backend directory
                 const imagePath = path.join(__dirname, '../../', recharge.receiptImage);
                 console.log('Attempting to delete file at path:', imagePath);
                 if (fs.existsSync(imagePath)) {
@@ -250,7 +256,7 @@ exports.deleteRechargeRequest = async (req, res) => {
         console.error('Detailed error in deleteRechargeRequest:', error);
         res.status(500).json({
             success: false,
-            error: `Error deleting recharge request: ${error.message}`
+            error: 'Server error: Failed to delete recharge request'
         });
     }
 }; 

@@ -301,6 +301,16 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
+        .message-visible {
+            display: block !important;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translate(-50%, -20px); }
+            100% { opacity: 1; transform: translate(-50%, 0); }
+        }
+
         .error-message {
             background: #f44336;
         }
@@ -667,9 +677,15 @@
             errorDiv.textContent = message;
             errorDiv.classList.add('message-visible');
             
+            // If it's the insufficient balance message, keep it visible longer
+            // until redirect happens
+            if (message.includes('Insufficient balance')) {
+                return; // Don't auto-hide this specific message
+            }
+            
             setTimeout(() => {
                 errorDiv.classList.remove('message-visible');
-            }, 3000);
+            }, 5000); // Increased from 3000 to 5000 ms for other messages
         }
 
         // Show Success Message
@@ -812,7 +828,7 @@
                         showError('Insufficient balance. Redirecting to recharge page...');
                         setTimeout(() => {
                             window.location.href = 'recharge.html';
-                        }, 2000);
+                        }, 3000);
                     } else {
                         showError(data.message || 'Failed to purchase package');
                     }

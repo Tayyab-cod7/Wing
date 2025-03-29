@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - Recharge Records | Track Your Investment History</title>
+    <meta name="description" content="View and track your Wing System recharge history. Access detailed records of all your investment recharges, including status, amounts, and transaction details.">
+    <meta name="keywords" content="wing system recharge records, recharge history, investment history, recharge status, online investment pakistan, recharge tracking">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Wing System - Recharge Records | Investment History">
+    <meta property="og:description" content="Track your recharge history with Wing System. View detailed records of all your investment recharges and their current status.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/recharge-record.html">
+    <meta property="og:image" content="/images/wing-system-recharge-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - Recharge Records | Investment History">
+    <meta name="twitter:description" content="Track your recharge history with Wing System. View detailed records of all your investment recharges and their current status.">
+    <meta name="twitter:image" content="/images/wing-system-recharge-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/recharge-record.html">
+    <meta name="theme-color" content="#2196F3">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="recharge-record.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            background-color: #8BC34A;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-title {
+            flex-grow: 1;
+            text-align: center;
+            margin-right: 40px; /* To offset the back button width */
+        }
+
+        .content {
+            margin-top: 60px;
+            padding: 15px;
+        }
+
+        .recharge-item {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .order-number {
+            background-color: #8BC34A;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin: -15px -15px 15px -15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #666;
+        }
+
+        .value {
+            font-weight: bold;
+        }
+
+        .value.amount {
+            color: #E53935;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .status.pending {
+            background-color: #FFF3E0;
+            color: #FF9800;
+        }
+
+        .status.approved {
+            background-color: #E8F5E9;
+            color: #4CAF50;
+        }
+
+        .status.rejected {
+            background-color: #fce4ec;
+            color: #d81b60;
+            border-radius: 15px;
+            padding: 5px 15px;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item.active {
+            color: #8BC34A;
+        }
+
+        .no-records {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .receipt-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .receipt-preview:hover {
+            transform: scale(1.05);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 10px;
+            z-index: 1001;
+        }
+
+        /* Make receipt images clickable */
+        .receipt-image {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .receipt-image:hover {
+            transform: scale(1.05);
+        }
+
+        /* Add responsive styles */
+        @media screen and (max-width: 768px) {
+            .header {
+                padding: 12px;
+            }
+
+            .header-title {
+                font-size: 1.2rem;
+            }
+
+            .content {
+                margin-top: 55px;
+                padding: 10px;
+                padding-bottom: 70px; /* Space for bottom nav */
+            }
+
+            .recharge-item {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .order-number {
+                padding: 8px;
+                margin: -12px -12px 12px -12px;
+                font-size: 0.9rem;
+            }
+
+            .detail-row {
+                padding: 4px 0;
+                margin-bottom: 8px;
+                font-size: 0.9rem;
+            }
+
+            .status {
+                padding: 4px 12px;
+                font-size: 0.8rem;
+            }
+
+            .bottom-nav {
+                padding: 8px 5px;
+            }
+
+            .nav-item {
+                font-size: 11px;
+            }
+
+            .nav-item i {
+                font-size: 18px;
+                margin-bottom: 3px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .header {
+                padding: 10px;
+            }
+
+            .header-title {
+                font-size: 1.1rem;
+                margin-right: 30px;
+            }
+
+            .back-button {
+                font-size: 14px;
+                padding: 4px 8px;
+            }
+
+            .content {
+                margin-top: 50px;
+                padding: 8px;
+            }
+
+            .recharge-item {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+
+            .order-number {
+                padding: 7px;
+                margin: -10px -10px 10px -10px;
+                font-size: 0.85rem;
+            }
+
+            .detail-row {
+                padding: 3px 0;
+                margin-bottom: 6px;
+                font-size: 0.85rem;
+            }
+
+            .label {
+                font-size: 0.85rem;
+            }
+
+            .value {
+                font-size: 0.85rem;
+            }
+
+            .value.amount {
+                font-size: 0.9rem;
+            }
+
+            .status {
+                padding: 3px 10px;
+                font-size: 0.75rem;
+            }
+
+            .receipt-preview {
+                width: 80px;
+                height: 80px;
+            }
+
+            .bottom-nav {
+                padding: 6px 3px;
+            }
+
+            .nav-item {
+                font-size: 10px;
+            }
+
+            .nav-item i {
+                font-size: 16px;
+                margin-bottom: 2px;
+            }
+
+            .no-records {
+                padding: 20px;
+            }
+
+            .no-records i {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+
+            .no-records p {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Ensure modal works well on mobile */
+        @media screen and (max-width: 768px) {
+            .modal {
+                padding: 10px;
+            }
+
+            .close-modal {
+                top: 5px;
+                right: 5px;
+                font-size: 24px;
+                padding: 8px;
+            }
+        }
+
+        /* Mobile Responsiveness Enhancements */
+        @media (max-width: 768px) {
+            .recharge-container {
+                padding: 15px;
+            }
+
+            .recharge-card {
+                padding: 15px;
+            }
+
+            .recharge-title {
+                font-size: 1.5rem;
+            }
+
+            .recharge-table {
+                font-size: 0.9rem;
+            }
+
+            .recharge-table th,
+            .recharge-table td {
+                padding: 8px;
+            }
+
+            .recharge-table th {
+                font-size: 0.85rem;
+            }
+
+            .status-badge {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
+
+            .action-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .recharge-container {
+                padding: 10px;
+            }
+
+            .recharge-card {
+                padding: 10px;
+            }
+
+            .recharge-title {
+                font-size: 1.3rem;
+            }
+
+            .recharge-table {
+                font-size: 0.85rem;
+            }
+
+            .recharge-table th,
+            .recharge-table td {
+                padding: 6px;
+            }
+
+            .recharge-table th {
+                font-size: 0.8rem;
+            }
+
+            .status-badge {
+                padding: 3px 6px;
+                font-size: 0.75rem;
+            }
+
+            .action-btn {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
+
+            .recharge-table td:nth-child(3),
+            .recharge-table th:nth-child(3) {
+                display: none;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .bottom-nav {
+                display: none !important;
+            }
+
+            .recharge-card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+
+            .recharge-table {
+                border-collapse: collapse;
+            }
+
+            .recharge-table th,
+            .recharge-table td {
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="back-button" onclick="history.back()">
+            <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <h2 class="header-title">Recharge Record</h2>
+    </div>
+
+    <div class="content" id="rechargeRecords">
+        <!-- Records will be loaded here -->
+    </div>
+
+    <!-- Keep only one modal -->
+    <div class="modal" id="receiptModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <img id="modalImage" class="modal-image" src="" alt="Receipt preview">
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="basic.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-coins"></i>
+            <span>Earn</span>
+        </a>
+        <a class="nav-item" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Referral</span>
+        </a>
+        <a class="nav-item" href="profile.html">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Structured Data for Recharge Records Page -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Wing System Recharge Records",
+        "description": "Track and view your recharge history with Wing System",
+        "mainEntity": {
+            "@type": "Table",
+            "name": "Recharge History",
+            "description": "Detailed records of all recharge requests and their status",
+            "about": {
+                "@type": "Thing",
+                "name": "Recharge Transactions",
+                "description": "History of recharge requests and their processing status"
+            }
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How can I track my recharge requests?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can track your recharge requests through the recharge records page, which shows all your recharge history including request ID, amount, status, and processing details."
+            }
+        },{
+            "@type": "Question",
+            "name": "What do the different recharge statuses mean?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Recharge statuses include: Pending (under review), Approved (processed), and Rejected (declined). Each status indicates the current state of your recharge request."
+            }
+        },{
+            "@type": "Question",
+            "name": "How long does recharge processing take?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Recharge processing typically takes 24-48 hours after approval. The exact time may vary depending on the payment method and verification requirements."
+            }
+        },{
+            "@type": "Question",
+            "name": "Can I cancel a recharge request?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Recharge requests can only be cancelled if they are in 'Pending' status. Once approved or rejected, the request cannot be cancelled."
+            }
+        }]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "http://localhost:5000/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Dashboard",
+            "item": "http://localhost:5000/dashboard"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Recharge Records",
+            "item": "http://localhost:5000/recharge-record.html"
+        }]
+    }
+    </script>
+
+    <script>
+        // Initialize modal elements
+        const modal = document.getElementById('receiptModal');
+        const modalImage = document.getElementById('modalImage');
+        const closeModalBtn = document.querySelector('.close-modal');
+
+        // Function to open modal with image
+        function openModal(imageSrc) {
+            if (!imageSrc) return;
+            
+            // Decode the image URL if it's encoded
+            const decodedSrc = decodeURIComponent(imageSrc);
+            
+            // Set the image source
+            modalImage.src = decodedSrc;
+            
+            // Show the modal
+            modal.style.display = 'block';
+            
+            // Add click event to close modal when clicking outside the image
+            modal.onclick = function(e) {
+                if (e.target === modal || e.target === closeModalBtn) {
+                    closeModal();
+                }
+            };
+        }
+
+        // Function to close modal
+        function closeModal() {
+            modal.style.display = 'none';
+            modalImage.src = '';
+        }
+
+        // Close modal when clicking close button
+        closeModalBtn.addEventListener('click', closeModal);
+
+        async function loadRechargeRecords() {
+            const recordsContainer = document.getElementById('rechargeRecords');
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/recharge/my-records', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Error fetching recharge records');
+                }
+
+                const recharges = result.data;
+
+                if (recharges.length === 0) {
+                    recordsContainer.innerHTML = `
+                        <div class="no-records">
+                            <i class="fas fa-history fa-3x" style="color: #ccc; margin-bottom: 15px;"></i>
+                            <p>No recharge records found</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                recordsContainer.innerHTML = recharges.map(record => `
+                    <div class="recharge-item">
+                        <div class="order-number">
+                            Request ID: ${record.requestId}
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Amount</span>
+                            <span class="value amount">Rs. ${record.amount}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Payment Method</span>
+                            <span class="value">${record.paymentMethod}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Status</span>
+                            <span class="status ${record.status.toLowerCase()}">
+                                ${record.status}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">TID</span>
+                            <span class="value">${record.tid}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Date</span>
+                            <span class="value">${new Date(record.createdAt).toLocaleString()}</span>
+                        </div>
+                        ${record.receiptImage ? `
+                            <div class="detail-row">
+                                <span class="label">Receipt</span>
+                                <span class="value">
+                                    <img src="${record.receiptImage}" 
+                                         alt="Receipt" 
+                                         class="receipt-preview"
+                                         onclick="openModal('${encodeURIComponent(record.receiptImage)}')">
+                                </span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error:', error);
+                recordsContainer.innerHTML = `
+                    <div class="no-records">
+                        <i class="fas fa-exclamation-circle fa-3x" style="color: #dc3545; margin-bottom: 15px;"></i>
+                        <p>Error loading recharge records</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Load records when page loads
+        document.addEventListener('DOMContentLoaded', loadRechargeRecords);
+    </script>
+</body>
+</html> 

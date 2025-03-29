@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - Referral Program | Earn Extra Income by Inviting Friends</title>
+    <meta name="description" content="Join Wing System's lucrative referral program. Earn 10% commission on your referrals' investments. Invite friends, share your unique referral link, and boost your earnings with our trusted investment platform.">
+    <meta name="keywords" content="wing system referral program, referral earnings, invite friends, commission earnings, investment referral, online earning pakistan, referral bonus">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Wing System - Referral Program | Earn Extra Income">
+    <meta property="og:description" content="Earn 10% commission on every investment your referrals make. Share your unique referral link and start earning extra income with Wing System's trusted referral program.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/refferal.html">
+    <meta property="og:image" content="/images/wing-system-referral-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - Referral Program | Earn Extra Income">
+    <meta name="twitter:description" content="Earn 10% commission on every investment your referrals make. Share your unique referral link and start earning extra income with Wing System's trusted referral program.">
+    <meta name="twitter:image" content="/images/wing-system-referral-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/refferal.html">
+    <meta name="theme-color" content="#2196F3">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="refferal.css">
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --primary-dark: #1976D2;
+            --primary-light: #e3f2fd;
+            --text-dark: #424242;
+            --text-light: #666;
+            --white: #ffffff;
+            --border-color: #e0e0e0;
+            --success-color: #4CAF50;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s ease;
+        }
+
+        .referral-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .referral-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .referral-box:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .referral-title {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .referral-code-container {
+            display: flex;
+            align-items: center;
+            background: var(--primary-light);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            gap: 15px;
+            transition: var(--transition);
+        }
+
+        .referral-code-container:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .referral-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            min-width: 120px;
+            font-size: 1.1rem;
+        }
+
+        .referral-code {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--primary-dark);
+            letter-spacing: 1px;
+            flex-grow: 1;
+            word-break: break-all;
+            background: var(--white);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .copy-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+
+        .referral-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            background: linear-gradient(145deg, var(--white), var(--primary-light));
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            background: -webkit-linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-text {
+            text-align: center;
+            color: var(--text-dark);
+            margin: 30px 0;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            padding: 20px;
+            background: var(--primary-light);
+            border-radius: 15px;
+            border: 2px dashed var(--primary-color);
+        }
+
+        .success-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success-color);
+            color: var(--white);
+            padding: 15px 30px;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translate(-50%, -100%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .referral-container {
+                max-width: 700px;
+            }
+
+            .referral-box {
+                padding: 25px;
+            }
+
+            .referral-title {
+                font-size: 1.8rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .referral-container {
+                padding: 15px;
+                margin: 10px auto;
+            }
+
+            .referral-box {
+                padding: 20px;
+                border-radius: 15px;
+            }
+
+            .referral-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .referral-code-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 15px;
+                gap: 10px;
+            }
+
+            .referral-label {
+                min-width: auto;
+                margin-bottom: 5px;
+                font-size: 1rem;
+            }
+
+            .referral-code {
+                font-size: 0.95rem;
+                padding: 8px 12px;
+                word-break: break-all;
+            }
+
+            .copy-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            .referral-stats {
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .stat-box {
+                padding: 20px 15px;
+            }
+
+            .stat-number {
+                font-size: 1.8rem;
+            }
+
+            .stat-label {
+                font-size: 0.9rem;
+            }
+
+            .info-text {
+                font-size: 0.95rem;
+                padding: 15px;
+                margin: 20px 0;
+                line-height: 1.5;
+            }
+
+            .success-message {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+                max-width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .referral-container {
+                padding: 10px;
+                margin: 5px auto;
+            }
+
+            .referral-box {
+                padding: 15px;
+                border-radius: 12px;
+            }
+
+            .referral-title {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .referral-code-container {
+                padding: 12px;
+                gap: 8px;
+            }
+
+            .referral-label {
+                font-size: 0.9rem;
+            }
+
+            .referral-code {
+                font-size: 0.9rem;
+                padding: 8px 10px;
+            }
+
+            .copy-btn {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+
+            .copy-btn i {
+                font-size: 0.9rem;
+            }
+
+            .referral-stats {
+                gap: 10px;
+                margin-top: 15px;
+            }
+
+            .stat-box {
+                padding: 15px 10px;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+                letter-spacing: 0.3px;
+            }
+
+            .info-text {
+                font-size: 0.9rem;
+                padding: 12px;
+                margin: 15px 0;
+                border-width: 1px;
+            }
+
+            .success-message {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+                border-radius: 8px;
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) {
+            .referral-box:hover {
+                transform: none;
+            }
+
+            .referral-code-container:hover {
+                transform: none;
+            }
+
+            .copy-btn:active {
+                transform: scale(0.98);
+            }
+
+            .stat-box:hover {
+                transform: none;
+            }
+        }
+
+        /* Height-based adjustments */
+        @media (max-height: 600px) {
+            .referral-container {
+                margin: 10px auto;
+            }
+
+            .referral-box {
+                padding: 15px;
+            }
+
+            .referral-title {
+                margin-bottom: 15px;
+            }
+
+            .referral-stats {
+                margin-top: 15px;
+            }
+
+            .info-text {
+                margin: 15px 0;
+                padding: 12px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .bottom-nav,
+            .copy-btn,
+            .success-message {
+                display: none !important;
+            }
+
+            .referral-box {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+
+            .referral-code-container {
+                background: #f5f5f5;
+            }
+
+            .stat-box {
+                border: 1px solid #ccc;
+                background: #f5f5f5;
+            }
+
+            .info-text {
+                border: 1px dashed #666;
+                background: #f5f5f5;
+            }
+        }
+
+        .team-members {
+            margin-top: 20px;
+        }
+
+        .team-member {
+            background: var(--primary-light);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .team-member:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .member-info {
+            flex-grow: 1;
+        }
+
+        .member-id {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .member-status {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .member-earnings {
+            background: var(--success-color);
+            color: var(--white);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .team-member {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .member-earnings {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="successMessage" class="success-message"></div>
+
+    <main class="content">
+        <div class="referral-container">
+            <div class="referral-box">
+                <h2 class="referral-title">Your Referral Details</h2>
+                <div class="referral-code-container">
+                    <div class="referral-label">Referral Code:</div>
+                    <span id="referralCode" class="referral-code">Loading...</span>
+                    <button onclick="copyReferralCode()" class="copy-btn">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                <div class="referral-code-container">
+                    <div class="referral-label">Referral Link:</div>
+                    <span id="referralLink" class="referral-code">Loading...</span>
+                    <button onclick="copyReferralLink()" class="copy-btn">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                <p class="info-text">
+                    Share your referral code or link with friends and earn 10 % of each investment of your refferal ! 
+                </p>
+                <div class="referral-stats">
+                    <div class="stat-box">
+                        <div id="totalReferrals" class="stat-number">0</div>
+                        <div class="stat-label">Total Referrals</div>
+                    </div>
+                    <div class="stat-box">
+                        <div id="referralEarnings" class="stat-number">RS 0</div>
+                        <div class="stat-label">Referral Earnings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 📌 Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="basic.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-coins"></i>
+            <span>Earn</span>
+        </a>
+        <a class="nav-item active" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Referral</span>
+        </a>
+        <a class="nav-item" href="profile.html">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Structured Data for Referral Program -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Wing System Referral Program",
+        "description": "Earn 10% commission on your referrals' investments with Wing System's lucrative referral program",
+        "mainEntity": {
+            "@type": "Program",
+            "name": "Wing System Referral Program",
+            "description": "Earn commission by inviting friends to invest in Wing System",
+            "offers": {
+                "@type": "Offer",
+                "description": "10% commission on all investments made by your referrals"
+            },
+            "termsOfService": "http://localhost:5000/terms.html"
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Earn Through Referrals",
+        "description": "Simple steps to start earning through Wing System's referral program",
+        "step": [
+            {
+                "@type": "HowToStep",
+                "name": "Get Your Referral Link",
+                "text": "Copy your unique referral link from your dashboard"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Share With Friends",
+                "text": "Share your referral link with friends and family"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Track Referrals",
+                "text": "Monitor your referrals and their investment status"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Earn Commission",
+                "text": "Receive 10% commission on your referrals' investments"
+            }
+        ],
+        "totalTime": "PT2M"
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How much commission do I earn on referrals?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You earn 10% commission on all investments made by your referrals."
+            }
+        },{
+            "@type": "Question",
+            "name": "How do I track my referral earnings?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can track your referral earnings in real-time through your dashboard, which shows total earnings, active referrals, and pending commissions."
+            }
+        },{
+            "@type": "Question",
+            "name": "When do I receive my referral commission?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Commission is credited to your account balance immediately after your referral makes an investment."
+            }
+        },{
+            "@type": "Question",
+            "name": "Is there a limit to how many referrals I can have?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, there is no limit to the number of referrals you can have. The more referrals you bring, the more you can earn."
+            }
+        }]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "http://localhost:5000/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Dashboard",
+            "item": "http://localhost:5000/dashboard"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Referral Program",
+            "item": "http://localhost:5000/refferal.html"
+        }]
+    }
+    </script>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+
+        // Check if server is available
+        async function checkServer() {
+            try {
+                const response = await fetch(`${API_URL}/api`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                return data && data.message === 'API is running';
+            } catch (error) {
+                console.error('Server check failed:', error);
+                return false;
+            }
+        }
+
+        // Check Authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Show Error Message
+        function showError(message) {
+            document.getElementById('referralCode').textContent = 'Error: ' + message;
+            document.getElementById('referralLink').textContent = 'Error: ' + message;
+            document.getElementById('totalReferrals').textContent = '0';
+            document.getElementById('referralEarnings').textContent = 'RS 0';
+        }
+
+        // Show Success Message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Load Referral Data
+        async function loadReferralData() {
+            if (!checkAuth()) return;
+
+            const token = localStorage.getItem('token');
+            
+            try {
+                // Get user profile data
+                const profileResponse = await fetch(`${API_URL}/api/auth/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!profileResponse.ok) {
+                    if (profileResponse.status === 401) {
+                        localStorage.clear();
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    throw new Error('Failed to load profile data');
+                }
+
+                const profileData = await profileResponse.json();
+
+                if (!profileData.success) {
+                    throw new Error(profileData.error || 'Failed to load profile data');
+                }
+
+                // Update referral code and link
+                const referralCode = profileData.data?.referralCode || 'Not available';
+                document.getElementById('referralCode').textContent = referralCode;
+                document.getElementById('referralLink').textContent = `${window.location.origin}/index.html?ref=${referralCode}`;
+
+                // Get earnings data
+                const earningsResponse = await fetch(`${API_URL}/api/earnings`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!earningsResponse.ok) {
+                    throw new Error('Failed to load earnings data');
+                }
+
+                const earningsData = await earningsResponse.json();
+
+                // Update UI with combined data
+                if (earningsData.success) {
+                    // Update total referrals count from profile data
+                    const totalReferrals = profileData.data?.referralCount || 0;
+                    document.getElementById('totalReferrals').textContent = totalReferrals;
+                    
+                    // Update total earnings from referrals
+                    const referralEarnings = profileData.data?.referralEarnings || 0;
+                    document.getElementById('referralEarnings').textContent = `RS ${referralEarnings}`;
+
+                    // Get referrals list
+                    const referrals = profileData.data?.referrals || [];
+                    
+                    // Remove any existing team container
+                    const existingTeamContainer = document.querySelector('.referral-box.team-container');
+                    if (existingTeamContainer) {
+                        existingTeamContainer.remove();
+                    }
+
+                    // If there are referrals in profile data, display them
+                    if (referrals.length > 0) {
+                        const teamContainer = document.createElement('div');
+                        teamContainer.className = 'referral-box team-container';
+                        teamContainer.innerHTML = `
+                            <h2 class="referral-title">Your Team Members</h2>
+                            <div class="team-members">
+                                ${referrals.map(member => {
+                                    return `
+                                        <div class="team-member">
+                                            <div class="member-info">
+                                                <div class="member-id">${member.phone}</div>
+                                                <div class="member-status">
+                                                    Package: ${member.activePackage || 'No Active Package'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        `;
+                        document.querySelector('.referral-container').appendChild(teamContainer);
+                    }
+                }
+
+                // Log the data to help debug
+                console.log('Profile Data:', profileData);
+                console.log('Earnings Data:', earningsData);
+
+            } catch (error) {
+                console.error('Error loading referral data:', error);
+                showError(error.message || 'Failed to load data');
+            }
+        }
+
+        // Helper function to get package amount
+        function getPackageAmount(packageName) {
+            const packageAmounts = {
+                'basic1': 500,
+                'basic2': 1000,
+                'basic3': 2000,
+                'pro1': 3000,
+                'pro2': 5000,
+                'pro3': 7500,
+                'premium1': 10000,
+                'premium2': 15000,
+                'premium3': 20000
+            };
+            return packageAmounts[packageName.toLowerCase()] || 0;
+        }
+
+        // Copy Referral Code
+        function copyReferralCode() {
+            const referralCode = document.getElementById('referralCode').textContent;
+            if (referralCode.startsWith('Error:') || referralCode === 'Loading...') {
+                return;
+            }
+            navigator.clipboard.writeText(referralCode)
+                .then(() => {
+                    showSuccess('Referral code copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+        }
+
+        // Copy Referral Link
+        function copyReferralLink() {
+            const referralLink = document.getElementById('referralLink').textContent;
+            if (referralLink.startsWith('Error:') || referralLink === 'Loading...') {
+                return;
+            }
+            navigator.clipboard.writeText(referralLink)
+                .then(() => {
+                    showSuccess('Referral link copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+        }
+
+        // Add auto-refresh functionality
+        setInterval(loadReferralData, 30000); // Refresh every 30 seconds
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadReferralData);
+
+        function generateReferralCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+    </script>
+</body>
+</html> 

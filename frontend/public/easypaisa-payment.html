@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - EasyPaisa Payment | Secure Mobile Wallet Recharge</title>
+    <meta name="description" content="Complete your Wing System recharge using EasyPaisa. Secure mobile wallet payment with instant processing. Follow simple steps to recharge your investment account.">
+    <meta name="keywords" content="wing system easypaisa payment, easypaisa recharge, mobile wallet payment, secure investment recharge, easypaisa transfer">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Wing System - EasyPaisa Payment | Secure Mobile Wallet Recharge">
+    <meta property="og:description" content="Complete your Wing System recharge using EasyPaisa. Secure mobile wallet payment with instant processing. Follow simple steps to recharge your investment account.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/easypaisa-payment.html">
+    <meta property="og:image" content="/images/wing-system-easypaisa-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - EasyPaisa Payment | Secure Mobile Wallet Recharge">
+    <meta name="twitter:description" content="Complete your Wing System recharge using EasyPaisa. Secure mobile wallet payment with instant processing. Follow simple steps to recharge your investment account.">
+    <meta name="twitter:image" content="/images/wing-system-easypaisa-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/easypaisa-payment.html">
+    <meta name="theme-color" content="#2196F3">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="easypaisa-payment.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        .header {
+            background-color: #2E7D32;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iMjAwIj48cGF0aCBkPSJNMCwxMDBjMTUwLDAsNTAsLTEwMCwyMDAsLTEwMHM1MCwxMDAsMjAwLDEwMHM1MCwtMTAwLDIwMCwtMTAwczUwLDEwMCwyMDAsMTAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmY0IiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=');
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 40px 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            padding: 5px;
+        }
+
+        .logo span {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .account-error {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #FFA500;
+        }
+
+        .warning-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: -20px 15px 0;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .warning-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .warning-header i {
+            color: #dc3545;
+        }
+
+        .warning-text {
+            color: #dc3545;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .payment-details {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #666;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .countdown {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .tid-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .upload-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .upload-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .upload-btn:hover {
+            border-color: #2E7D32;
+            color: #2E7D32;
+        }
+
+        .receipt-preview {
+            max-width: 150px;
+            max-height: 150px;
+            margin-top: 15px;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            object-fit: cover;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #2E7D32;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .confirm-btn:hover {
+            background-color: #1B5E20;
+        }
+
+        .copy-icon {
+            color: #2E7D32;
+            cursor: pointer;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 10px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        /* Message styles */
+        .message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 25px;
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            display: none;
+            z-index: 1000;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .success {
+            background-color: #4CAF50;
+        }
+
+        .error {
+            background-color: #dc3545;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translate(-50%, -100%);
+            }
+            to {
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Add responsive styles */
+        @media screen and (max-width: 768px) {
+            .header {
+                padding: 12px;
+            }
+
+            .header-title {
+                font-size: 1.2rem;
+            }
+
+            .content {
+                margin-top: 55px;
+                padding: 10px;
+                padding-bottom: 70px;
+            }
+
+            .payment-card {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .amount-display {
+                font-size: 1.8rem;
+                padding: 15px;
+            }
+
+            .payment-instructions {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            .payment-instructions h3 {
+                font-size: 1rem;
+                margin-bottom: 8px;
+            }
+
+            .payment-instructions p {
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+            }
+
+            .payment-instructions ul {
+                padding-left: 15px;
+            }
+
+            .payment-instructions li {
+                font-size: 0.9rem;
+                margin-bottom: 5px;
+            }
+
+            .tid-input {
+                padding: 10px;
+                font-size: 0.95rem;
+                margin-bottom: 15px;
+            }
+
+            .upload-section {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            .upload-btn {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .upload-btn i {
+                font-size: 1.1rem;
+                margin-right: 5px;
+            }
+
+            .receipt-preview {
+                max-width: 200px;
+                margin-top: 10px;
+            }
+
+            .confirm-btn {
+                padding: 12px;
+                font-size: 1rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .header {
+                padding: 10px;
+            }
+
+            .header-title {
+                font-size: 1.1rem;
+                margin-right: 30px;
+            }
+
+            .back-button {
+                font-size: 14px;
+                padding: 4px 8px;
+            }
+
+            .content {
+                margin-top: 50px;
+                padding: 8px;
+            }
+
+            .payment-card {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+
+            .amount-display {
+                font-size: 1.6rem;
+                padding: 12px;
+            }
+
+            .payment-instructions {
+                padding: 10px;
+                margin-bottom: 12px;
+            }
+
+            .payment-instructions h3 {
+                font-size: 0.95rem;
+                margin-bottom: 6px;
+            }
+
+            .payment-instructions p {
+                font-size: 0.85rem;
+                margin-bottom: 6px;
+            }
+
+            .payment-instructions ul {
+                padding-left: 12px;
+            }
+
+            .payment-instructions li {
+                font-size: 0.85rem;
+                margin-bottom: 4px;
+            }
+
+            .tid-input {
+                padding: 8px;
+                font-size: 0.9rem;
+                margin-bottom: 12px;
+            }
+
+            .upload-section {
+                padding: 10px;
+                margin-bottom: 12px;
+            }
+
+            .upload-btn {
+                padding: 8px;
+                font-size: 0.85rem;
+            }
+
+            .upload-btn i {
+                font-size: 1rem;
+                margin-right: 4px;
+            }
+
+            .receipt-preview {
+                max-width: 150px;
+                margin-top: 8px;
+            }
+
+            .confirm-btn {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            /* Modal adjustments for mobile */
+            .modal {
+                padding: 10px;
+            }
+
+            .modal-content {
+                padding: 10px;
+            }
+
+            .close-modal {
+                top: 5px;
+                right: 5px;
+                font-size: 24px;
+                padding: 8px;
+            }
+
+            .modal-image {
+                max-width: 100%;
+                max-height: 80vh;
+            }
+        }
+
+        /* Ensure bottom spacing on mobile */
+        @media screen and (max-height: 700px) {
+            .content {
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Mobile Responsiveness Enhancements */
+        @media (max-width: 768px) {
+            .payment-container {
+                padding: 15px;
+            }
+
+            .payment-card {
+                padding: 15px;
+            }
+
+            .payment-title {
+                font-size: 1.5rem;
+            }
+
+            .payment-info {
+                font-size: 0.9rem;
+            }
+
+            .payment-details {
+                font-size: 0.9rem;
+            }
+
+            .copy-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .payment-steps {
+                font-size: 0.9rem;
+            }
+
+            .payment-steps li {
+                padding: 8px 0;
+            }
+
+            .submit-btn {
+                padding: 12px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .payment-container {
+                padding: 10px;
+            }
+
+            .payment-card {
+                padding: 12px;
+            }
+
+            .payment-title {
+                font-size: 1.3rem;
+            }
+
+            .payment-info {
+                font-size: 0.85rem;
+            }
+
+            .payment-details {
+                font-size: 0.85rem;
+            }
+
+            .copy-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+
+            .payment-steps {
+                font-size: 0.85rem;
+            }
+
+            .payment-steps li {
+                padding: 6px 0;
+            }
+
+            .submit-btn {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            .payment-amount {
+                font-size: 1.8rem;
+            }
+
+            .payment-label {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .bottom-nav {
+                display: none !important;
+            }
+
+            .payment-card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+
+            .copy-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-wallet"></i>
+            <span>EasyPaisa Payment</span>
+        </div>
+        <div class="account-error">
+            Please pay with the same wallet and fill in the correct TID to avoid failure.
+        </div>
+    </div>
+
+    <div class="warning-section">
+        <div class="warning-header">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>Warning</span>
+        </div>
+        <div class="warning-text">
+            Please make payment to the account number below.
+        </div>
+
+        <div class="payment-details">
+            <div class="detail-row">
+                <span class="detail-label">Wallet</span>
+                <span class="detail-value">EasyPaisa</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Account</span>
+                <div class="detail-value">
+                    <span id="accountNumber">03287711833 </span>
+                    <button class="copy-btn" onclick="copyToClipboard('accountNumber')">
+                        <i class="fas fa-copy copy-icon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Quantity</span>
+                <div class="detail-value">
+                    <span id="amount">2000</span>
+                    <button class="copy-btn" onclick="copyToClipboard('amount')">
+                        <i class="fas fa-copy copy-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <input type="text" 
+               class="tid-input" 
+               id="tidInput" 
+               placeholder="Input your EasyPaisa account number" 
+               pattern="[0-9]*" 
+               inputmode="numeric" 
+               maxlength="11" 
+               minlength="11" 
+               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+        <div class="upload-section">
+            <label for="receiptUpload" class="upload-btn">
+                <i class="fas fa-cloud-upload-alt"></i>
+                Upload Payment Receipt
+            </label>
+            <input type="file" id="receiptUpload" style="display: none" accept="image/*">
+            <img id="receiptPreview" class="receipt-preview" onclick="openModal()">
+        </div>
+
+        <button class="confirm-btn" onclick="submitPayment()">Confirm Payment</button>
+    </div>
+
+    <!-- Modal for image preview -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <img class="modal-image" id="modalImage">
+        </div>
+    </div>
+
+    <!-- Message container -->
+    <div id="message" class="message"></div>
+
+    <!-- Structured Data for EasyPaisa Payment Page -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Wing System EasyPaisa Payment",
+        "description": "Complete your Wing System recharge using EasyPaisa mobile wallet",
+        "mainEntity": {
+            "@type": "Service",
+            "name": "EasyPaisa Payment Service",
+            "description": "Secure mobile wallet payment service for Wing System recharge",
+            "provider": {
+                "@type": "Organization",
+                "name": "Wing System",
+                "url": "http://localhost:5000"
+            }
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Pay with EasyPaisa",
+        "description": "Step-by-step guide to complete payment using EasyPaisa",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Open EasyPaisa App",
+            "text": "Launch your EasyPaisa mobile wallet application"
+        },{
+            "@type": "HowToStep",
+            "name": "Enter Amount",
+            "text": "Enter the exact amount shown in the payment details"
+        },{
+            "@type": "HowToStep",
+            "name": "Enter Account Number",
+            "text": "Enter the EasyPaisa account number provided"
+        },{
+            "@type": "HowToStep",
+            "name": "Complete Transfer",
+            "text": "Review and confirm the transfer"
+        },{
+            "@type": "HowToStep",
+            "name": "Upload Receipt",
+            "text": "Take a screenshot of the payment receipt and upload it"
+        }]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I make a payment with EasyPaisa?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "To make a payment with EasyPaisa, open your EasyPaisa app, enter the exact amount shown, use the provided account number, complete the transfer, and upload the payment receipt for verification."
+            }
+        },{
+            "@type": "Question",
+            "name": "What happens after I upload the receipt?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "After uploading the receipt, our team will verify the payment. Once verified, the amount will be credited to your Wing System account within 24 hours."
+            }
+        },{
+            "@type": "Question",
+            "name": "Is the EasyPaisa payment process secure?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, the EasyPaisa payment process is secure. We use encrypted connections and verify all transactions. Users must provide valid payment receipts for verification."
+            }
+        },{
+            "@type": "Question",
+            "name": "What if I enter the wrong amount?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It's crucial to enter the exact amount shown. If you enter a different amount, the payment may not be processed correctly. Please contact support if you need assistance."
+            }
+        }]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "http://localhost:5000/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Recharge",
+            "item": "http://localhost:5000/recharge.html"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "EasyPaisa Payment",
+            "item": "http://localhost:5000/easypaisa-payment.html"
+        }]
+    }
+    </script>
+
+    <script>
+        const API_URL = window.location.origin;
+
+        // Get current recharge request from localStorage
+        const currentRequest = JSON.parse(localStorage.getItem('currentRechargeRequest') || '{}');
+        if (currentRequest.amount) {
+            document.getElementById('amount').textContent = currentRequest.amount;
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showMessage('Copied to clipboard!', false);
+            }).catch(err => {
+                showMessage('Failed to copy text', true);
+            });
+        }
+
+        // File upload handling
+        document.getElementById('receiptUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                    showMessage('File size should be less than 5MB', true);
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('receiptPreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    document.getElementById('modalImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Modal functions
+        function openModal() {
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Message display function
+        function showMessage(text, isError = false) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message ${isError ? 'error' : 'success'}`;
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+        }
+
+        // Submit payment function
+        async function submitPayment() {
+            const tid = document.getElementById('tidInput').value.trim();
+            const receiptFile = document.getElementById('receiptUpload').files[0];
+
+            if (!tid) {
+                showMessage('Please enter TID number', true);
+                return;
+            }
+
+            if (tid.length !== 11) {
+                showMessage('EasyPaisa account number must be exactly 11 digits', true);
+                return;
+            }
+
+            if (!/^\d+$/.test(tid)) {
+                showMessage('EasyPaisa account number must contain only numbers', true);
+                return;
+            }
+
+            if (!receiptFile) {
+                showMessage('Please upload payment receipt', true);
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('receipt', receiptFile);
+            formData.append('requestId', currentRequest.requestId);
+            formData.append('amount', currentRequest.amount);
+            formData.append('paymentMethod', 'easypaisa');
+            formData.append('tid', tid);
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/api/recharge/request`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showMessage('Payment submitted successfully!', false);
+                    setTimeout(() => {
+                        window.location.href = 'recharge-record.html';
+                    }, 2000);
+                } else {
+                    showMessage(data.message || 'Failed to submit payment', true);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Failed to submit payment', true);
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Add real-time package updates
+        localStorage.setItem('userPackage', 'Pro');
+    </script>
+</body>
+</html> 

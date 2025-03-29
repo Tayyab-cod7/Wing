@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Wing System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        .header {
+            background-color: #4338CA;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iMjAwIj48cGF0aCBkPSJNMCwxMDBjMTUwLDAsNTAsLTEwMCwyMDAsLTEwMHM1MCwxMDAsMjAwLDEwMHM1MCwtMTAwLDIwMCwtMTAwczUwLDEwMCwyMDAsMTAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmY0IiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=');
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 40px 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            padding: 5px;
+        }
+
+        .logo span {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .account-error {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #FFA500;
+        }
+
+        .warning-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: -20px 15px 0;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .warning-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .warning-header i {
+            color: #dc3545;
+        }
+
+        .warning-text {
+            color: #dc3545;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .payment-details {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #666;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .countdown {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .tid-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .upload-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .upload-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .upload-btn:hover {
+            border-color: #4338CA;
+            color: #4338CA;
+        }
+
+        .receipt-preview {
+            max-width: 150px;
+            max-height: 150px;
+            margin-top: 15px;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            object-fit: cover;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #4338CA;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .confirm-btn:hover {
+            background-color: #3730A3;
+        }
+
+        .copy-icon {
+            color: #4338CA;
+            cursor: pointer;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 10px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        /* Original styles remain unchanged */
+        .payment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .payment-header h1 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .payment-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .payment-details {
+            margin-bottom: 20px;
+        }
+
+        .payment-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .payment-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .payment-detail-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .payment-detail-value {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .payment-instructions {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .payment-instructions h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .payment-instructions ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .payment-instructions li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .payment-instructions li:before {
+            content: "•";
+            color: #8BC34A;
+            position: absolute;
+            left: 0;
+        }
+
+        .payment-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-btn {
+            background: #8BC34A;
+            color: white;
+        }
+
+        .confirm-btn:hover {
+            background: #7CB342;
+        }
+
+        .cancel-btn {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .payment-container {
+                padding: 15px;
+            }
+
+            .payment-card {
+                padding: 15px;
+            }
+
+            .payment-header h1 {
+                font-size: 1.3rem;
+            }
+
+            .payment-header p {
+                font-size: 0.9rem;
+            }
+
+            .payment-detail-row {
+                padding: 8px 0;
+            }
+
+            .payment-detail-label {
+                font-size: 0.85rem;
+            }
+
+            .payment-detail-value {
+                font-size: 0.9rem;
+            }
+
+            .payment-instructions {
+                padding: 12px;
+            }
+
+            .payment-instructions h3 {
+                font-size: 1rem;
+            }
+
+            .payment-instructions li {
+                font-size: 0.9rem;
+            }
+
+            .action-btn {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .payment-container {
+                padding: 10px;
+            }
+
+            .payment-card {
+                padding: 12px;
+            }
+
+            .payment-header h1 {
+                font-size: 1.2rem;
+            }
+
+            .payment-header p {
+                font-size: 0.85rem;
+            }
+
+            .payment-detail-row {
+                padding: 6px 0;
+            }
+
+            .payment-detail-label {
+                font-size: 0.8rem;
+            }
+
+            .payment-detail-value {
+                font-size: 0.85rem;
+            }
+
+            .payment-instructions {
+                padding: 10px;
+            }
+
+            .payment-instructions h3 {
+                font-size: 0.95rem;
+            }
+
+            .payment-instructions li {
+                font-size: 0.85rem;
+                padding-left: 15px;
+            }
+
+            .payment-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .action-btn {
+                width: 100%;
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+        </div>
+        <div class="account-error">
+        </div>
+    </div>
+
+    <div class="warning-section">
+        <div class="warning-header">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>Warning</span>
+        </div>
+        <div class="warning-text">
+            Please pay with the same wallet and fill in the correct TID to avoid failure.
+        </div>
+        <div class="payment-text">
+            Please make payment to the account number below.
+        </div>
+
+        <div class="payment-details">
+            <div class="detail-row">
+                <span class="detail-label">Wallet</span>
+                <span class="detail-value">
+                    Jazz-Cash
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Account</span>
+                <span class="detail-value">
+                    <span id="accountNumber">03080006873</span>
+                    <button class="copy-btn" onclick="copyToClipboard('accountNumber')">
+                        <i class="far fa-copy copy-icon"></i>
+                    </button>
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Quantity</span>
+                <span class="detail-value">
+                    <span id="amountDisplay">Loading...</span>
+                    <button class="copy-btn" onclick="copyToClipboard('amountDisplay')">
+                        <i class="far fa-copy copy-icon"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <input type="file" id="receiptUpload" accept="image/*" style="display: none;">
+            <button class="upload-btn" onclick="document.getElementById('receiptUpload').click()">
+                <i class="fas fa-upload"></i>
+                <span>Upload Payment Receipt</span>
+            </button>
+            <img id="receiptPreview" class="receipt-preview" alt="Receipt preview">
+        </div>
+
+        <!-- Modal for receipt preview -->
+        <div class="modal" id="receiptModal">
+            <div class="modal-content">
+                <button class="close-modal">&times;</button>
+                <img id="modalImage" class="modal-image" src="" alt="Receipt preview">
+            </div>
+        </div>
+
+        <input type="text" class="tid-input" placeholder="Input your Jazz-cash number" maxlength="11" pattern="[0-9]{11}" oninput="validateJazzCashNumber(this)">
+        <button class="confirm-btn" disabled>Confirm</button>
+    </div>
+
+    <script>
+        function validateJazzCashNumber(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+            
+            if (input.value.length > 11) {
+                input.value = input.value.slice(0, 11);
+            }
+            
+            const confirmBtn = document.querySelector('.confirm-btn');
+            const receiptUpload = document.getElementById('receiptUpload');
+            
+            if (input.value.length === 11 && receiptUpload.files.length > 0) {
+                confirmBtn.disabled = false;
+            } else {
+                confirmBtn.disabled = true;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentRequest = JSON.parse(localStorage.getItem('currentRechargeRequest'));
+            const confirmBtn = document.querySelector('.confirm-btn');
+            const receiptUpload = document.getElementById('receiptUpload');
+            const receiptPreview = document.getElementById('receiptPreview');
+            const uploadBtn = document.querySelector('.upload-btn');
+            const modal = document.getElementById('receiptModal');
+            const modalImage = document.getElementById('modalImage');
+            const tidInput = document.querySelector('.tid-input');
+            
+            if (!currentRequest) {
+                window.location.href = 'recharge.html';
+                return;
+            }
+
+            // Display amount
+            document.getElementById('amountDisplay').textContent = currentRequest.amount;
+
+            // Handle file upload
+            receiptUpload.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        receiptPreview.src = e.target.result;
+                        receiptPreview.style.display = 'block';
+                        uploadBtn.innerHTML = '<i class="fas fa-check"></i><span>Receipt Uploaded</span>';
+                        uploadBtn.style.backgroundColor = '#e8f5e9';
+                        uploadBtn.style.borderColor = '#4caf50';
+                        uploadBtn.style.color = '#4caf50';
+                        
+                        if (tidInput.value.length === 11) {
+                            confirmBtn.disabled = false;
+                        }
+                    }
+                    
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+
+            // Handle modal
+            receiptPreview.addEventListener('click', function() {
+                modalImage.src = this.src;
+                modal.style.display = 'flex';
+            });
+
+            document.querySelector('.close-modal').addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Handle confirm button click
+            confirmBtn.addEventListener('click', async function() {
+                const tid = tidInput.value;
+                if (!tid || tid.length !== 11) {
+                    alert('Please enter a valid 11-digit Jazz Cash number');
+                    return;
+                }
+
+                if (!receiptUpload.files[0]) {
+                    alert('Please upload the payment receipt first');
+                    return;
+                }
+
+                try {
+                    // Create form data
+                    const formData = new FormData();
+                    formData.append('receipt', receiptUpload.files[0]);
+                    formData.append('requestId', currentRequest.requestId);
+                    formData.append('amount', currentRequest.amount);
+                    formData.append('paymentMethod', currentRequest.paymentMethod);
+                    formData.append('tid', tid);
+
+                    // Send request to server
+                    const token = localStorage.getItem('token');
+                    const response = await fetch('/api/recharge/request', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Error submitting recharge request');
+                    }
+
+                    // Clear current request and redirect
+                    localStorage.removeItem('currentRechargeRequest');
+                    alert('Payment receipt uploaded successfully!');
+                    window.location.href = 'recharge-record.html';
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

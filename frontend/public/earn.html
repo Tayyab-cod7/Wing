@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - Daily Earnings & Rewards | Claim Your Daily Income</title>
+    <meta name="description" content="Earn daily rewards and income with Wing System. Claim your daily earnings, track your investment returns, and grow your wealth. Simple, secure, and guaranteed daily payouts.">
+    <meta name="keywords" content="wing system daily earnings, daily rewards, investment returns, daily income, online earning pakistan, passive income, daily payout">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Wing System - Daily Earnings & Rewards">
+    <meta property="og:description" content="Start earning daily with Wing System. Simple claiming process, instant rewards, and guaranteed returns. Track your earnings in real-time!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/earn.html">
+    <meta property="og:image" content="/images/wing-system-earn-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - Daily Earnings & Rewards">
+    <meta name="twitter:description" content="Start earning daily with Wing System. Simple claiming process, instant rewards, and guaranteed returns. Track your earnings in real-time!">
+    <meta name="twitter:image" content="/images/wing-system-earn-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/earn.html">
+    <meta name="theme-color" content="#2196F3">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="earn.css">
+</head>
+<body>
+    <!-- Error and Success Messages -->
+    <div id="errorMessage" class="error-message"></div>
+    <div id="successMessage" class="success-message"></div>
+
+
+    <!-- 🟡 Ramadan Banner -->
+    <div class="ramadan-banner">🔥 10% OFF Ramadan Special Offer! </div>
+
+    <main class="content">
+        <!-- 📊 Earnings Summary -->
+        <section class="earnings-summary">
+            <div class="earning-box">
+                <h3>Current Balance</h3>
+                <p>RS <span id="currentBalance">0</span></p>
+            </div>
+        </section>
+
+        <button id="earnButton" class="earn-btn" onclick="earnDaily()">Click me to earn</button>
+        <div id="timerText" class="timer-text"></div>
+
+        <!-- Active Package Section -->
+        <section class="active-package-section">
+            <div class="active-package-title">Your Active Package</div>
+            <div id="activePackageCard" class="plan-card" style="display: none;">
+                <!-- Package details will be populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- 📌 Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="basic.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item active" href="earn.html">
+            <i class="fas fa-coins"></i>
+            <span>Earn</span>
+        </a>
+        <a class="nav-item" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Referral</span>
+        </a>
+        <a class="nav-item" href="profile.html">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <style>
+    /* Base styles */
+    body {
+        padding-bottom: 70px;
+    }
+
+    .content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Ramadan Banner */
+    .ramadan-banner {
+        background: linear-gradient(135deg, #4338CA, #6366F1);
+        color: white;
+        text-align: center;
+        padding: 12px;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    /* Earnings Summary */
+    .earnings-summary {
+        margin: 20px 0;
+    }
+
+    .earning-box {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .earning-box h3 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+
+    .earning-box p {
+        color: #2196F3;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    /* Earn Button */
+    .earn-btn {
+        transition: all 0.3s ease;
+        margin: 20px auto;
+        background: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 180px;
+        height: 180px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 10px;
+        line-height: 1.2;
+    }
+
+    .earn-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        background-color: #ccc !important;
+    }
+
+    /* Timer Text */
+    .timer-text {
+        text-align: center;
+        margin: 0 auto 20px;
+        color: #333;
+        font-size: 24px;
+        font-weight: 600;
+        padding: 15px;
+        max-width: 300px;
+        width: 90%;
+    }
+
+    .timer-digits {
+        color: #2196F3;
+        font-family: 'Inter', sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+    .timer-separator {
+        margin: 0 5px;
+        color: #666;
+    }
+
+    /* Active Package Styles */
+    .active-package-section {
+        margin-top: 30px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .active-package-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .plan-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 10px auto;
+        max-width: 350px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .plan-card-icon {
+        font-size: 2rem;
+        color: #2196F3;
+        margin-bottom: 15px;
+    }
+
+    .plan-card h3 {
+        color: #333;
+        margin: 10px 0;
+        font-size: 1.2rem;
+    }
+
+    .plan-card-price {
+        font-size: 1.1rem;
+        color: #666;
+        margin: 10px 0;
+    }
+
+    .plan-card-price b {
+        color: #2196F3;
+        font-size: 1.2rem;
+    }
+
+    .plan-card-earning {
+        color: #4CAF50;
+        font-weight: 600;
+        margin: 10px 0;
+    }
+
+    .plan-card-validity {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 10px 0;
+    }
+
+    .cancel-btn {
+        background-color: #ff5252;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-top: 15px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .cancel-btn:hover {
+        background-color: #ff1744;
+        transform: translateY(-2px);
+    }
+
+    .cancel-btn:active {
+        transform: translateY(0);
+    }
+
+    /* Package Timer */
+    .package-timer {
+        background-color: #fff3e0;
+        color: #ff6d00;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 15px 0;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .countdown {
+        color: #ff3d00;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .content {
+            padding: 15px;
+        }
+
+        .ramadan-banner {
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .earning-box h3 {
+            font-size: 1.1rem;
+        }
+
+        .earning-box p {
+            font-size: 1.8rem;
+        }
+
+        .earn-btn {
+            width: 150px;
+            height: 150px;
+            font-size: 16px;
+        }
+
+        .timer-text {
+            font-size: 20px;
+            padding: 12px;
+        }
+
+        .timer-digits {
+            font-size: 28px;
+        }
+
+        .active-package-title {
+            font-size: 1.1rem;
+        }
+
+        .plan-card {
+            padding: 15px;
+        }
+
+        .plan-card-icon {
+            font-size: 1.8rem;
+        }
+
+        .plan-card h3 {
+            font-size: 1.1rem;
+        }
+
+        .plan-card-price {
+            font-size: 1rem;
+        }
+
+        .plan-card-price b {
+            font-size: 1.1rem;
+        }
+
+        .package-timer {
+            font-size: 1rem;
+        }
+
+        .countdown {
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .content {
+            padding: 12px;
+        }
+
+        .ramadan-banner {
+            font-size: 13px;
+            padding: 8px;
+        }
+
+        .earning-box {
+            padding: 15px;
+        }
+
+        .earning-box h3 {
+            font-size: 1rem;
+        }
+
+        .earning-box p {
+            font-size: 1.6rem;
+        }
+
+        .earn-btn {
+            width: 130px;
+            height: 130px;
+            font-size: 15px;
+        }
+
+        .timer-text {
+            font-size: 18px;
+            padding: 10px;
+        }
+
+        .timer-digits {
+            font-size: 24px;
+        }
+
+        .active-package-title {
+            font-size: 1rem;
+        }
+
+        .plan-card {
+            padding: 12px;
+        }
+
+        .plan-card-icon {
+            font-size: 1.6rem;
+        }
+
+        .plan-card h3 {
+            font-size: 1rem;
+        }
+
+        .plan-card-price {
+            font-size: 0.9rem;
+        }
+
+        .plan-card-price b {
+            font-size: 1rem;
+        }
+
+        .plan-card-earning {
+            font-size: 0.9rem;
+        }
+
+        .plan-card-validity {
+            font-size: 0.8rem;
+        }
+
+        .package-timer {
+            font-size: 0.9rem;
+            padding: 8px;
+        }
+
+        .countdown {
+            font-size: 1rem;
+        }
+
+        .cancel-btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) {
+        .earn-btn:active {
+            transform: scale(0.98);
+        }
+
+        .cancel-btn:active {
+            transform: scale(0.98);
+        }
+    }
+
+    /* Height-based adjustments */
+    @media (max-height: 600px) {
+        .content {
+            padding-top: 10px;
+        }
+
+        .earnings-summary {
+            margin: 15px 0;
+        }
+
+        .active-package-section {
+            margin-top: 20px;
+        }
+    }
+
+    /* Error and Success Messages */
+    .error-message,
+    .success-message {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 500;
+        z-index: 1000;
+        display: none;
+        animation: slideIn 0.3s ease;
+        max-width: 90%;
+        text-align: center;
+    }
+
+    .error-message {
+        background-color: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
+
+    .success-message {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translate(-50%, -100%);
+            opacity: 0;
+        }
+        to {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+    }
+    </style>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+
+        // Add package configuration at the top of your script
+        const PACKAGES = {
+            // Basic Packages
+            'basic1': { price: 500, dailyRate: 75, name: 'Basic Plan 1', icon: 'seedling' },
+            'basic2': { price: 1000, dailyRate: 150, name: 'Basic Plan 2', icon: 'leaf' },
+            'basic3': { price: 1800, dailyRate: 200, name: 'Basic Plan 3', icon: 'tree' },
+            'basic4': { price: 3000, dailyRate: 300, name: 'Basic Plan 4', icon: 'star' },
+            
+            // Pro Packages
+            'pro1': { price: 3000, dailyRate: 500, name: 'Pro Plan 1', icon: 'crown' },
+            'pro2': { price: 5000, dailyRate: 650, name: 'Pro Plan 2', icon: 'gem' },
+            'pro3': { price: 7500, dailyRate: 800, name: 'Pro Plan 3', icon: 'trophy' },
+            
+            // Premium Packages
+            'premium1': { price: 10000, dailyRate: 1500, name: 'Premium Plan 1', icon: 'diamond' },
+            'premium2': { price: 15000, dailyRate: 2000, name: 'Premium Plan 2', icon: 'star' },
+            'premium3': { price: 20000, dailyRate: 3000, name: 'Premium Plan 3', icon: 'trophy' }
+        };
+
+        // Check Authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.log('No token found, redirecting to login');
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Show Error Message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Show Success Message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Add these functions before loadEarnings
+        function enableEarnButton() {
+            const earnButton = document.getElementById('earnButton');
+            earnButton.disabled = false;
+            earnButton.style.backgroundColor = '';
+            earnButton.style.cursor = 'pointer';
+        }
+
+        function disableEarnButton(message) {
+            const earnButton = document.getElementById('earnButton');
+            earnButton.disabled = true;
+            earnButton.style.backgroundColor = '#ccc';
+            earnButton.style.cursor = 'not-allowed';
+            document.getElementById('timerText').textContent = message;
+            document.getElementById('timerText').style.color = '#ff5252';
+        }
+
+        // Load Earnings
+        async function loadEarnings() {
+            if (!checkAuth()) return;
+
+            // Cleanup any existing countdown
+            cleanupPackageCountdown();
+
+            const token = localStorage.getItem('token');
+            try {
+                // First check package status
+                const statusResponse = await fetch(`${API_URL}/api/earnings/package-status`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const statusData = await statusResponse.json();
+                console.log('Package status:', statusData);
+
+                // Then load earnings
+                const earningsResponse = await fetch(`${API_URL}/api/earnings`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await earningsResponse.json();
+                
+                if (data.success) {
+                    document.getElementById('currentBalance').textContent = data.balance || 0;
+                    
+                    // Update active package display
+                    if (statusData.hasActivePackage) {
+                        const package = PACKAGES[statusData.activePackage];
+                        if (package) {
+                            const remainingDays = Math.ceil((new Date(statusData.packageEndDate) - new Date()) / (1000 * 60 * 60 * 24));
+                            document.getElementById('activePackageCard').innerHTML = `
+                                <div class="plan-card-icon">
+                                    <i class="fas fa-${package.icon}"></i>
+                                </div>
+                                <h3>${package.name}</h3>
+                                <div class="plan-card-price">
+                                    <b>Rs. ${package.price}</b>
+                                </div>
+                                <div class="plan-card-earning">
+                                    Daily Income: Rs. ${package.dailyRate}
+                                </div>
+                                <div class="plan-card-validity">
+                                    Valid for: ${remainingDays} days
+                                </div>
+                                <div class="package-timer" id="packageTimer">
+                                    Package expires in: <span class="countdown" id="packageCountdown"></span>
+                                </div>
+                                <button class="cancel-btn" onclick="cancelPackage()">Cancel Package</button>
+                            `;
+                            document.getElementById('activePackageCard').style.display = 'block';
+                            console.log('Package card HTML set and displayed');
+                            
+                            // Start package countdown
+                            startPackageCountdown(statusData.packageEndDate);
+                            
+                            // Enable earn button when package is active and check if it's a new package
+                            const lastEarnTime = localStorage.getItem('lastEarnTime');
+                            if (!lastEarnTime || new Date(statusData.packageStartDate) > new Date(parseInt(lastEarnTime))) {
+                                // This is a new package or first time - enable earning
+                                localStorage.removeItem('lastEarnTime');
+                                enableEarnButton();
+                            } else {
+                                // Existing package - check timer as usual
+                                updateTimer();
+                            }
+                        }
+                    } else {
+                        console.log('No active package to display');
+                        document.getElementById('activePackageCard').style.display = 'none';
+                        // Disable earn button when no package is active
+                        disableEarnButton('No active package. Please purchase a package to start earning.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showError('Error loading data. Please refresh the page.');
+            }
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEarnings();
+            updateTimer(); // Also update timer when page loads
+            
+            // Update timer every second to keep seconds display smooth
+            setInterval(updateTimer, 1000);
+        });
+
+        // Earn Daily
+        function earnDaily() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.log('No token found in earnDaily');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Check if there's an active package
+            if (!document.getElementById('activePackageCard').style.display || 
+                document.getElementById('activePackageCard').style.display === 'none') {
+                showError('You need an active package to earn rewards');
+                return;
+            }
+
+            // Check if button is in cooldown
+            const lastEarnTime = localStorage.getItem('lastEarnTime');
+            if (lastEarnTime) {
+                const timeElapsed = Date.now() - parseInt(lastEarnTime);
+                if (timeElapsed < 24 * 60 * 60 * 1000) {
+                    showError('Please wait for the cooldown to finish');
+                    return;
+                }
+            }
+
+            console.log('Earning daily with token:', token);
+            fetch(`${API_URL}/api/earnings/earn`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.log('Token expired or invalid');
+                        localStorage.removeItem('token');
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    const data = await response.json();
+                    throw new Error(data.message || 'Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    console.log('Earn successful:', data);
+                    showSuccess(`Successfully earned Rs. ${data.dailyEarningRate}!`);
+                    // Update program earnings
+                    document.getElementById('currentBalance').textContent = data.balance || 0;
+                    
+                    localStorage.setItem('lastEarnTime', Date.now().toString());
+                    updateTimer();
+                } else {
+                    showError(data.message || 'Failed to earn');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError(error.message || 'Error earning reward');
+            });
+        }
+
+        // Update Timer Display
+        function updateTimer() {
+            const timerText = document.getElementById('timerText');
+            const earnButton = document.getElementById('earnButton');
+            const lastEarnTime = localStorage.getItem('lastEarnTime');
+            const activePackageCard = document.getElementById('activePackageCard');
+            
+            // Check if there's an active package
+            if (!activePackageCard || activePackageCard.style.display === 'none') {
+                earnButton.disabled = true;
+                earnButton.style.backgroundColor = '#ccc';
+                earnButton.style.cursor = 'not-allowed';
+                timerText.innerHTML = 'No active package';
+                timerText.style.color = '#ff5252';
+                return;
+            }
+            
+            if (lastEarnTime) {
+                const now = Date.now();
+                const timeElapsed = now - parseInt(lastEarnTime);
+                
+                if (timeElapsed >= 24 * 60 * 60 * 1000) { // If 24 hours have passed
+                    earnButton.disabled = false;
+                    earnButton.style.backgroundColor = '';
+                    earnButton.style.cursor = 'pointer';
+                    timerText.innerHTML = 'Ready to earn!';
+                    timerText.style.color = '#4CAF50';
+                    // Clear any existing interval
+                    if (window.earnTimerInterval) {
+                        clearInterval(window.earnTimerInterval);
+                    }
+                    return;
+                }
+
+                // Clear any existing interval
+                if (window.earnTimerInterval) {
+                    clearInterval(window.earnTimerInterval);
+                }
+
+                const updateDisplay = () => {
+                    const now = Date.now();
+                    const timeElapsed = now - parseInt(lastEarnTime);
+                    const timeRemaining = Math.max(24 * 60 * 60 * 1000 - timeElapsed, 0);
+                    
+                    // Check if package is still active
+                    if (!activePackageCard || activePackageCard.style.display === 'none') {
+                        earnButton.disabled = true;
+                        earnButton.style.backgroundColor = '#ccc';
+                        earnButton.style.cursor = 'not-allowed';
+                        timerText.innerHTML = 'Package expired or cancelled';
+                        timerText.style.color = '#ff5252';
+                        if (window.earnTimerInterval) {
+                            clearInterval(window.earnTimerInterval);
+                        }
+                        return;
+                    }
+                    
+                    if (timeRemaining === 0) {
+                        earnButton.disabled = false;
+                        earnButton.style.backgroundColor = '';
+                        earnButton.style.cursor = 'pointer';
+                        timerText.innerHTML = 'Ready to earn!';
+                        timerText.style.color = '#4CAF50';
+                        if (window.earnTimerInterval) {
+                            clearInterval(window.earnTimerInterval);
+                        }
+                        return;
+                    }
+
+                    earnButton.disabled = true;
+                    earnButton.style.backgroundColor = '#ccc';
+                    earnButton.style.cursor = 'not-allowed';
+                    
+                    const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                    
+                    const formatNumber = (num) => num.toString().padStart(2, '0');
+                    
+                    timerText.innerHTML = `
+                        <span class="timer-digits">${formatNumber(hours)}</span>
+                        <span class="timer-separator">:</span>
+                        <span class="timer-digits">${formatNumber(minutes)}</span>
+                        <span class="timer-separator">:</span>
+                        <span class="timer-digits">${formatNumber(seconds)}</span>`;
+                    timerText.style.color = '#2196F3';
+                };
+                
+                // Initial update
+                updateDisplay();
+                // Store the interval ID globally
+                window.earnTimerInterval = setInterval(updateDisplay, 1000);
+            } else {
+                // No last earn time, so enable the button if there's an active package
+                earnButton.disabled = false;
+                earnButton.style.backgroundColor = '';
+                earnButton.style.cursor = 'pointer';
+                timerText.innerHTML = 'Ready to earn!';
+                timerText.style.color = '#4CAF50';
+            }
+        }
+
+        // Withdraw Earnings
+        function withdrawEarnings() {
+            if (!checkAuth()) return;
+
+            const token = localStorage.getItem('token');
+            fetch(`${API_URL}/api/withdraw`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccess('Withdrawal successful');
+                    loadEarnings();
+                } else {
+                    showError(data.message || 'Error withdrawing');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('Error withdrawing');
+            });
+        }
+
+        // Add this new function for package countdown
+        function startPackageCountdown(endDate) {
+            const countdownElement = document.getElementById('packageCountdown');
+            if (!countdownElement) return;
+
+            let intervalId;
+
+            const updateCountdown = () => {
+                const now = new Date().getTime();
+                const end = new Date(endDate).getTime();
+                const timeLeft = Math.max(0, end - now);
+
+                if (timeLeft === 0) {
+                    clearInterval(intervalId);
+                    countdownElement.textContent = 'Expired';
+                    // Wait a brief moment to ensure the server has processed the expiration
+                    setTimeout(() => {
+                        loadEarnings();
+                    }, 1000);
+                    return;
+                }
+
+                // Calculate days, hours, minutes, and seconds
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                // Format the countdown text
+                countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            };
+
+            // Update immediately
+            updateCountdown();
+            // Update every second
+            intervalId = setInterval(updateCountdown, 1000);
+
+            // Store interval ID to clear it later if needed
+            window.packageCountdownInterval = intervalId;
+        }
+
+        // Add cleanup function for the countdown
+        function cleanupPackageCountdown() {
+            if (window.packageCountdownInterval) {
+                clearInterval(window.packageCountdownInterval);
+                window.packageCountdownInterval = null;
+            }
+        }
+
+        // Update the cancelPackage function to clear the timer
+        async function cancelPackage() {
+            if (!checkAuth()) return;
+
+            const confirmed = confirm('Are you sure you want to cancel your active package? This action cannot be undone.');
+            if (!confirmed) return;
+
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${API_URL}/api/earnings/cancel-package`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showSuccess('Package cancelled successfully');
+                    // Clear the last earn time
+                    localStorage.removeItem('lastEarnTime');
+                    // Clean up the countdown timer
+                    cleanupPackageCountdown();
+                    // Reload earnings to update the UI
+                    loadEarnings();
+                } else {
+                    showError(data.message || 'Failed to cancel package');
+                }
+            } catch (error) {
+                console.error('Error cancelling package:', error);
+                showError('Failed to cancel package. Please try again.');
+            }
+        }
+    </script>
+
+    <!-- Structured Data for Earning Page -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Wing System Daily Earnings",
+        "description": "Earn daily rewards and track your investment returns with Wing System's automated earning system",
+        "mainEntity": {
+            "@type": "Service",
+            "name": "Daily Earnings System",
+            "description": "Automated daily earnings system with guaranteed returns based on your investment package",
+            "offers": {
+                "@type": "Offer",
+                "description": "Earn daily rewards ranging from Rs. 75 to Rs. 3000 based on your active package"
+            },
+            "termsOfService": "http://localhost:5000/terms.html"
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Earn Daily Rewards",
+        "description": "Simple steps to claim your daily earnings with Wing System",
+        "step": [
+            {
+                "@type": "HowToStep",
+                "name": "Check Active Package",
+                "text": "Verify your active investment package and daily earning rate"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Wait for Reset",
+                "text": "Wait for the 24-hour timer to reset"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Claim Reward",
+                "text": "Click the claim button to receive your daily earnings"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Confirm Earnings",
+                "text": "Check your updated balance with the newly added earnings"
+            }
+        ],
+        "totalTime": "PT1M"
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How often can I claim my earnings?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can claim your earnings once every 24 hours. The timer resets after each successful claim."
+            }
+        },{
+            "@type": "Question",
+            "name": "How much can I earn daily?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Daily earnings range from Rs. 75 to Rs. 3000, depending on your active investment package."
+            }
+        },{
+            "@type": "Question",
+            "name": "When do earnings get credited to my account?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Earnings are instantly credited to your account balance upon successful claim."
+            }
+        },{
+            "@type": "Question",
+            "name": "What happens if I miss a day?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Each daily reward must be claimed within its 24-hour window. Missed claims cannot be recovered."
+            }
+        }]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "http://localhost:5000/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Dashboard",
+            "item": "http://localhost:5000/dashboard"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Daily Earnings",
+            "item": "http://localhost:5000/earn.html"
+        }]
+    }
+    </script>
+</body>
+</html>

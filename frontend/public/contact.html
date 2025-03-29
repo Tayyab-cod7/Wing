@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - Contact Us | Get Support for Your Investment Journey</title>
+    <meta name="description" content="Contact Wing System's support team for assistance with your investment account, technical queries, or general information. We're here to help you with your investment journey.">
+    <meta name="keywords" content="wing system contact, investment support, customer service, technical support, investment help, online investment pakistan, contact support">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Wing System - Contact Us | Investment Support">
+    <meta property="og:description" content="Get in touch with Wing System's support team. We provide assistance for investment queries, technical support, and account-related questions.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/contact.html">
+    <meta property="og:image" content="/images/wing-system-contact-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - Contact Us | Investment Support">
+    <meta name="twitter:description" content="Get in touch with Wing System's support team. We provide assistance for investment queries, technical support, and account-related questions.">
+    <meta name="twitter:image" content="/images/wing-system-contact-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/contact.html">
+    <meta name="theme-color" content="#2196F3">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="contact.css">
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --primary-dark: #1976D2;
+            --primary-light: #e3f2fd;
+            --text-dark: #424242;
+            --text-light: #666;
+            --white: #ffffff;
+            --border-color: #e0e0e0;
+            --success-color: #4CAF50;
+            --error-color: #f44336;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        .contact-container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-box {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .contact-title {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: var(--success-color);
+            border: 1px solid #c8e6c9;
+        }
+
+        .alert-error {
+            background: #ffebee;
+            color: var(--error-color);
+            border: 1px solid #ffcdd2;
+        }
+
+        @media (max-width: 768px) {
+            .contact-container {
+                padding: 15px;
+            }
+
+            .contact-box {
+                padding: 20px;
+            }
+
+            .contact-title {
+                font-size: 1.3rem;
+            }
+
+            .form-control {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .submit-btn {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .contact-container {
+                padding: 15px;
+            }
+
+            .contact-card {
+                padding: 15px;
+            }
+
+            .contact-form {
+                padding: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .form-group label {
+                font-size: 0.9rem;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+
+            .submit-btn {
+                width: 100%;
+                padding: 12px;
+                font-size: 1rem;
+            }
+
+            .contact-info {
+                padding: 15px;
+            }
+
+            .contact-item {
+                padding: 10px;
+            }
+
+            .contact-item i {
+                font-size: 1.2rem;
+            }
+
+            .contact-item span {
+                font-size: 0.9rem;
+            }
+
+            .social-links {
+                gap: 15px;
+            }
+
+            .social-links a {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-container {
+                padding: 10px;
+            }
+
+            .contact-card {
+                padding: 10px;
+            }
+
+            .contact-form {
+                padding: 10px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 6px 10px;
+            }
+
+            .submit-btn {
+                padding: 10px;
+            }
+
+            .contact-item {
+                padding: 8px;
+            }
+
+            .social-links a {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="content">
+        <div class="contact-container">
+            <div class="contact-box">
+                <h1 class="contact-title">Contact Us</h1>
+                
+                <div id="successAlert" class="alert alert-success"></div>
+                <div id="errorAlert" class="alert alert-error"></div>
+
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label class="form-label" for="subject">Subject</label>
+                        <input type="text" id="subject" class="form-control" placeholder="Enter subject" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="message">Message</label>
+                        <textarea id="message" class="form-control" placeholder="Enter your message" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="basic.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-coins"></i>
+            <span>Earn</span>
+        </a>
+        <a class="nav-item" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Referral</span>
+        </a>
+        <a class="nav-item" href="profile.html">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Structured Data for Contact Page -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ContactPage",
+        "name": "Wing System Contact",
+        "description": "Get in touch with Wing System's support team for investment assistance and technical support",
+        "mainEntity": {
+            "@type": "Organization",
+            "name": "Wing System Support",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+923000000000",
+                "contactType": "customer service",
+                "email": "support@wingsystem.com",
+                "areaServed": "PK",
+                "availableLanguage": ["English", "Urdu"]
+            }
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "What support services does Wing System provide?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Wing System provides comprehensive support including investment guidance, technical assistance, account management help, and general inquiries about our investment platform."
+            }
+        },{
+            "@type": "Question",
+            "name": "How can I contact Wing System support?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can contact Wing System support through our contact form, WhatsApp, or email. Our support team is available to assist you with any queries or concerns."
+            }
+        },{
+            "@type": "Question",
+            "name": "What are Wing System's business hours?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Wing System's support team is available 24/7 to assist you with any queries or concerns about your investment account."
+            }
+        },{
+            "@type": "Question",
+            "name": "What languages does Wing System support?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Wing System provides support in both English and Urdu to better serve our diverse user base."
+            }
+        }]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "http://localhost:5000/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Dashboard",
+            "item": "http://localhost:5000/dashboard"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Contact",
+            "item": "http://localhost:5000/contact.html"
+        }]
+    }
+    </script>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+
+        // Check Authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Show Success Message
+        function showSuccess(message) {
+            successAlert.textContent = message;
+            successAlert.style.display = 'block';
+            errorAlert.style.display = 'none';
+            setTimeout(() => {
+                successAlert.style.display = 'none';
+            }, 5000);
+        }
+
+        // Show Error Message
+        function showError(message) {
+            errorAlert.textContent = message;
+            errorAlert.style.display = 'block';
+            successAlert.style.display = 'none';
+            setTimeout(() => {
+                errorAlert.style.display = 'none';
+            }, 5000);
+        }
+
+        // Submit Contact Form
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!checkAuth()) return;
+
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!subject || !message) {
+                showError('Please fill in all fields');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/api/contact`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ subject, message })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showSuccess('Message sent successfully!');
+                    contactForm.reset();
+                } else {
+                    throw new Error(data.message || 'Failed to send message');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError(error.message || 'Failed to send message');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
+        });
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
+</body>
+</html> 

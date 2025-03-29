@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - Basic Investment Packages | Start Earning Daily</title>
+    <meta name="description" content="Explore Wing System's Basic investment packages. Start with low investment, earn daily returns, and grow your wealth. Choose from multiple packages with guaranteed returns.">
+    <meta name="keywords" content="wing system basic package, investment packages, daily earnings, online investment, passive income, investment plans">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Wing System - Basic Investment Packages">
+    <meta property="og:description" content="Start your investment journey with Wing System's Basic packages. Low investment, daily returns, secure platform.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/basic.html">
+    <meta property="og:image" content="/images/wing-system-basic-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - Basic Investment Packages">
+    <meta name="twitter:description" content="Start your investment journey with Wing System's Basic packages. Low investment, daily returns, secure platform.">
+    <meta name="twitter:image" content="/images/wing-system-basic-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/basic.html">
+    <meta name="theme-color" content="#2196F3">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header styles */
+        .header {
+            background: #2196F3;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        .main-content {
+            padding: 5rem 1rem 5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Balance display */
+        .balance-display {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .balance-display div:first-child {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #currentBalance {
+            font-size: 2rem;
+            color: #2196F3;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .balance-display div:last-child {
+            color: #4CAF50;
+            font-size: 0.8rem;
+        }
+
+        /* Package grid */
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        /* Plan card */
+        .plan-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .plan-card-icon {
+            width: 60px;
+            height: 60px;
+            background: #e3f2fd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .plan-card-icon i {
+            font-size: 1.5rem;
+            color: #2196F3;
+        }
+
+        .plan-card h3 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .plan-card-price {
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        .plan-card-price .original {
+            text-decoration: line-through;
+            color: #999;
+            margin-right: 0.5rem;
+        }
+
+        .plan-card-price .discounted {
+            color: #2196F3;
+            font-weight: bold;
+        }
+
+        .discount-badge {
+            background: #e3f2fd;
+            color: #2196F3;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        .plan-card-earning {
+            color: #4CAF50;
+            font-weight: 500;
+            margin: 0.5rem 0;
+        }
+
+        .plan-card-validity {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Invest button */
+        .invest-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+
+        .invest-btn:hover {
+            background: #1976D2;
+        }
+
+        /* Bottom navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-item.active {
+            color: #2196F3;
+        }
+
+        /* Notification overlay */
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+
+        .notification-box {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+        }
+
+        .notification-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2196F3;
+            margin-bottom: 1rem;
+        }
+
+        .notification-message {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .notification-message b {
+            color: #2196F3;
+        }
+
+        .close-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #1976D2;
+        }
+
+        /* Error and Success messages */
+        .error-message, .success-message {
+            position: fixed;
+            top: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            display: none;
+            text-align: center;
+            max-width: 90%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .error-message {
+            background: #f44336;
+        }
+
+        .success-message {
+            background: #4CAF50;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                padding: 4rem 1rem 5rem;
+            }
+
+            .balance-display {
+                padding: 1.2rem;
+            }
+
+            #currentBalance {
+                font-size: 1.8rem;
+            }
+
+            .package-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .plan-card {
+                padding: 1.2rem;
+            }
+
+            .plan-card-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .plan-card-icon i {
+                font-size: 1.2rem;
+            }
+
+            .plan-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .plan-card-price {
+                font-size: 1rem;
+            }
+
+            .invest-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .notification-box {
+                padding: 1.2rem;
+            }
+
+            .notification-title {
+                font-size: 1.1rem;
+            }
+
+            .notification-message {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.1rem;
+            }
+
+            .balance-display {
+                padding: 1rem;
+            }
+
+            #currentBalance {
+                font-size: 1.6rem;
+            }
+
+            .plan-card {
+                padding: 1rem;
+            }
+
+            .plan-card-icon {
+                width: 45px;
+                height: 45px;
+            }
+
+            .plan-card-icon i {
+                font-size: 1.1rem;
+            }
+
+            .plan-card h3 {
+                font-size: 1rem;
+            }
+
+            .plan-card-price {
+                font-size: 0.9rem;
+            }
+
+            .invest-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .bottom-nav {
+                padding: 0.6rem;
+            }
+
+            .nav-item {
+                font-size: 0.75rem;
+            }
+
+            .nav-item i {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Update message container structure -->
+    <div class="message-container">
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+    </div>
+
+    <!-- 📢 Welcome Notification -->
+    <div id="notificationOverlay" class="notification-overlay">
+        <div class="notification-box">
+            <div class="notification-title">🎉 Welcome to Wing Network!</div>
+            <div class="notification-message">
+                1. Registration bonus: <b>RS 50.00</b> <br>
+                2. Invite people to invest & earn <b>10% cash bonus</b>. <br>
+                3. Wing Network is the <b>best platform in Pakistan</b>, join us today!
+            </div>
+            <button class="close-btn" onclick="closeNotification()">Got it</button>
+        </div>
+    </div>
+
+    <!-- 🔹 Main Content (Initially Hidden) -->
+    <div id="mainContent" style="display: none;">
+        <!-- Place your full website content here (like homepage, navigation, etc.) -->
+    </div>
+
+    <main class="content">
+        <div class="logo-image"></div>
+
+        <!-- Home Page -->
+        <div id="homePage" class="page active">
+            <div class="home-container">
+                <div class="ramadan-banner">
+                    <p>🌙 Ramadan Special Offer! Get <b>10% OFF</b> on all packages! 🎉</p>
+                </div>
+                
+                <div class="balance-display" style="background: #fff; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+                    <div style="color: #666; font-size: 0.9rem;">Current Balance</div>
+                    <div id="currentBalance" style="font-size: 1.5rem; color: #2196F3; font-weight: bold;">Rs. 50</div>
+                    <div style="color: #4CAF50; font-size: 0.8rem; margin-top: 5px;">Registration Bonus Included</div>
+                </div>
+
+                <div id="message" class="message" style="text-align: center; margin: 10px 0; padding: 10px; border-radius: 5px; display: none;"></div>
+                <div id="packageInfo" style="text-align: center; margin: 10px 0; display: none;">
+                    <div id="balance"></div>
+                    <div id="dailyRate"></div>
+                </div>
+
+                <div class="stats-grid">
+                    <div id="active" class="stat-card active" onclick="window.location.href='basic.html'">
+                        <h3>Basic Package</h3>
+                    </div>
+                    <div class="stat-card" onclick="window.location.href='pro.html'">
+                        <h3>Pro Package</h3>
+                    </div>
+                    <div class="stat-card" onclick="window.location.href='premium.html'">
+                        <h3>Premium Package</h3>
+                    </div>
+                </div>
+
+                <!-- Basic Package Details -->
+                <div id="basicPackageDetails" class="package-details active fade-in">
+                    <div class="plan-grid">
+                        <!-- Basic Plan 1 -->
+                        <div class="plan-card fade-in">
+                            <div class="plan-card-icon"><i class="fas fa-seedling"></i></div>
+                            <h3>Basic Plan 1</h3>
+                            <div class="plan-card-price"><s>RS 600</s> <b>RS 500</b> (10% OFF)</div>
+                            <div class="plan-card-earning">Daily Income: RS 75</div>
+                            <div class="plan-card-validity">Valid for: 30 Days</div>
+                            <div class="button-group">
+                                <button class="invest-btn" onclick="purchasePackage('basic1', 500)">Invest Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Basic Plan 2 -->
+                        <div class="plan-card fade-in">
+                            <div class="plan-card-icon"><i class="fas fa-leaf"></i></div>
+                            <h3>Basic Plan 2</h3>
+                            <div class="plan-card-price"><s>RS 1200</s> <b>RS 1000</b> (10% OFF)</div>
+                            <div class="plan-card-earning">Daily Income: RS 150</div>
+                            <div class="plan-card-validity">Valid for: 30 Days</div>
+                            <div class="button-group">
+                                <button class="invest-btn" onclick="purchasePackage('basic2', 1000)">Invest Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Basic Plan 3 -->
+                        <div class="plan-card fade-in">
+                            <div class="plan-card-icon"><i class="fas fa-tree"></i></div>
+                            <h3>Basic Plan 3</h3>
+                            <div class="plan-card-price">
+                                <span class="original">1800</span>
+                                <span class="discounted">1500</span>
+                                <span class="discount-badge">10% OFF</span>
+                            </div>
+                            <div class="plan-card-earning">Daily Earning: 225</div>
+                            <div class="plan-card-validity">Valid for: 30 Days</div>
+                            <div class="button-group">
+                                <button class="invest-btn" onclick="purchasePackage('basic3', 1500)">Invest Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Basic Plan 4 -->
+                        <div class="plan-card fade-in">
+                            <div class="plan-card-icon"><i class="fas fa-star"></i></div>
+                            <h3>Basic Plan 4</h3>
+                            <div class="plan-card-price">
+                                <span class="original">2500</span>
+                                <span class="discounted">2000</span>
+                                <span class="discount-badge">10% OFF</span>
+                            </div>
+                            <div class="plan-card-earning">Daily Earning: 300</div>
+                            <div class="plan-card-validity">Valid for: 30 Days</div>
+                            <div class="button-group">
+                                <button class="invest-btn" onclick="purchasePackage('basic4', 2000)">Invest Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item active" href="dashboard.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-coins"></i>
+            <span>Earn</span>
+        </a>
+        <a class="nav-item" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Referral</span>
+        </a>
+        <a class="nav-item" href="profile.html">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Wing System Basic Investment Packages",
+        "description": "Investment packages offering daily returns with secure and guaranteed earnings",
+        "offers": {
+            "@type": "AggregateOffer",
+            "offerCount": "4",
+            "lowPrice": "400",
+            "highPrice": "1200",
+            "priceCurrency": "PKR",
+            "offers": [
+                {
+                    "@type": "Offer",
+                    "name": "Basic 1",
+                    "price": "400",
+                    "priceCurrency": "PKR",
+                    "description": "Daily earning Rs. 75 for 30 days"
+                },
+                {
+                    "@type": "Offer",
+                    "name": "Basic 2",
+                    "price": "600",
+                    "priceCurrency": "PKR",
+                    "description": "Daily earning Rs. 150 for 30 days"
+                },
+                {
+                    "@type": "Offer",
+                    "name": "Basic 3",
+                    "price": "900",
+                    "priceCurrency": "PKR",
+                    "description": "Daily earning Rs. 225 for 30 days"
+                },
+                {
+                    "@type": "Offer",
+                    "name": "Basic 4",
+                    "price": "1200",
+                    "priceCurrency": "PKR",
+                    "description": "Daily earning Rs. 300 for 30 days"
+                }
+            ]
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "1250"
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "http://localhost:5000/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Investment Packages",
+            "item": "http://localhost:5000/packages"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Basic Packages",
+            "item": "http://localhost:5000/basic.html"
+        }]
+    }
+    </script>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+
+        // Check Authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Show Error Message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            // Hide any existing success message
+            successDiv.classList.remove('message-visible');
+            
+            errorDiv.textContent = message;
+            errorDiv.classList.add('message-visible');
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('message-visible');
+            }, 3000);
+        }
+
+        // Show Success Message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            const errorDiv = document.getElementById('errorMessage');
+            
+            // Hide any existing error message
+            errorDiv.classList.remove('message-visible');
+            
+            successDiv.textContent = message;
+            successDiv.classList.add('message-visible');
+            
+            setTimeout(() => {
+                successDiv.classList.remove('message-visible');
+            }, 3000);
+        }
+
+        // Show notification
+        function showNotification() {
+            const overlay = document.getElementById('notificationOverlay');
+            overlay.style.display = 'flex';
+        }
+
+        // Close notification
+        function closeNotification() {
+            const overlay = document.getElementById('notificationOverlay');
+            overlay.style.display = 'none';
+        }
+
+        // Load Balance and Package Status
+        async function loadBalance() {
+            if (!checkAuth()) return;
+
+            const token = localStorage.getItem('token');
+            try {
+                // First check package status
+                const statusResponse = await fetch(`${API_URL}/api/earnings/package-status`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const statusData = await statusResponse.json();
+                
+                // If there's an active package, disable all invest buttons
+                const investButtons = document.querySelectorAll('.invest-btn');
+                if (statusData.hasActivePackage) {
+                    investButtons.forEach(button => {
+                        button.disabled = true;
+                        button.textContent = `Package Active (${statusData.remainingDays} days left)`;
+                        button.style.backgroundColor = '#ccc';
+                        button.style.cursor = 'not-allowed';
+                    });
+                } else {
+                    investButtons.forEach(button => {
+                        button.disabled = false;
+                        button.textContent = 'Invest Now';
+                        button.style.backgroundColor = '';
+                        button.style.cursor = 'pointer';
+                    });
+                }
+
+                // Then load balance
+                const balanceResponse = await fetch(`${API_URL}/api/earnings`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!balanceResponse.ok) {
+                    throw new Error(`Failed to load balance: ${balanceResponse.status}`);
+                }
+                const data = await balanceResponse.json();
+                
+                if (data.success) {
+                    const balance = data.balance || 0;
+                    document.getElementById('currentBalance').textContent = `Rs. ${balance}`;
+                } else {
+                    console.error('Invalid balance data:', data);
+                    showError(data.message || 'Error loading balance');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error loading data. Please refresh the page.');
+            }
+        }
+
+        // Purchase Package
+        async function purchasePackage(packageId, amount) {
+            if (!checkAuth()) return;
+
+            // Show confirmation dialog with more detailed message
+            const confirmed = confirm(
+                `⚠️ Important Notice:\n\n` +
+                `You are about to purchase a Basic Package:\n` +
+                `💰 Investment Amount: Rs. ${amount}\n` +
+                `⏱️ Duration: 30 Days\n\n` +
+                `Please note:\n` +
+                `• This is a one-time investment\n` +
+                `• Package will expire after 30 days\n` +
+                `• Investment amount is non-refundable\n\n` +
+                `Click OK to proceed with the purchase.`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${API_URL}/api/earnings/purchase`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        packageId,
+                        amount
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Reset timer state
+                    localStorage.removeItem('lastEarnTime');
+                    showSuccess('🎉 Congratulations! Package purchased successfully!\n\nRedirecting to earning page...');
+                    loadBalance(); // Refresh the balance display
+                    setTimeout(() => {
+                        window.location.href = 'earn.html';
+                    }, 2000);
+                } else {
+                    if (data.message && data.message.toLowerCase().includes('insufficient')) {
+                        showError('Insufficient balance. Redirecting to recharge page...');
+                        setTimeout(() => {
+                            window.location.href = 'recharge.html';
+                        }, 2000);
+                    } else {
+                        showError(data.message || 'Failed to purchase package');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error purchasing package');
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!checkAuth()) return;
+            
+            // Load initial balance and package status
+            loadBalance();
+            
+            // Refresh balance and package status every 30 seconds
+            setInterval(loadBalance, 30000);
+        });
+    </script>
+</body>
+
+</html>

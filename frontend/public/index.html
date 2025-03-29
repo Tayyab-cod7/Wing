@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Wing System - Earn Money Online | Sign Up or Login</title>
+    <meta name="description"
+        content="Join Wing System to earn money online. Simple registration, secure payments, and daily earnings. Start your earning journey today with our trusted platform.">
+    <meta name="keywords"
+        content="wing system, earn money online, online earnings, payment platform, daily earnings, secure payments">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#6366f1">
+    <meta property="og:title" content="Wing System - Earn Money Online">
+    <meta property="og:description"
+        content="Join Wing System to earn money online. Simple registration, secure payments, and daily earnings.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/index.html">
+    <meta property="og:image" content="/images/wing-system-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - Earn Money Online">
+    <meta name="twitter:description"
+        content="Join Wing System to earn money online. Simple registration, secure payments, and daily earnings.">
+    <meta name="twitter:image" content="/images/wing-system-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/index.html">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <style>
+        .error-message,
+        .success-message {
+            position: fixed;
+            top: env(safe-area-inset-top, 20px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 2rem);
+            max-width: 400px;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .error-message {
+            background-color: var(--error-color);
+        }
+
+        .success-message {
+            background-color: var(--success-color);
+        }
+
+        .loading {
+            position: relative;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+          /* Bottom navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-item.active {
+            color: #2196F3;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translate(-50%, -100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        button[type="submit"] {
+            position: relative;
+            min-width: 120px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            .container {
+                margin-bottom: env(safe-area-inset-bottom, 1rem);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container" role="main">
+        <div id="errorMessage" class="error-message" role="alert" aria-live="polite"></div>
+        <div id="successMessage" class="success-message" role="alert" aria-live="polite"></div>
+        <div class="forms-container">
+            <!-- Signup Form -->
+            <section class="form-section" id="signup-form">
+                <h1>Sign Up for Wing Network</h1>
+                <p class="subtitle">Start earning money online - create your account today</p>
+                <form id="signupForm" novalidate aria-label="Sign up form">
+                    <div class="form-group">
+                        <label for="signupPhone" class="visually-hidden">Phone Number</label>
+                        <input type="tel" id="signupPhone" name="phone" placeholder="Enter your phone number"
+                            pattern="[0-9]{11}" maxlength="11" inputmode="numeric" autocomplete="tel"
+                            aria-required="true" required>
+                        <small class="input-hint" id="phoneHint">Please enter exactly 11 digits</small>
+                    </div>
+                    <div class="form-group password-field">
+                        <label for="signupPassword" class="visually-hidden">Password</label>
+                        <input type="password" id="signupPassword" name="password" placeholder="Create a password"
+                            pattern="[A-Za-z0-9]{6,8}" minlength="6" maxlength="8" autocomplete="new-password"
+                            aria-required="true" required>
+                        <i class="toggle-password fas fa-eye" data-target="signupPassword" role="button" tabindex="0"
+                            aria-label="Toggle password visibility"></i>
+                        <small class="input-hint" id="passwordHint">6-8 characters, letters and numbers only</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="referralCode" class="visually-hidden">Referral Code</label>
+                        <input type="text" id="referralCode" name="referralCode" placeholder="Enter referral code"
+                            pattern="[0-9]{6}" maxlength="6" inputmode="numeric" autocomplete="off" aria-required="true"
+                            required>
+                        <small class="input-hint" id="referralHint">Enter 6 digit referral code</small>
+                    </div>
+                    <div class="form-group terms-group">
+                        <label class="terms-label">
+                            <input type="checkbox" id="termsCheckbox" required aria-required="true">
+                            <span>I agree to the <a href="about.html" target="_blank" rel="noopener">Terms and
+                                    Conditions</a></span>
+                        </label>
+                    </div>
+                    <button type="submit">Create Account</button>
+                </form>
+                <p>Already have an account? <a href="#" id="showLogin" role="button">Login</a></p>
+            </section>
+
+            <!-- Login Form -->
+            <section class="form-section" id="login-form" style="display: none;">
+                <h2>Welcome Back to Wing Network</h2>
+                <p class="subtitle">Access your earning dashboard securely</p>
+                <form id="loginForm" novalidate aria-label="Login form">
+                    <div class="form-group">
+                        <label for="loginPhone" class="visually-hidden">Phone Number</label>
+                        <input type="tel" id="loginPhone" name="phone" placeholder="Enter your phone number"
+                            pattern="[0-9]{11}" maxlength="11" inputmode="numeric" autocomplete="tel"
+                            aria-required="true" required>
+                        <small class="input-hint" id="loginPhoneHint">Please enter exactly 11 digits</small>
+                    </div>
+                    <div class="form-group password-field">
+                        <label for="loginPassword" class="visually-hidden">Password</label>
+                        <input type="password" id="loginPassword" name="password" placeholder="Enter your password"
+                            pattern="[A-Za-z0-9]{6,8}" minlength="6" maxlength="8" autocomplete="current-password"
+                            aria-required="true" required>
+                        <i class="toggle-password fas fa-eye" data-target="loginPassword" role="button" tabindex="0"
+                            aria-label="Toggle password visibility"></i>
+                        <small class="input-hint" id="loginPasswordHint">6-8 characters, letters and numbers
+                            only</small>
+                    </div>
+                    <button type="submit">Login to Account</button>
+                </form>
+                <p>Don't have an account? <a href="#" id="showSignup" role="button">Sign up</a></p>
+            </section>
+        </div>
+    </main>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Wing System",
+        "description": "Online earning platform offering secure payments and daily earnings opportunities",
+        "url": "http://localhost:5000",
+        "applicationCategory": "MoneyManagementApplication",
+        "operatingSystem": "All",
+        "offers": {
+            "@type": "Offer",
+            "description": "Join Wing System to start earning money online"
+        }
+    }
+    </script>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

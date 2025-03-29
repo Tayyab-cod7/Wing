@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - Recharge Your Account | Secure Investment Platform</title>
+    <meta name="description" content="Recharge your Wing System account securely. Choose from multiple payment methods including JazzCash, EasyPaisa, and Bank Transfer. Start your investment journey today.">
+    <meta name="keywords" content="wing system recharge, investment platform recharge, jazzcash recharge, easypaisa recharge, bank transfer investment, online investment pakistan">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Wing System - Recharge Your Account | Secure Investment Platform">
+    <meta property="og:description" content="Recharge your Wing System account securely. Choose from multiple payment methods including JazzCash, EasyPaisa, and Bank Transfer. Start your investment journey today.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/recharge.html">
+    <meta property="og:image" content="/images/wing-system-recharge-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - Recharge Your Account | Secure Investment Platform">
+    <meta name="twitter:description" content="Recharge your Wing System account securely. Choose from multiple payment methods including JazzCash, EasyPaisa, and Bank Transfer. Start your investment journey today.">
+    <meta name="twitter:image" content="/images/wing-system-recharge-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/recharge.html">
+    <meta name="theme-color" content="#2196F3">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="recharge.css">
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header styles */
+        .header {
+            background: #2196F3;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        .main-content {
+            padding: 5rem 1rem 5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Balance display */
+        .balance-display {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .balance-display div:first-child {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #currentBalance {
+            font-size: 2rem;
+            color: #2196F3;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .balance-display div:last-child {
+            color: #4CAF50;
+            font-size: 0.8rem;
+        }
+
+        /* Recharge form */
+        .recharge-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2196F3;
+        }
+
+        /* Recharge amount buttons */
+        .recharge-amounts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .amount-btn {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .amount-btn:hover {
+            background: #e3f2fd;
+            border-color: #2196F3;
+        }
+
+        .amount-btn.selected {
+            background: #e3f2fd;
+            border-color: #2196F3;
+            color: #2196F3;
+        }
+
+        /* Submit button */
+        .submit-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #1976D2;
+        }
+
+        /* Bottom navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-item.active {
+            color: #2196F3;
+        }
+
+        /* Error and Success messages */
+        .error-message, .success-message {
+            position: fixed;
+            top: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            display: none;
+            text-align: center;
+            max-width: 90%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .error-message {
+            background: #f44336;
+        }
+
+        .success-message {
+            background: #4CAF50;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                padding: 4rem 1rem 5rem;
+            }
+
+            .balance-display {
+                padding: 1.2rem;
+            }
+
+            #currentBalance {
+                font-size: 1.8rem;
+            }
+
+            .recharge-form {
+                padding: 1.5rem;
+            }
+
+            .form-group input {
+                padding: 0.7rem;
+                font-size: 0.95rem;
+            }
+
+            .recharge-amounts {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .amount-btn {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .submit-btn {
+                padding: 0.8rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.1rem;
+            }
+
+            .balance-display {
+                padding: 1rem;
+            }
+
+            #currentBalance {
+                font-size: 1.6rem;
+            }
+
+            .recharge-form {
+                padding: 1.2rem;
+            }
+
+            .form-group {
+                margin-bottom: 1.2rem;
+            }
+
+            .form-group label {
+                font-size: 0.9rem;
+            }
+
+            .form-group input {
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+
+            .recharge-amounts {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+
+            .amount-btn {
+                padding: 0.7rem;
+                font-size: 0.85rem;
+            }
+
+            .submit-btn {
+                padding: 0.7rem;
+                font-size: 0.9rem;
+            }
+
+            .bottom-nav {
+                padding: 0.6rem;
+            }
+
+            .nav-item {
+                font-size: 0.75rem;
+            }
+
+            .nav-item i {
+                font-size: 1.1rem;
+            }
+        }
+
+        .recharge-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .balance-card {
+            background: #8BC34A;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .balance-label {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .balance-amount {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .amount-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .amount-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .amount-btn {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .amount-btn:hover {
+            border-color: #8BC34A;
+            color: #8BC34A;
+        }
+
+        .amount-btn.selected {
+            background: #8BC34A;
+            color: white;
+            border-color: #8BC34A;
+        }
+
+        .payment-section {
+            margin-bottom: 20px;
+        }
+
+        .payment-label {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .payment-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .recharge-btn {
+            width: 100%;
+            padding: 15px;
+            background: #8BC34A;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .recharge-btn:hover {
+            background: #7CB342;
+        }
+
+        .recharge-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Message styles */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            z-index: 9999;
+        }
+
+        .error-message, .success-message {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .error-message {
+            background-color: #ff5252;
+            color: white;
+        }
+
+        .success-message {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .amount-input.invalid {
+            border-color: #ff5252;
+            background-color: #fff8f8;
+        }
+
+        .amount-input:focus {
+            outline: none;
+            border-color: #8BC34A;
+            box-shadow: 0 0 0 2px rgba(139, 195, 74, 0.2);
+        }
+
+        .amount-input.invalid:focus {
+            border-color: #ff5252;
+            box-shadow: 0 0 0 2px rgba(255, 82, 82, 0.2);
+        }
+
+        /* Recharge Instructions Styles */
+        .recharge-instructions {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #8BC34A;
+        }
+
+        .recharge-instructions h3 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .recharge-instructions ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .recharge-instructions li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .recharge-instructions li:before {
+            content: "•";
+            color: #8BC34A;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .recharge-container {
+                padding: 15px;
+            }
+
+            .amount-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .amount-btn {
+                padding: 12px;
+                font-size: 1rem;
+            }
+
+            .balance-card {
+                padding: 15px;
+            }
+
+            .balance-amount {
+                font-size: 1.8rem;
+            }
+
+            .recharge-btn {
+                padding: 12px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .recharge-container {
+                padding: 10px;
+            }
+
+            .amount-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .amount-btn {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .balance-card {
+                padding: 12px;
+            }
+
+            .balance-amount {
+                font-size: 1.6rem;
+            }
+
+            .recharge-btn {
+                padding: 10px;
+                font-size: 1rem;
+            }
+
+            .recharge-instructions {
+                padding: 12px;
+            }
+
+            .recharge-instructions h3 {
+                font-size: 1rem;
+            }
+
+            .recharge-instructions li {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Error and Success Messages -->
+    <div class="message-container">
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+    </div>
+
+    <main class="content">
+        <div class="logo-image"></div>
+
+        <div class="recharge-container">
+            <!-- Recharge Instructions -->
+            <div class="recharge-instructions">
+                <h3>Recharge Instructions</h3>
+                <ul>
+                    <li>The minimum deposit amount is RS 500.</li>
+                    <li>The transfer amount must be on the correct number that was given, otherwise the transfer will not be successful.</li>
+                    <li>After the transfer is successful, please wait the amount will transfer under 24 hours.</li>
+                    <li>If your funds take too long to arrive, please contact the official team.</li>
+                </ul>
+            </div>
+
+            <!-- Current Balance Display -->
+            <div class="balance-card">
+                <div class="balance-label">Current Balance</div>
+                <div class="balance-amount" id="currentBalance">Rs. 0</div>
+            </div>
+
+            <!-- Custom Amount Input -->
+            <input type="number" class="amount-input" id="customAmount" placeholder="Enter amount (500-20000, multiple of 100)" min="500" max="20000" step="100">
+
+            <!-- Preset Amounts -->
+            <div class="amount-grid">
+                <div class="amount-btn" onclick="selectAmount(500)">Rs. 500</div>
+                <div class="amount-btn" onclick="selectAmount(1000)">Rs. 1000</div>
+                <div class="amount-btn" onclick="selectAmount(1500)">Rs. 1500</div>
+                <div class="amount-btn" onclick="selectAmount(2000)">Rs. 2000</div>
+                <div class="amount-btn" onclick="selectAmount(3000)">Rs. 3000</div>
+                <div class="amount-btn" onclick="selectAmount(5000)">Rs. 5000</div>
+                <div class="amount-btn" onclick="selectAmount(7500)">Rs. 7500</div>
+                <div class="amount-btn" onclick="selectAmount(10000)">Rs. 10000</div>
+                <div class="amount-btn" onclick="selectAmount(15000)">Rs. 15000</div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="payment-section">
+                <div class="payment-label">Payment Type:</div>
+                <div class="payment-option">
+                    <input type="radio" id="jazzcash" name="paymentChannel" value="jazzcash" checked>
+                    <label for="jazzcash">
+                        <i class="fas fa-mobile-alt"></i>
+                        Jazz Cash
+                    </label>
+                </div>
+                <div class="payment-option">
+                    <input type="radio" id="easypaisa" name="paymentChannel" value="easypaisa">
+                    <label for="easypaisa">
+                        <i class="fas fa-wallet"></i>
+                        Easy Paisa
+                    </label>
+                </div>
+            </div>
+
+            <!-- Recharge Button -->
+            <button class="recharge-btn" onclick="processRecharge()" id="rechargeButton">
+                Recharge Now
+            </button>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="basic.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-coins"></i>
+            <span>Earn</span>
+        </a>
+        <a class="nav-item" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Referral</span>
+        </a>
+        <a class="nav-item" href="profile.html">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Structured Data for Recharge Page -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Wing System Recharge",
+        "description": "Recharge your Wing System account securely with multiple payment options",
+        "mainEntity": {
+            "@type": "Service",
+            "name": "Account Recharge Service",
+            "description": "Secure account recharge service with multiple payment methods",
+            "provider": {
+                "@type": "Organization",
+                "name": "Wing System",
+                "url": "http://localhost:5000"
+            }
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Recharge Your Wing System Account",
+        "description": "Step-by-step guide to recharge your Wing System account",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Select Payment Method",
+            "text": "Choose your preferred payment method from JazzCash, EasyPaisa, or Bank Transfer"
+        },{
+            "@type": "HowToStep",
+            "name": "Enter Amount",
+            "text": "Enter the amount you want to recharge in PKR"
+        },{
+            "@type": "HowToStep",
+            "name": "Submit Payment",
+            "text": "Submit your payment details and wait for confirmation"
+        },{
+            "@type": "HowToStep",
+            "name": "Upload Receipt",
+            "text": "Upload your payment receipt for verification"
+        }]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "What payment methods are accepted?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Wing System accepts multiple payment methods including JazzCash, EasyPaisa, and Bank Transfer. Each method has specific account details for secure transactions."
+            }
+        },{
+            "@type": "Question",
+            "name": "How long does recharge processing take?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Recharge processing typically takes 24-48 hours after receipt verification. The exact time may vary depending on the payment method and verification requirements."
+            }
+        },{
+            "@type": "Question",
+            "name": "Is the recharge process secure?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, the recharge process is secure. We use encrypted connections and verify all transactions. Users must provide valid payment receipts for verification."
+            }
+        },{
+            "@type": "Question",
+            "name": "What is the minimum recharge amount?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The minimum recharge amount varies by payment method. Please check the current limits in the recharge form or contact support for details."
+            }
+        }]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "http://localhost:5000/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Dashboard",
+            "item": "http://localhost:5000/dashboard"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Recharge",
+            "item": "http://localhost:5000/recharge.html"
+        }]
+    }
+    </script>
+
+    <script>
+        const API_URL = window.location.origin;
+        
+        // Check Authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Load Balance
+        async function loadBalance() {
+            if (!checkAuth()) return;
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/api/earnings`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('currentBalance').textContent = `Rs. ${data.balance}`;
+                }
+            } catch (error) {
+                console.error('Error loading balance:', error);
+            }
+        }
+
+        // Process Recharge
+        function processRecharge() {
+            if (!checkAuth()) return;
+
+            const amount = parseInt(document.getElementById('customAmount').value);
+            const paymentMethod = document.querySelector('input[name="paymentChannel"]:checked').value;
+
+            if (!validateAmount(amount)) {
+                showError('Please enter a valid amount between 500 and 20000 (multiple of 100)');
+                return;
+            }
+
+            // Generate request ID
+            const requestId = generateRequestId();
+
+            // Store recharge request data in localStorage
+            const rechargeRequest = {
+                requestId: requestId,
+                amount: amount,
+                paymentMethod: paymentMethod,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+
+            // Get existing requests or initialize empty array
+            let rechargeRequests = JSON.parse(localStorage.getItem('rechargeRequests') || '[]');
+            rechargeRequests.push(rechargeRequest);
+            localStorage.setItem('rechargeRequests', JSON.stringify(rechargeRequests));
+
+            // Store current request for payment page
+            localStorage.setItem('currentRechargeRequest', JSON.stringify(rechargeRequest));
+
+            // Redirect to payment page based on selected method
+            if (paymentMethod === 'jazzcash') {
+                window.location.href = 'jazzcash-payment.html';
+            } else if (paymentMethod === 'easypaisa') {
+                window.location.href = 'easypaisa-payment.html';
+            }
+        }
+
+        // Function to generate random 8-digit number
+        function generateRequestId() {
+            return 'REQ' + Date.now().toString().slice(-8) + Math.random().toString(36).substr(2, 4).toUpperCase();
+        }
+
+        // Function to validate amount
+        function validateAmount(amount) {
+            const input = document.getElementById('customAmount');
+            const rechargeButton = document.getElementById('rechargeButton');
+            
+            if (amount >= 500 && amount <= 20000 && amount % 100 === 0) {
+                input.classList.remove('invalid');
+                rechargeButton.disabled = false;
+                return true;
+            } else {
+                input.classList.add('invalid');
+                rechargeButton.disabled = true;
+                return false;
+            }
+        }
+
+        // Function to show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Function to show success message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Select Amount
+        function selectAmount(amount) {
+            // Update the input field with the selected amount
+            document.getElementById('customAmount').value = amount;
+            
+            // Remove selected class from all buttons
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected class to the clicked button
+            event.target.classList.add('selected');
+            
+            // Validate the amount and enable/disable button
+            validateAmount(amount);
+        }
+
+        // Handle custom amount input
+        document.getElementById('customAmount').addEventListener('input', function() {
+            const amount = parseInt(this.value);
+            validateAmount(amount);
+            
+            // Update button selection
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.textContent === `Rs. ${amount}`) {
+                    btn.classList.add('selected');
+                }
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBalance();
+            // Disable recharge button initially
+            document.getElementById('rechargeButton').disabled = true;
+        });
+    </script>
+</body>
+</html>

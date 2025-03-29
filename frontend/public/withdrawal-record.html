@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - Withdrawal Records | Track Your Withdrawal History</title>
+    <meta name="description" content="View and track your Wing System withdrawal history. Access detailed records of all your withdrawal requests, including status, amounts, and transaction details.">
+    <meta name="keywords" content="wing system withdrawal records, withdrawal history, transaction history, withdrawal status, online investment pakistan, withdrawal tracking">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Wing System - Withdrawal Records | Transaction History">
+    <meta property="og:description" content="Track your withdrawal history with Wing System. View detailed records of all your withdrawal requests and their current status.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/withdrawal-record.html">
+    <meta property="og:image" content="/images/wing-system-withdrawal-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - Withdrawal Records | Transaction History">
+    <meta name="twitter:description" content="Track your withdrawal history with Wing System. View detailed records of all your withdrawal requests and their current status.">
+    <meta name="twitter:image" content="/images/wing-system-withdrawal-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/withdrawal-record.html">
+    <meta name="theme-color" content="#2196F3">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="withdrawal-record.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            background-color: #8BC34A;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-title {
+            flex-grow: 1;
+            text-align: center;
+            margin-right: 40px;
+        }
+
+        .content {
+            margin-top: 60px;
+            padding: 15px;
+            padding-bottom: 70px;
+        }
+
+        .withdrawal-item {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .order-number {
+            background-color: #8BC34A;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin: -15px -15px 15px -15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #666;
+        }
+
+        .value {
+            font-weight: bold;
+        }
+
+        .value.amount {
+            color: #E53935;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .status.pending {
+            background-color: #FFF3E0;
+            color: #FF9800;
+        }
+
+        .status.approved {
+            background-color: #E8F5E9;
+            color: #4CAF50;
+        }
+
+        .status.rejected {
+            background-color: #fce4ec;
+            color: #d81b60;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item.active {
+            color: #8BC34A;
+        }
+
+        .no-records {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item.active {
+            color: #8BC34A;
+        }
+
+        @media screen and (max-width: 768px) {
+            .header {
+                padding: 12px;
+            }
+
+            .header-title {
+                font-size: 1.2rem;
+            }
+
+            .content {
+                margin-top: 55px;
+                padding: 10px;
+                padding-bottom: 70px;
+            }
+
+            .withdrawal-item {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .order-number {
+                padding: 8px;
+                margin: -12px -12px 12px -12px;
+                font-size: 0.9rem;
+            }
+
+            .detail-row {
+                padding: 4px 0;
+            }
+        }
+
+        /* Mobile Responsiveness Enhancements */
+        @media (max-width: 768px) {
+            .withdrawal-container {
+                padding: 15px;
+            }
+
+            .withdrawal-card {
+                padding: 15px;
+            }
+
+            .withdrawal-title {
+                font-size: 1.5rem;
+            }
+
+            .withdrawal-table {
+                font-size: 0.9rem;
+            }
+
+            .withdrawal-table th,
+            .withdrawal-table td {
+                padding: 8px;
+            }
+
+            .withdrawal-table th {
+                font-size: 0.85rem;
+            }
+
+            .status-badge {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
+
+            .action-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .withdrawal-container {
+                padding: 10px;
+            }
+
+            .withdrawal-card {
+                padding: 10px;
+            }
+
+            .withdrawal-title {
+                font-size: 1.3rem;
+            }
+
+            .withdrawal-table {
+                font-size: 0.85rem;
+            }
+
+            .withdrawal-table th,
+            .withdrawal-table td {
+                padding: 6px;
+            }
+
+            .withdrawal-table th {
+                font-size: 0.8rem;
+            }
+
+            .status-badge {
+                padding: 3px 6px;
+                font-size: 0.75rem;
+            }
+
+            .action-btn {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
+
+            .withdrawal-table td:nth-child(3),
+            .withdrawal-table th:nth-child(3) {
+                display: none;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .bottom-nav {
+                display: none !important;
+            }
+
+            .withdrawal-card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+
+            .withdrawal-table {
+                border-collapse: collapse;
+            }
+
+            .withdrawal-table th,
+            .withdrawal-table td {
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="back-button" onclick="window.history.back()">←Back</button>
+        <h1 class="header-title">Withdrawal Record</h1>
+    </div>
+
+    <div class="content" id="recordsContainer">
+        <!-- Records will be dynamically inserted here -->
+    </div>
+
+       <!-- Bottom Navigation -->
+       <nav class="bottom-nav">
+        <a class="nav-item" href="basic.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-coins"></i>
+            <span>Earn</span>
+        </a>
+        <a class="nav-item" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Referral</span>
+        </a>
+        <a class="nav-item" href="profile.html">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Structured Data for Withdrawal Records Page -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Wing System Withdrawal Records",
+        "description": "Track and view your withdrawal history with Wing System",
+        "mainEntity": {
+            "@type": "Table",
+            "name": "Withdrawal History",
+            "description": "Detailed records of all withdrawal requests and their status",
+            "about": {
+                "@type": "Thing",
+                "name": "Withdrawal Transactions",
+                "description": "History of withdrawal requests and their processing status"
+            }
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How can I track my withdrawal requests?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can track your withdrawal requests through the withdrawal records page, which shows all your withdrawal history including request ID, amount, status, and processing details."
+            }
+        },{
+            "@type": "Question",
+            "name": "What do the different withdrawal statuses mean?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Withdrawal statuses include: Pending (under review), Approved (processed), and Rejected (declined). Each status indicates the current state of your withdrawal request."
+            }
+        },{
+            "@type": "Question",
+            "name": "How long does withdrawal processing take?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Withdrawal processing typically takes 24-48 hours after approval. The exact time may vary depending on the payment method and verification requirements."
+            }
+        },{
+            "@type": "Question",
+            "name": "Can I cancel a withdrawal request?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Withdrawal requests can only be cancelled if they are in 'Pending' status. Once approved or rejected, the request cannot be cancelled."
+            }
+        }]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "http://localhost:5000/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Dashboard",
+            "item": "http://localhost:5000/dashboard"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Withdrawal Records",
+            "item": "http://localhost:5000/withdrawal-record.html"
+        }]
+    }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchWithdrawalRecords();
+        });
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return 'N/A';
+            
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            };
+            return date.toLocaleString('en-US', options);
+        }
+
+        async function fetchWithdrawalRecords() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const response = await fetch('/api/withdrawal/records', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem('token');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const container = document.getElementById('recordsContainer');
+                
+                if (!Array.isArray(data) || data.length === 0) {
+                    container.innerHTML = '<div class="no-records">No withdrawal records found</div>';
+                    return;
+                }
+
+                container.innerHTML = data.map(record => `
+                    <div class="withdrawal-item">
+                        <div class="order-number">Request ID: ${record.requestId}</div>
+                        <div class="detail-row">
+                            <span class="label">Amount</span>
+                            <span class="value amount">Rs. ${record.amount}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Payment Method</span>
+                            <span class="value">${record.paymentMethod}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Status</span>
+                            <span class="status ${record.status.toLowerCase()}">${record.status}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">TID</span>
+                            <span class="value">${record.status === 'pending' ? record.accountNumber : record.tid}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Date</span>
+                            <span class="value">${formatDate(record.requestDate)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error fetching withdrawal records:', error);
+                document.getElementById('recordsContainer').innerHTML = 
+                    '<div class="no-records">Error loading withdrawal records. Please try again later.</div>';
+            }
+        }
+    </script>
+</body>
+</html> 

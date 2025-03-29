@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - User Profile | Manage Your Investment Account</title>
+    <meta name="description" content="Access and manage your Wing System investment account. View your profile details, investment history, earnings, and account settings. Secure and easy account management for investors.">
+    <meta name="keywords" content="wing system profile, investment account, account management, investment history, earnings tracking, online investment pakistan, account settings">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Wing System - User Profile | Account Management">
+    <meta property="og:description" content="Manage your Wing System investment account. View profile details, track investments, and monitor earnings. Secure account management for investors.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/profile.html">
+    <meta property="og:image" content="/images/wing-system-profile-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - User Profile | Account Management">
+    <meta name="twitter:description" content="Manage your Wing System investment account. View profile details, track investments, and monitor earnings. Secure account management for investors.">
+    <meta name="twitter:image" content="/images/wing-system-profile-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/profile.html">
+    <meta name="theme-color" content="#2196F3">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="profile.css">
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --primary-dark: #1976D2;
+            --primary-light: #e3f2fd;
+            --text-dark: #424242;
+            --text-light: #666;
+            --white: #ffffff;
+            --border-color: #e0e0e0;
+            --success-color: #4CAF50;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        .profile-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .balance-section {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-id {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .balance-amount {
+            text-align: right;
+        }
+
+        .balance-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .balance-value {
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .recharge-withdraw {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-title {
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .action-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--primary-dark);
+            transition: var(--transition);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .action-button i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .menu-list {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background: var(--primary-light);
+        }
+
+        .menu-item i {
+            width: 24px;
+            margin-right: 15px;
+            color: var(--primary-color);
+        }
+
+        .menu-item span {
+            flex: 1;
+        }
+
+        .menu-item .arrow {
+            color: var(--text-light);
+        }
+
+        .logout-item {
+            color: #ff5252;
+        }
+
+        .logout-item i {
+            color: #ff5252;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                padding: 15px;
+            }
+
+            .balance-section {
+                padding: 15px;
+            }
+
+            .user-id {
+                font-size: 1rem;
+            }
+
+            .balance-value {
+                font-size: 1.3rem;
+            }
+
+            .action-buttons {
+                gap: 10px;
+            }
+
+            .action-button {
+                padding: 12px;
+            }
+
+            .action-button i {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="content">
+        <div class="profile-container">
+            <!-- Balance Section -->
+            <div class="balance-section">
+                <div class="user-id" id="userId">Loading...</div>
+                <div class="balance-amount">
+                    <div class="balance-label">Current Balance</div>
+                    <div class="balance-value" id="userBalance">Rs. 0</div>
+                </div>
+            </div>
+
+            <!-- Recharge and Withdraw Section -->
+            <div class="recharge-withdraw">
+                <h3 class="section-title">Recharge and Withdraw</h3>
+                <div class="action-buttons">
+                    <a href="recharge.html" class="action-button">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Recharge</span>
+                    </a>
+                    <a href="withdraw.html" class="action-button">
+                        <i class="fas fa-wallet"></i>
+                        <span>Withdrawal</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Menu List -->
+            <div class="menu-list">
+                <a href="recharge-record.html" class="menu-item">
+                    <i class="fas fa-history"></i>
+                    <span>Recharge Record</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </a>
+                <a href="withdrawal-record.html" class="menu-item">
+                    <i class="fas fa-money-check-alt"></i>
+                    <span>Withdrawal Record</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </a>
+                <a href="about.html" class="menu-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>About Us</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </a>
+                <a href="contact.html" class="menu-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact Us</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </a>
+                <a href="#" class="menu-item logout-item" id="logoutButton">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="basic.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-coins"></i>
+            <span>Earn</span>
+        </a>
+        <a class="nav-item" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Referral</span>
+        </a>
+        <a class="nav-item active" href="profile.html">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Structured Data for Profile Page -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "name": "Wing System User Profile",
+        "description": "Manage your Wing System investment account and track your investment progress",
+        "mainEntity": {
+            "@type": "Person",
+            "name": "User Profile",
+            "description": "Investment account management and tracking system",
+            "accountStatus": "Active",
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Investment Packages",
+                "itemListElement": [
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "InvestmentFund",
+                            "name": "Basic Package",
+                            "description": "Entry-level investment package"
+                        }
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "InvestmentFund",
+                            "name": "Pro Package",
+                            "description": "Advanced investment package"
+                        }
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "InvestmentFund",
+                            "name": "Premium Package",
+                            "description": "Premium investment package"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Manage Your Investment Account",
+        "description": "Steps to manage your Wing System investment account",
+        "step": [
+            {
+                "@type": "HowToStep",
+                "name": "View Profile Details",
+                "text": "Access your personal information and account status"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Track Investments",
+                "text": "Monitor your active investment packages and returns"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Manage Settings",
+                "text": "Update your account settings and preferences"
+            },
+            {
+                "@type": "HowToStep",
+                "name": "View History",
+                "text": "Check your investment and transaction history"
+            }
+        ],
+        "totalTime": "PT2M"
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I update my profile information?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can update your profile information through the profile settings section. Click on the edit button next to the information you want to change."
+            }
+        },{
+            "@type": "Question",
+            "name": "How can I track my investment returns?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Your investment returns are displayed in the earnings section of your profile. You can view daily earnings, total returns, and investment history."
+            }
+        },{
+            "@type": "Question",
+            "name": "What information is shown in my profile?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Your profile displays personal information, active investment packages, total earnings, referral statistics, and account settings."
+            }
+        },{
+            "@type": "Question",
+            "name": "How secure is my profile information?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Your profile information is protected with industry-standard security measures. We use encryption and secure authentication to protect your data."
+            }
+        }]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "http://localhost:5000/"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Dashboard",
+            "item": "http://localhost:5000/dashboard"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Profile",
+            "item": "http://localhost:5000/profile.html"
+        }]
+    }
+    </script>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+
+        // Check Authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Load User Data and Balance
+        function loadUserData() {
+            if (!checkAuth()) return;
+
+            const token = localStorage.getItem('token');
+            
+            // Get user profile data
+            fetch(`${API_URL}/api/auth/me`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('userId').textContent = `ID: ${data.data.phone}`;
+                }
+            })
+            .catch(error => console.error('Error loading user data:', error));
+
+            // Get balance data
+            fetch(`${API_URL}/api/earnings`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('userBalance').textContent = `Rs. ${data.balance}`;
+                }
+            })
+            .catch(error => console.error('Error loading balance:', error));
+        }
+
+        // Handle Logout
+        document.getElementById('logoutButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            window.location.href = 'index.html';
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAuth()) {
+                loadUserData();
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -32,11 +32,25 @@ const upload = multer({
     }
 }).single('receipt');
 
+// Helper function to cleanup file paths
+function cleanupImagePath(filePath) {
+    // If path includes the full directory structure, extract just the filename
+    if (filePath.includes('uploads/receipts/')) {
+        const parts = filePath.split('uploads/receipts/');
+        return `uploads/receipts/${parts[parts.length - 1]}`;
+    }
+    
+    // If it's just a filename, return uploads/receipts/filename
+    const filename = path.basename(filePath);
+    return `uploads/receipts/${filename}`;
+}
+
 // Submit recharge request
 exports.submitRechargeRequest = async (req, res) => {
     try {
         upload(req, res, async function (err) {
             if (err) {
+                console.error('Upload error:', err);
                 return res.status(400).json({
                     success: false,
                     error: err.message
@@ -62,8 +76,9 @@ exports.submitRechargeRequest = async (req, res) => {
                 });
             }
 
-            // Store only the relative path to the uploads directory
-            const relativeImagePath = `uploads/receipts/${path.basename(req.file.path)}`;
+            // Ensure we save a clean path format
+            const imagePath = cleanupImagePath(req.file.path);
+            console.log('Saving receipt image path:', imagePath);
 
             const recharge = new Recharge({
                 requestId,
@@ -71,11 +86,15 @@ exports.submitRechargeRequest = async (req, res) => {
                 amount,
                 paymentMethod,
                 tid,
-                receiptImage: relativeImagePath,
+                receiptImage: imagePath,
                 receiptUploadDate: new Date()
             });
 
             await recharge.save();
+
+            // Return the full URL in the response for immediate display
+            const imageUrl = `${req.protocol}://${req.get('host')}/${imagePath}`;
+            recharge.receiptImage = imageUrl;
 
             res.status(201).json({
                 success: true,
@@ -101,8 +120,10 @@ exports.getMyRechargeRecords = async (req, res) => {
         const rechargesWithUrls = recharges.map(recharge => {
             const rechargeObj = recharge.toObject();
             if (rechargeObj.receiptImage) {
-                // Make sure the path is correctly formed with the host
-                rechargeObj.receiptImage = `${req.protocol}://${req.get('host')}/${rechargeObj.receiptImage}`;
+                // Make sure we have a clean path first
+                const cleanPath = cleanupImagePath(rechargeObj.receiptImage);
+                rechargeObj.receiptImage = `${req.protocol}://${req.get('host')}/${cleanPath}`;
+                console.log('Receipt image URL:', rechargeObj.receiptImage);
             }
             return rechargeObj;
         });
@@ -131,8 +152,10 @@ exports.getAllRechargeRequests = async (req, res) => {
         const rechargesWithUrls = recharges.map(recharge => {
             const rechargeObj = recharge.toObject();
             if (rechargeObj.receiptImage) {
-                // Make sure the path is correctly formed with the host
-                rechargeObj.receiptImage = `${req.protocol}://${req.get('host')}/${rechargeObj.receiptImage}`;
+                // Make sure we have a clean path first
+                const cleanPath = cleanupImagePath(rechargeObj.receiptImage);
+                rechargeObj.receiptImage = `${req.protocol}://${req.get('host')}/${cleanPath}`;
+                console.log('Receipt image URL (admin view):', rechargeObj.receiptImage);
             }
             return rechargeObj;
         });
@@ -223,8 +246,9 @@ exports.deleteRechargeRequest = async (req, res) => {
         // Delete the receipt image file if it exists
         if (recharge.receiptImage) {
             try {
-                // Ensure we're using the correct path relative to the backend directory
-                const imagePath = path.join(__dirname, '../../', recharge.receiptImage);
+                // Clean up the path before trying to delete
+                const cleanPath = cleanupImagePath(recharge.receiptImage);
+                const imagePath = path.join(__dirname, '../../', cleanPath);
                 console.log('Attempting to delete file at path:', imagePath);
                 if (fs.existsSync(imagePath)) {
                     fs.unlinkSync(imagePath);

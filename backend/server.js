@@ -89,13 +89,26 @@ const uploadsDir = path.join(__dirname, 'uploads');
 const receiptsDir = path.join(uploadsDir, 'receipts');
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir);
+    console.log('Created uploads directory:', uploadsDir);
 }
 if (!fs.existsSync(receiptsDir)) {
     fs.mkdirSync(receiptsDir);
+    console.log('Created receipts directory:', receiptsDir);
 }
 
-// Serve static files from uploads directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve static files from uploads directory - with detailed logging
+app.use('/uploads', (req, res, next) => {
+    console.log('Static file request for:', req.url);
+    next();
+}, express.static(path.join(__dirname, 'uploads')));
+
+// Log all static file requests
+app.use((req, res, next) => {
+    if (req.url.startsWith('/uploads')) {
+        console.log('Uploads access:', req.url);
+    }
+    next();
+});
 
 // Static files
 app.use(express.static(path.join(__dirname, '../frontend/public')));

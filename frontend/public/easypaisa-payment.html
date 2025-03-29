@@ -37,11 +37,13 @@
         }
 
         body {
-            background-color: #fff;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
         }
 
         .header {
-            background-color: #2E7D32;
+            background-color: #DC143C;
             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iMjAwIj48cGF0aCBkPSJNMCwxMDBjMTUwLDAsNTAsLTEwMCwyMDAsLTEwMHM1MCwxMDAsMjAwLDEwMHM1MCwtMTAwLDIwMCwtMTAwczUwLDEwMCwyMDAsMTAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmY0IiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=');
             background-position: center;
             background-repeat: no-repeat;
@@ -98,27 +100,27 @@
         }
 
         .warning-header i {
-            color: #dc3545;
+            color: #DC143C;
         }
 
         .warning-text {
-            color: #dc3545;
+            color: #666;
             margin-bottom: 20px;
             line-height: 1.5;
         }
 
         .payment-details {
-            background-color: #f8f9fa;
-            border-radius: 10px;
+            background-color: white;
             padding: 20px;
-            margin-top: 20px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .detail-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 15px 0;
             border-bottom: 1px solid #eee;
         }
 
@@ -128,13 +130,14 @@
 
         .detail-label {
             color: #666;
+            font-size: 1rem;
         }
 
         .detail-value {
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px;
         }
 
         .copy-btn {
@@ -159,8 +162,14 @@
         }
 
         .upload-section {
-            margin-top: 20px;
+            background-color: #f9f9f9;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
             text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .upload-btn {
@@ -180,8 +189,8 @@
         }
 
         .upload-btn:hover {
-            border-color: #2E7D32;
-            color: #2E7D32;
+            border-color: #DC143C;
+            color: #DC143C;
         }
 
         .receipt-preview {
@@ -198,7 +207,7 @@
         .confirm-btn {
             width: 100%;
             padding: 15px;
-            background-color: #2E7D32;
+            background-color: #DC143C;
             color: white;
             border: none;
             border-radius: 25px;
@@ -210,11 +219,11 @@
         }
 
         .confirm-btn:hover {
-            background-color: #1B5E20;
+            background-color: #B01030;
         }
 
         .copy-icon {
-            color: #2E7D32;
+            color: #DC143C;
             cursor: pointer;
         }
 

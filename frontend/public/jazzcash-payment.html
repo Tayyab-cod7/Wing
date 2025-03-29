@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment - Wing System</title>
+    <title>JazzCash Payment | Wing System</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -14,357 +15,196 @@
         }
 
         body {
-            background-color: #fff;
-        }
-
-        .header {
-            background-color: #4338CA;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iMjAwIj48cGF0aCBkPSJNMCwxMDBjMTUwLDAsNTAsLTEwMCwyMDAsLTEwMHM1MCwxMDAsMjAwLDEwMHM1MCwtMTAwLDIwMCwtMTAwczUwLDEwMCwyMDAsMTAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmY0IiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=');
-            background-position: center;
-            background-repeat: no-repeat;
-            padding: 40px 20px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .logo img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: white;
-            padding: 5px;
-        }
-
-        .logo span {
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .account-error {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            border-radius: 25px;
-            text-align: center;
-            margin-bottom: 20px;
-            color: #FFA500;
-        }
-
-        .warning-section {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin: -20px 15px 0;
-            position: relative;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .warning-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
+            background-color: #f5f5f5;
             color: #333;
+            line-height: 1.6;
         }
 
-        .warning-header i {
-            color: #dc3545;
-        }
-
-        .warning-text {
-            color: #dc3545;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .payment-details {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            color: #666;
-        }
-
-        .detail-value {
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .copy-btn {
-            background: none;
-            border: none;
-            padding: 5px;
-            cursor: pointer;
-        }
-
-        .countdown {
-            color: #666;
-            font-weight: 500;
-        }
-
-        .tid-input {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            margin-top: 20px;
-            font-size: 16px;
-        }
-
-        .upload-section {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .upload-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .upload-btn:hover {
-            border-color: #4338CA;
-            color: #4338CA;
-        }
-
-        .receipt-preview {
-            max-width: 150px;
-            max-height: 150px;
-            margin-top: 15px;
-            border-radius: 10px;
-            display: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            cursor: pointer;
-            object-fit: cover;
-        }
-
-        .confirm-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: #4338CA;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 500;
-            margin-top: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .confirm-btn:hover {
-            background-color: #3730A3;
-        }
-
-        .copy-icon {
-            color: #4338CA;
-            cursor: pointer;
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            position: relative;
-            max-width: 90%;
-            max-height: 90vh;
-        }
-
-        .modal-image {
-            max-width: 100%;
-            max-height: 90vh;
-            border-radius: 10px;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: white;
-            font-size: 30px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 5px;
-        }
-
-        /* Original styles remain unchanged */
         .payment-container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .payment-card {
-            background: white;
-            border-radius: 15px;
+        .payment-header {
+            background-color: #DC143C; /* Crimson red */
+            color: white;
             padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .payment-header {
-            text-align: center;
-            margin-bottom: 20px;
+        .payment-header i {
+            font-size: 24px;
         }
 
         .payment-header h1 {
-            color: #333;
             font-size: 1.5rem;
-            margin-bottom: 10px;
+            font-weight: 600;
         }
 
-        .payment-header p {
+        .payment-instructions {
+            background-color: #DC143C; /* Crimson red */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .payment-details {
+            background-color: white;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .payment-row:last-child {
+            border-bottom: none;
+        }
+
+        .payment-label {
             color: #666;
             font-size: 1rem;
         }
 
-        .payment-details {
-            margin-bottom: 20px;
-        }
-
-        .payment-detail-row {
+        .payment-value {
+            font-size: 1rem;
+            font-weight: 600;
             display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
+            align-items: center;
         }
 
-        .payment-detail-row:last-child {
-            border-bottom: none;
+        .payment-value .copy-icon {
+            margin-left: 10px;
+            color: #DC143C; /* Crimson red */
+            cursor: pointer;
         }
 
-        .payment-detail-label {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .payment-detail-value {
-            color: #333;
-            font-weight: 500;
-        }
-
-        .payment-instructions {
-            background: #f8f8f8;
+        .warning-box {
+            background-color: #fff8f8;
+            border-left: 4px solid #DC143C; /* Crimson red */
             padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
         }
 
-        .payment-instructions h3 {
-            color: #333;
+        .warning-box h3 {
+            display: flex;
+            align-items: center;
+            color: #DC143C; /* Crimson red */
             margin-bottom: 10px;
             font-size: 1.1rem;
         }
 
-        .payment-instructions ul {
-            list-style-type: none;
-            padding-left: 0;
-            margin: 0;
+        .warning-box h3 i {
+            margin-right: 10px;
         }
 
-        .payment-instructions li {
-            padding: 8px 0;
-            padding-left: 20px;
-            position: relative;
+        .warning-box p {
             color: #666;
             font-size: 0.95rem;
+            margin-bottom: 8px;
         }
 
-        .payment-instructions li:before {
-            content: "•";
-            color: #8BC34A;
-            position: absolute;
-            left: 0;
-        }
-
-        .payment-actions {
-            display: flex;
-            gap: 10px;
+        .upload-section {
+            background-color: #f9f9f9;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
             margin-top: 20px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .confirm-btn {
-            background: #8BC34A;
-            color: white;
+        .upload-section:hover {
+            border-color: #DC143C; /* Crimson red */
         }
 
-        .confirm-btn:hover {
-            background: #7CB342;
-        }
-
-        .cancel-btn {
-            background: #f5f5f5;
+        .upload-icon {
+            font-size: 24px;
             color: #666;
+            margin-bottom: 10px;
         }
 
-        .cancel-btn:hover {
-            background: #e0e0e0;
+        .upload-text {
+            color: #666;
+            font-size: 1rem;
         }
 
-        /* Responsive styles */
+        .upload-input {
+            display: none;
+        }
+
+        .confirm-button {
+            background-color: #DC143C; /* Crimson red */
+            color: white;
+            border: none;
+            padding: 15px 0;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .confirm-button:hover {
+            background-color: #B01030; /* Darker crimson red */
+        }
+
+        .confirm-button:disabled {
+            background-color: #e0e0e0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .receipt-preview {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* Error and Success messages */
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background-color: #ffebee;
+            color: #d32f2f;
+            border-left: 4px solid #d32f2f;
+        }
+
+        .success-message {
+            background-color: #e8f5e9;
+            color: #388e3c;
+            border-left: 4px solid #388e3c;
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 768px) {
             .payment-container {
                 padding: 15px;
             }
 
-            .payment-card {
+            .payment-header {
                 padding: 15px;
             }
 
@@ -372,37 +212,22 @@
                 font-size: 1.3rem;
             }
 
-            .payment-header p {
-                font-size: 0.9rem;
-            }
-
-            .payment-detail-row {
-                padding: 8px 0;
-            }
-
-            .payment-detail-label {
-                font-size: 0.85rem;
-            }
-
-            .payment-detail-value {
-                font-size: 0.9rem;
-            }
-
             .payment-instructions {
-                padding: 12px;
-            }
-
-            .payment-instructions h3 {
-                font-size: 1rem;
-            }
-
-            .payment-instructions li {
+                padding: 12px 15px;
                 font-size: 0.9rem;
             }
 
-            .action-btn {
-                padding: 10px;
+            .payment-details {
+                padding: 15px;
+            }
+
+            .payment-label, .payment-value {
                 font-size: 0.95rem;
+            }
+
+            .confirm-button {
+                padding: 12px 0;
+                font-size: 1rem;
             }
         }
 
@@ -411,7 +236,7 @@
                 padding: 10px;
             }
 
-            .payment-card {
+            .payment-header {
                 padding: 12px;
             }
 
@@ -419,238 +244,267 @@
                 font-size: 1.2rem;
             }
 
-            .payment-header p {
-                font-size: 0.85rem;
-            }
-
-            .payment-detail-row {
-                padding: 6px 0;
-            }
-
-            .payment-detail-label {
-                font-size: 0.8rem;
-            }
-
-            .payment-detail-value {
-                font-size: 0.85rem;
-            }
-
             .payment-instructions {
                 padding: 10px;
-            }
-
-            .payment-instructions h3 {
-                font-size: 0.95rem;
-            }
-
-            .payment-instructions li {
                 font-size: 0.85rem;
-                padding-left: 15px;
             }
 
-            .payment-actions {
-                flex-direction: column;
-                gap: 8px;
+            .payment-details {
+                padding: 12px;
             }
 
-            .action-btn {
-                width: 100%;
-                padding: 8px;
+            .payment-label, .payment-value {
                 font-size: 0.9rem;
+            }
+
+            .warning-box {
+                padding: 12px;
+            }
+
+            .warning-box h3 {
+                font-size: 1rem;
+            }
+
+            .warning-box p {
+                font-size: 0.85rem;
+            }
+
+            .upload-text {
+                font-size: 0.9rem;
+            }
+
+            .confirm-button {
+                padding: 10px 0;
+                font-size: 0.95rem;
             }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="header">
-        <div class="logo">
+    <div class="payment-container">
+        <!-- Payment Header -->
+        <div class="payment-header">
+            <i class="fas fa-mobile-alt"></i>
+            <h1>JazzCash Payment</h1>
         </div>
-        <div class="account-error">
-        </div>
-    </div>
 
-    <div class="warning-section">
-        <div class="warning-header">
-            <i class="fas fa-exclamation-circle"></i>
-            <span>Warning</span>
-        </div>
-        <div class="warning-text">
+        <!-- Payment Instructions -->
+        <div class="payment-instructions">
             Please pay with the same wallet and fill in the correct TID to avoid failure.
         </div>
-        <div class="payment-text">
-            Please make payment to the account number below.
-        </div>
 
+        <!-- Payment Details -->
         <div class="payment-details">
-            <div class="detail-row">
-                <span class="detail-label">Wallet</span>
-                <span class="detail-value">
-                    Jazz-Cash
+            <!-- Warning Box -->
+            <div class="warning-box">
+                <h3><i class="fas fa-exclamation-circle"></i> Warning</h3>
+                <p>Please make payment to the account number below.</p>
+            </div>
+
+            <!-- Payment Information -->
+            <div class="payment-row">
+                <span class="payment-label">Wallet</span>
+                <span class="payment-value">JazzCash</span>
+            </div>
+
+            <div class="payment-row">
+                <span class="payment-label">Account</span>
+                <span class="payment-value">
+                    03151251123
+                    <i class="fas fa-copy copy-icon" onclick="copyToClipboard('03151251123')"></i>
                 </span>
             </div>
-            <div class="detail-row">
-                <span class="detail-label">Account</span>
-                <span class="detail-value">
-                    <span id="accountNumber">03080006873</span>
-                    <button class="copy-btn" onclick="copyToClipboard('accountNumber')">
-                        <i class="far fa-copy copy-icon"></i>
-                    </button>
+
+            <div class="payment-row">
+                <span class="payment-label">Quantity</span>
+                <span class="payment-value">
+                    <span id="paymentAmount">2000</span>
+                    <i class="fas fa-copy copy-icon" onclick="copyToClipboard(document.getElementById('paymentAmount').textContent)"></i>
                 </span>
             </div>
-            <div class="detail-row">
-                <span class="detail-label">Quantity</span>
-                <span class="detail-value">
-                    <span id="amountDisplay">Loading...</span>
-                    <button class="copy-btn" onclick="copyToClipboard('amountDisplay')">
-                        <i class="far fa-copy copy-icon"></i>
-                    </button>
-                </span>
+
+            <!-- TID Input -->
+            <div class="payment-row">
+                <span class="payment-label">TID</span>
+                <input type="text" id="tidInput" placeholder="Input your JazzCash transaction ID" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
             </div>
-        </div>
 
-        <div class="upload-section">
-            <input type="file" id="receiptUpload" accept="image/*" style="display: none;">
-            <button class="upload-btn" onclick="document.getElementById('receiptUpload').click()">
-                <i class="fas fa-upload"></i>
-                <span>Upload Payment Receipt</span>
-            </button>
-            <img id="receiptPreview" class="receipt-preview" alt="Receipt preview">
-        </div>
-
-        <!-- Modal for receipt preview -->
-        <div class="modal" id="receiptModal">
-            <div class="modal-content">
-                <button class="close-modal">&times;</button>
-                <img id="modalImage" class="modal-image" src="" alt="Receipt preview">
+            <!-- Upload Section -->
+            <div class="upload-section" id="uploadTrigger">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">Upload Payment Receipt</div>
+                <input type="file" id="receiptUpload" class="upload-input" accept="image/*">
             </div>
-        </div>
 
-        <input type="text" class="tid-input" placeholder="Input your Jazz-cash number" maxlength="11" pattern="[0-9]{11}" oninput="validateJazzCashNumber(this)">
-        <button class="confirm-btn" disabled>Confirm</button>
+            <!-- Receipt Image Preview -->
+            <img id="receiptPreview" src="#" alt="Receipt preview" class="receipt-preview">
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="message error-message"></div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="message success-message"></div>
+
+            <!-- Confirm Button -->
+            <button id="confirmButton" class="confirm-button" disabled>Confirm Payment</button>
+        </div>
     </div>
 
     <script>
-        function validateJazzCashNumber(input) {
-            input.value = input.value.replace(/[^0-9]/g, '');
-            
-            if (input.value.length > 11) {
-                input.value = input.value.slice(0, 11);
+        // Get recharge request data from localStorage
+        const currentRequestData = JSON.parse(localStorage.getItem('currentRechargeRequest') || '{}');
+        const requestId = currentRequestData.requestId || '';
+        const amount = currentRequestData.amount || 0;
+
+        // Update payment amount in the UI
+        document.getElementById('paymentAmount').textContent = amount;
+
+        // Function to copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showSuccessMessage('Copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Function to show error message
+        function showErrorMessage(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Function to show success message
+        function showSuccessMessage(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Set up file upload
+        const uploadTrigger = document.getElementById('uploadTrigger');
+        const receiptUpload = document.getElementById('receiptUpload');
+        const receiptPreview = document.getElementById('receiptPreview');
+        const confirmButton = document.getElementById('confirmButton');
+        const tidInput = document.getElementById('tidInput');
+
+        uploadTrigger.addEventListener('click', () => {
+            receiptUpload.click();
+        });
+
+        receiptUpload.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    receiptPreview.src = e.target.result;
+                    receiptPreview.style.display = 'block';
+                    validateForm();
+                };
+                reader.readAsDataURL(this.files[0]);
             }
-            
-            const confirmBtn = document.querySelector('.confirm-btn');
-            const receiptUpload = document.getElementById('receiptUpload');
-            
-            if (input.value.length === 11 && receiptUpload.files.length > 0) {
-                confirmBtn.disabled = false;
+        });
+
+        tidInput.addEventListener('input', validateForm);
+
+        function validateForm() {
+            // Enable button only if TID is filled and receipt is uploaded
+            if (tidInput.value.trim() !== '' && receiptUpload.files && receiptUpload.files[0]) {
+                confirmButton.disabled = false;
             } else {
-                confirmBtn.disabled = true;
+                confirmButton.disabled = true;
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentRequest = JSON.parse(localStorage.getItem('currentRechargeRequest'));
-            const confirmBtn = document.querySelector('.confirm-btn');
-            const receiptUpload = document.getElementById('receiptUpload');
-            const receiptPreview = document.getElementById('receiptPreview');
-            const uploadBtn = document.querySelector('.upload-btn');
-            const modal = document.getElementById('receiptModal');
-            const modalImage = document.getElementById('modalImage');
-            const tidInput = document.querySelector('.tid-input');
-            
-            if (!currentRequest) {
-                window.location.href = 'recharge.html';
+        // Submit recharge request
+        confirmButton.addEventListener('click', async function() {
+            if (!requestId) {
+                showErrorMessage('Invalid request. Please try again.');
                 return;
             }
 
-            // Display amount
-            document.getElementById('amountDisplay').textContent = currentRequest.amount;
+            const tid = tidInput.value.trim();
+            if (!tid) {
+                showErrorMessage('Please enter your transaction ID (TID).');
+                return;
+            }
 
-            // Handle file upload
-            receiptUpload.addEventListener('change', function(e) {
-                if (e.target.files && e.target.files[0]) {
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        receiptPreview.src = e.target.result;
-                        receiptPreview.style.display = 'block';
-                        uploadBtn.innerHTML = '<i class="fas fa-check"></i><span>Receipt Uploaded</span>';
-                        uploadBtn.style.backgroundColor = '#e8f5e9';
-                        uploadBtn.style.borderColor = '#4caf50';
-                        uploadBtn.style.color = '#4caf50';
-                        
-                        if (tidInput.value.length === 11) {
-                            confirmBtn.disabled = false;
-                        }
-                    }
-                    
-                    reader.readAsDataURL(e.target.files[0]);
-                }
-            });
+            if (!receiptUpload.files || !receiptUpload.files[0]) {
+                showErrorMessage('Please upload your payment receipt.');
+                return;
+            }
 
-            // Handle modal
-            receiptPreview.addEventListener('click', function() {
-                modalImage.src = this.src;
-                modal.style.display = 'flex';
-            });
+            try {
+                confirmButton.disabled = true;
+                confirmButton.textContent = 'Processing...';
 
-            document.querySelector('.close-modal').addEventListener('click', function() {
-                modal.style.display = 'none';
-            });
+                // Prepare form data
+                const formData = new FormData();
+                formData.append('requestId', requestId);
+                formData.append('amount', amount);
+                formData.append('paymentMethod', 'jazzcash');
+                formData.append('tid', tid);
+                formData.append('receipt', receiptUpload.files[0]);
 
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-
-            // Handle confirm button click
-            confirmBtn.addEventListener('click', async function() {
-                const tid = tidInput.value;
-                if (!tid || tid.length !== 11) {
-                    alert('Please enter a valid 11-digit Jazz Cash number');
+                // Get token
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = 'index.html';
                     return;
                 }
 
-                if (!receiptUpload.files[0]) {
-                    alert('Please upload the payment receipt first');
-                    return;
-                }
+                // Send request
+                const response = await fetch(`${window.location.origin}/api/recharge/request`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
 
-                try {
-                    // Create form data
-                    const formData = new FormData();
-                    formData.append('receipt', receiptUpload.files[0]);
-                    formData.append('requestId', currentRequest.requestId);
-                    formData.append('amount', currentRequest.amount);
-                    formData.append('paymentMethod', currentRequest.paymentMethod);
-                    formData.append('tid', tid);
-
-                    // Send request to server
-                    const token = localStorage.getItem('token');
-                    const response = await fetch('/api/recharge/request', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: formData
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(data.error || 'Error submitting recharge request');
-                    }
-
-                    // Clear current request and redirect
+                const data = await response.json();
+                
+                if (data.success) {
+                    showSuccessMessage('Payment submitted successfully!');
+                    // Clear current request
                     localStorage.removeItem('currentRechargeRequest');
-                    alert('Payment receipt uploaded successfully!');
-                    window.location.href = 'recharge-record.html';
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert(error.message);
+                    // Redirect to recharge record after delay
+                    setTimeout(() => {
+                        window.location.href = 'recharge-record.html';
+                    }, 2000);
+                } else {
+                    showErrorMessage(data.error || 'Failed to submit payment. Please try again.');
+                    confirmButton.disabled = false;
+                    confirmButton.textContent = 'Confirm Payment';
                 }
-            });
+            } catch (error) {
+                console.error('Error submitting recharge:', error);
+                showErrorMessage('Network error. Please try again.');
+                confirmButton.disabled = false;
+                confirmButton.textContent = 'Confirm Payment';
+            }
+        });
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Validate requestId exists
+            if (!requestId) {
+                window.location.href = 'recharge.html';
+            }
         });
     </script>
 </body>

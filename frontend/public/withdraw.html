@@ -1362,6 +1362,30 @@
         withdrawAmount.addEventListener('input', () => amountError.style.display = 'none');
         accountNumber.addEventListener('input', () => accountError.style.display = 'none');
 
+        // Show Success Message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            if (successDiv) {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+                setTimeout(() => {
+                    successDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Show Error Message
+        function showError(message) {
+            const errorDiv = document.getElementById('accountError');
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
             if (checkAuth()) {

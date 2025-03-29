@@ -663,6 +663,12 @@
 
         // Earn Daily
         function earnDaily() {
+            // Disable the button immediately to prevent multiple clicks
+            const earnButton = document.getElementById('earnButton');
+            earnButton.disabled = true;
+            earnButton.style.backgroundColor = '#ccc';
+            earnButton.style.cursor = 'not-allowed';
+
             const token = localStorage.getItem('token');
             if (!token) {
                 console.log('No token found in earnDaily');
@@ -674,6 +680,10 @@
             if (!document.getElementById('activePackageCard').style.display || 
                 document.getElementById('activePackageCard').style.display === 'none') {
                 showError('You need an active package to earn rewards');
+                // Re-enable the button if validation fails
+                earnButton.disabled = false;
+                earnButton.style.backgroundColor = '';
+                earnButton.style.cursor = 'pointer';
                 return;
             }
 
@@ -683,6 +693,10 @@
                 const timeElapsed = Date.now() - parseInt(lastEarnTime);
                 if (timeElapsed < 24 * 60 * 60 * 1000) {
                     showError('Please wait for the cooldown to finish');
+                    // Re-enable the button if cooldown check fails
+                    earnButton.disabled = false;
+                    earnButton.style.backgroundColor = '';
+                    earnButton.style.cursor = 'pointer';
                     return;
                 }
             }
@@ -716,14 +730,22 @@
                     document.getElementById('currentBalance').textContent = data.balance || 0;
                     
                     localStorage.setItem('lastEarnTime', Date.now().toString());
-                    updateTimer();
+                    updateTimer(); // This will keep the button disabled
                 } else {
                     showError(data.message || 'Failed to earn');
+                    // Re-enable the button on failure
+                    earnButton.disabled = false;
+                    earnButton.style.backgroundColor = '';
+                    earnButton.style.cursor = 'pointer';
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 showError(error.message || 'Error earning reward');
+                // Re-enable the button on error
+                earnButton.disabled = false;
+                earnButton.style.backgroundColor = '';
+                earnButton.style.cursor = 'pointer';
             });
         }
 

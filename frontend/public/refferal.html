@@ -708,7 +708,7 @@
             document.getElementById('totalReferrals').textContent = '0';
             document.getElementById('referralEarnings').textContent = 'RS 0';
         }
-
+        
         // Show Success Message
         function showSuccess(message) {
             const successDiv = document.getElementById('successMessage');
@@ -846,13 +846,21 @@
             if (referralCode.startsWith('Error:') || referralCode === 'Loading...') {
                 return;
             }
-            navigator.clipboard.writeText(referralCode)
-                .then(() => {
-                    showSuccess('Referral code copied to clipboard!');
-                })
-                .catch(err => {
-                    console.error('Failed to copy:', err);
-                });
+            
+            // Try using the newer clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(referralCode)
+                    .then(() => {
+                        showSuccess('Referral code copied to clipboard!');
+                    })
+                    .catch(err => {
+                        // Fall back to alternative method
+                        fallbackCopyTextToClipboard(referralCode, 'Referral code copied to clipboard!');
+                    });
+            } else {
+                // Use fallback for browsers without clipboard API
+                fallbackCopyTextToClipboard(referralCode, 'Referral code copied to clipboard!');
+            }
         }
 
         // Copy Referral Link
@@ -861,13 +869,52 @@
             if (referralLink.startsWith('Error:') || referralLink === 'Loading...') {
                 return;
             }
-            navigator.clipboard.writeText(referralLink)
-                .then(() => {
-                    showSuccess('Referral link copied to clipboard!');
-                })
-                .catch(err => {
-                    console.error('Failed to copy:', err);
-                });
+            
+            // Try using the newer clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(referralLink)
+                    .then(() => {
+                        showSuccess('Referral link copied to clipboard!');
+                    })
+                    .catch(err => {
+                        // Fall back to alternative method
+                        fallbackCopyTextToClipboard(referralLink, 'Referral link copied to clipboard!');
+                    });
+            } else {
+                // Use fallback for browsers without clipboard API
+                fallbackCopyTextToClipboard(referralLink, 'Referral link copied to clipboard!');
+            }
+        }
+        
+        // Fallback copy method using textarea
+        function fallbackCopyTextToClipboard(text, successMessage) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            
+            // Make the textarea out of viewport
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            
+            // Select and copy the text
+            textArea.focus();
+            textArea.select();
+            
+            let successful = false;
+            try {
+                successful = document.execCommand('copy');
+                if (successful) {
+                    showSuccess(successMessage);
+                } else {
+                    console.error('Unable to copy');
+                }
+            } catch (err) {
+                console.error('Error copying text: ', err);
+            }
+            
+            // Clean up
+            document.body.removeChild(textArea);
         }
 
         // Add auto-refresh functionality

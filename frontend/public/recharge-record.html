@@ -629,6 +629,8 @@
             // Decode the image URL if it's encoded
             const decodedSrc = decodeURIComponent(imageSrc);
             
+            console.log('Opening modal with image:', decodedSrc);
+            
             // Set the image source
             modalImage.src = decodedSrc;
             
@@ -657,13 +659,20 @@
 
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch('/api/recharge/my-records', {
+                
+                // Use the correct API URL with origin
+                const apiUrl = `${window.location.origin}/api/recharge/my-records`;
+                console.log('Fetching recharge records from:', apiUrl);
+                
+                const response = await fetch(apiUrl, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
 
                 const result = await response.json();
+                
+                console.log('Recharge records response:', result);
 
                 if (!response.ok) {
                     throw new Error(result.error || 'Error fetching recharge records');
@@ -681,46 +690,57 @@
                     return;
                 }
 
-                recordsContainer.innerHTML = recharges.map(record => `
-                    <div class="recharge-item">
-                        <div class="order-number">
-                            Request ID: ${record.requestId}
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">Amount</span>
-                            <span class="value amount">Rs. ${record.amount}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">Payment Method</span>
-                            <span class="value">${record.paymentMethod}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">Status</span>
-                            <span class="status ${record.status.toLowerCase()}">
-                                ${record.status}
-                            </span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">TID</span>
-                            <span class="value">${record.tid}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">Date</span>
-                            <span class="value">${new Date(record.createdAt).toLocaleString()}</span>
-                        </div>
-                        ${record.receiptImage ? `
+                recordsContainer.innerHTML = recharges.map(record => {
+                    console.log('Processing record:', record.requestId, 'Image:', record.receiptImage);
+                    
+                    // Ensure image path is complete with origin if needed
+                    let imagePath = record.receiptImage;
+                    if (imagePath && !imagePath.startsWith('http')) {
+                        imagePath = `${window.location.origin}/${imagePath}`;
+                    }
+                    
+                    return `
+                        <div class="recharge-item">
+                            <div class="order-number">
+                                Request ID: ${record.requestId}
+                            </div>
                             <div class="detail-row">
-                                <span class="label">Receipt</span>
-                                <span class="value">
-                                    <img src="${record.receiptImage}" 
-                                         alt="Receipt" 
-                                         class="receipt-preview"
-                                         onclick="openModal('${encodeURIComponent(record.receiptImage)}')">
+                                <span class="label">Amount</span>
+                                <span class="value amount">Rs. ${record.amount}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Payment Method</span>
+                                <span class="value">${record.paymentMethod}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Status</span>
+                                <span class="status ${record.status.toLowerCase()}">
+                                    ${record.status}
                                 </span>
                             </div>
-                        ` : ''}
-                    </div>
-                `).join('');
+                            <div class="detail-row">
+                                <span class="label">TID</span>
+                                <span class="value">${record.tid}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Date</span>
+                                <span class="value">${new Date(record.createdAt).toLocaleString()}</span>
+                            </div>
+                            ${record.receiptImage ? `
+                                <div class="detail-row">
+                                    <span class="label">Receipt</span>
+                                    <span class="value">
+                                        <img src="${imagePath}" 
+                                             alt="Receipt" 
+                                             class="receipt-preview"
+                                             onerror="this.onerror=null; this.src='images/receipt-placeholder.png'; console.error('Failed to load image:', '${imagePath}');"
+                                             onclick="openModal('${encodeURIComponent(imagePath)}')">
+                                    </span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
 
             } catch (error) {
                 console.error('Error:', error);

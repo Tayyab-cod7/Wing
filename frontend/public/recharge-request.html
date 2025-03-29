@@ -949,9 +949,20 @@
         }
 
         function openReceiptModal(receiptUrl) {
+            console.log('Opening receipt modal with URL:', receiptUrl);
+            
+            // Decode URL if encoded
+            const decodedUrl = decodeURIComponent(receiptUrl);
+            
+            // Ensure URL is absolute
+            let fullUrl = decodedUrl;
+            if (fullUrl && !fullUrl.startsWith('http')) {
+                fullUrl = `${window.location.origin}/${fullUrl}`;
+            }
+            
             const modal = document.getElementById('receiptModal');
             const modalImage = document.getElementById('modalImage');
-            modalImage.src = receiptUrl;
+            modalImage.src = fullUrl;
             modal.style.display = 'flex';
         }
 

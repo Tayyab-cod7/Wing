@@ -98,7 +98,15 @@ if (!fs.existsSync(receiptsDir)) {
 
 // Serve static files from uploads directory - with detailed logging
 app.use('/uploads', (req, res, next) => {
-    console.log('Static file request for:', req.url);
+    console.log('Static file request for uploads:', req.url);
+    console.log('Full path:', path.join(__dirname, 'uploads', req.url));
+    // Check if file exists
+    const filePath = path.join(__dirname, 'uploads', req.url);
+    if (fs.existsSync(filePath)) {
+        console.log('File exists at path:', filePath);
+    } else {
+        console.log('File NOT found at path:', filePath);
+    }
     next();
 }, express.static(path.join(__dirname, 'uploads')));
 

@@ -124,6 +124,44 @@
             font-weight: 700;
         }
 
+        .cooldown-timer {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            color: var(--danger-color);
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        
+        .cooldown-label {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--danger-color);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .cooldown-text {
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+        
+        .timer-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: monospace;
+            color: var(--danger-color);
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
         .withdraw-form {
             background: var(--white);
             border-radius: 12px;
@@ -615,8 +653,21 @@
             </div>
 
             <div class="current-balance">
-                <div class="balance-label">Available Balance</div>
+                <div class="balance-label">Current Balance</div>
                 <div class="balance-value" id="userBalance">Rs. 0</div>
+                <div class="user-package">Package: <span id="userPackage">No Package</span></div>
+            </div>
+            
+            <!-- Add cooldown timer display -->
+            <div id="cooldownTimer" class="cooldown-timer" style="display: none;">
+                <div class="cooldown-label">⚠️ WITHDRAWAL LOCKED ⚠️</div>
+                <div class="cooldown-text">Next withdrawal available in:</div>
+                <div class="timer-value">00:00:00</div>
+            </div>
+            
+            <div class="package-limits">
+                <i class="fas fa-wallet"></i>
+                Your withdrawal limit: Rs. 0 - Rs. 0
             </div>
 
             <div class="withdraw-form">
@@ -845,6 +896,46 @@
         // Add these variables at the top with other DOM elements
         let lastWithdrawalTime = localStorage.getItem('lastWithdrawalTime');
         let withdrawalCooldown = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+        
+        // Add a function to display the cooldown timer
+        function updateCooldownTimer() {
+            if (!lastWithdrawalTime) return;
+            
+            const now = Date.now();
+            const timeSinceLastWithdrawal = now - parseInt(lastWithdrawalTime);
+            const remainingTime = withdrawalCooldown - timeSinceLastWithdrawal;
+            
+            if (remainingTime <= 0) {
+                localStorage.removeItem('lastWithdrawalTime');
+                lastWithdrawalTime = null;
+                
+                const timerEl = document.getElementById('cooldownTimer');
+                if (timerEl) {
+                    timerEl.style.display = 'none';
+                }
+                
+                updateWithdrawalButtonState();
+                return;
+            }
+            
+            const hours = Math.floor(remainingTime / (60 * 60 * 1000));
+            const minutes = Math.floor((remainingTime % (60 * 60 * 1000)) / (60 * 1000));
+            const seconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
+            
+            const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            // Display the timer
+            const timerEl = document.getElementById('cooldownTimer');
+            if (timerEl) {
+                timerEl.style.display = 'block';
+                const timerValueEl = timerEl.querySelector('.timer-value');
+                if (timerValueEl) {
+                    timerValueEl.textContent = formattedTime;
+                }
+            }
+            
+            updateWithdrawalButtonState();
+        }
 
         // Check Authentication
         function checkAuth() {
@@ -993,22 +1084,43 @@
             e.target.value = value;
         });
 
-        // Modify the validateWithdrawal function
+        // Validate Withdrawal
         async function validateWithdrawal() {
             let isValid = true;
-            const amount = Number(withdrawAmount.value);
+            const amount = parseFloat(withdrawAmount.value);
             const method = document.querySelector('input[name="paymentMethod"]:checked');
             const account = accountNumber.value.trim();
             const currentPackage = await checkActivePackage();
             const limits = currentPackage.isActive ? packageLimits[currentPackage.package] || { min: 0, max: 0 } : { min: 0, max: 0 };
+
+            // Check if withdrawal is allowed (cooldown period)
+            if (lastWithdrawalTime) {
+                const now = Date.now();
+                const timeSinceLastWithdrawal = now - parseInt(lastWithdrawalTime);
+                if (timeSinceLastWithdrawal < withdrawalCooldown) {
+                    const hours = Math.floor((withdrawalCooldown - timeSinceLastWithdrawal) / (60 * 60 * 1000));
+                    const minutes = Math.floor(((withdrawalCooldown - timeSinceLastWithdrawal) % (60 * 60 * 1000)) / (60 * 1000));
+                    amountError.textContent = `You can withdraw again in ${hours}h ${minutes}m`;
+                    amountError.style.display = 'block';
+                    return false;
+                }
+            }
 
             // Validate amount
             if (!amount) {
                 amountError.textContent = 'Please enter an amount';
                 amountError.style.display = 'block';
                 isValid = false;
-            } else if (amount < limits.min || amount > limits.max) {
-                amountError.textContent = `Amount must be between Rs. ${limits.min} and Rs. ${limits.max} for your package`;
+            } else if (!currentPackage.isActive) {
+                amountError.textContent = 'You need an active package to withdraw';
+                amountError.style.display = 'block';
+                isValid = false;
+            } else if (amount < limits.min) {
+                amountError.textContent = `Minimum withdrawal amount for ${currentPackage.package} package is Rs. ${limits.min}`;
+                amountError.style.display = 'block';
+                isValid = false;
+            } else if (amount > limits.max) {
+                amountError.textContent = `Maximum withdrawal amount for ${currentPackage.package} package is Rs. ${limits.max}`;
                 amountError.style.display = 'block';
                 isValid = false;
             } else if (!validateAmount(amount)) {
@@ -1089,29 +1201,21 @@
             }
         };
 
-        // Add this function to check withdrawal cooldown
-        function checkWithdrawalCooldown() {
-            if (!lastWithdrawalTime) return true;
-            
-            const now = Date.now();
-            const timeSinceLastWithdrawal = now - parseInt(lastWithdrawalTime);
-            const remainingTime = withdrawalCooldown - timeSinceLastWithdrawal;
-            
-            if (remainingTime <= 0) {
-                localStorage.removeItem('lastWithdrawalTime');
-                return true;
-            }
-            
-            return false;
-        }
-
         // Add this function to update withdrawal button state
         function updateWithdrawalButtonState() {
-            const canWithdraw = checkWithdrawalCooldown();
-            const hasActivePackage = userPackageSpan && userPackageSpan.textContent !== 'No Package';
+            const canWithdraw = !lastWithdrawalTime || (Date.now() - parseInt(lastWithdrawalTime) >= withdrawalCooldown);
+            const currentPackage = userPackageSpan ? userPackageSpan.textContent : 'No Package';
+            const hasActivePackage = currentPackage !== 'No Package';
             const currentBalance = parseFloat(userBalance.textContent.replace('Rs. ', ''));
-            const hasEnoughBalance = currentBalance >= 300; // Minimum withdrawal amount
+            const minWithdrawalAmount = hasActivePackage ? packageLimits[currentPackage]?.min || 300 : 300;
+            const hasEnoughBalance = currentBalance >= minWithdrawalAmount;
             
+            // Disable the withdrawal form elements if in cooldown or no active package
+            withdrawAmount.disabled = !canWithdraw || !hasActivePackage;
+            accountNumber.disabled = !canWithdraw || !hasActivePackage;
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+                radio.disabled = !canWithdraw || !hasActivePackage;
+            });
             withdrawBtn.disabled = !canWithdraw || !hasActivePackage || !hasEnoughBalance;
             
             if (!canWithdraw) {
@@ -1120,6 +1224,8 @@
                 const hours = Math.floor(remainingTime / (60 * 60 * 1000));
                 const minutes = Math.floor((remainingTime % (60 * 60 * 1000)) / (60 * 1000));
                 withdrawBtn.innerHTML = `<i class="fas fa-clock"></i> Next withdrawal in ${hours}h ${minutes}m`;
+            } else if (!hasActivePackage) {
+                withdrawBtn.innerHTML = `<i class="fas fa-exclamation-circle"></i> No Active Package`;
             } else if (!hasEnoughBalance) {
                 withdrawBtn.innerHTML = `<i class="fas fa-exclamation-circle"></i> Insufficient Balance`;
             } else {
@@ -1130,9 +1236,21 @@
         // Modify the confirmWithdraw click handler
         document.getElementById('confirmWithdraw').addEventListener('click', async function() {
             try {
-                if (!checkWithdrawalCooldown()) {
-                    showError('Please wait for the cooldown period to end');
-                    return;
+                // Disable the button to prevent multiple clicks
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                
+                // Check cooldown period again
+                if (lastWithdrawalTime) {
+                    const now = Date.now();
+                    const timeSinceLastWithdrawal = now - parseInt(lastWithdrawalTime);
+                    if (timeSinceLastWithdrawal < withdrawalCooldown) {
+                        showError('Please wait for the cooldown period to end');
+                        // Re-enable the button
+                        this.disabled = false;
+                        this.innerHTML = 'Confirm Withdrawal';
+                        return;
+                    }
                 }
 
                 const accountNum = document.getElementById('accountNumber').value;
@@ -1142,11 +1260,17 @@
                 
                 if (!selectedMethod) {
                     showError('Please select a payment method');
+                    // Re-enable the button
+                    this.disabled = false;
+                    this.innerHTML = 'Confirm Withdrawal';
                     return;
                 }
 
                 if (amount > currentBalance) {
                     showError('Insufficient balance');
+                    // Re-enable the button
+                    this.disabled = false;
+                    this.innerHTML = 'Confirm Withdrawal';
                     return;
                 }
 
@@ -1188,12 +1312,16 @@
                 if (result.success) {
                     // Set the last withdrawal time
                     localStorage.setItem('lastWithdrawalTime', Date.now().toString());
+                    lastWithdrawalTime = Date.now().toString();
                     
-                    // Update the balance display
+                    // Update the balance display immediately
                     const newBalance = currentBalance - amount;
-                    userBalance.textContent = `Rs. ${newBalance}`;
+                    userBalance.textContent = `Rs. ${newBalance.toFixed(2)}`;
                     
+                    // Show success message
                     showSuccess('Withdrawal request submitted successfully');
+                    
+                    // Close the receipt modal
                     document.getElementById('receiptModal').style.display = 'none';
                     
                     // Reset form
@@ -1202,10 +1330,11 @@
                     document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => radio.checked = false);
                     document.querySelectorAll('.payment-method').forEach(method => method.classList.remove('selected'));
                     
-                    // Update withdrawal button state
+                    // Update withdrawal button state and show timer
+                    updateCooldownTimer();
                     updateWithdrawalButtonState();
                     
-                    // Redirect to withdrawal records page after 2 seconds
+                    // Redirect to withdrawal records page
                     setTimeout(() => {
                         window.location.href = 'withdrawal-record.html';
                     }, 2000);
@@ -1215,6 +1344,10 @@
             } catch (error) {
                 console.error('Error:', error);
                 showError(error.message || 'Failed to submit withdrawal request');
+                
+                // Re-enable the button
+                this.disabled = false;
+                this.innerHTML = 'Confirm Withdrawal';
             }
         });
 
@@ -1236,15 +1369,15 @@
                     loadBalance(),
                     checkActivePackage()
                 ]);
+                
+                // Start cooldown timer if needed
+                if (lastWithdrawalTime) {
+                    updateCooldownTimer();
+                    // Update cooldown timer every second
+                    setInterval(updateCooldownTimer, 1000);
+                }
             }
         });
-
-        // Add periodic updates for the withdrawal button state
-        setInterval(() => {
-            if (checkAuth()) {
-                updateWithdrawalButtonState();
-            }
-        }, 60000); // Update every minute
     </script>
 </body>
 </html> 

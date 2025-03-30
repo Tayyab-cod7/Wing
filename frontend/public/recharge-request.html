@@ -779,6 +779,25 @@
             }
 
             requests.forEach(request => {
+                // Process image path if it exists
+                let imagePath = request.receiptImage;
+                if (imagePath) {
+                    // Check if path contains server file system path
+                    if (imagePath.includes('/var/www/Wing/backend/uploads/')) {
+                        // Extract just the filename from the path
+                        const filename = imagePath.split('/').pop();
+                        // Create a proper URL to the uploads folder
+                        imagePath = `${window.location.origin}/uploads/receipts/${filename}`;
+                    }
+                    // If it's already a relative path, ensure it has origin
+                    else if (!imagePath.startsWith('http')) {
+                        imagePath = `${window.location.origin}/${imagePath}`;
+                    }
+                    
+                    // Update the image path in the request object
+                    request.receiptImage = imagePath;
+                }
+
                 const isApproved = request.status === 'approved';
                 const isRejected = request.status === 'rejected';
                 const isPending = !isApproved && !isRejected;

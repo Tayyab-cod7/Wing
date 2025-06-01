@@ -13,6 +13,9 @@ const withdrawalRoutes = require('./src/routes/withdrawalRoutes');
 // Load env vars
 dotenv.config({ path: path.join(__dirname, '.env') });
 
+// Define the project root directory based on server.js location
+const projectRoot = path.join(__dirname, '..'); // Assuming server.js is in the backend directory
+
 const app = express();
 
 // Body parser
@@ -119,7 +122,7 @@ app.use((req, res, next) => {
 });
 
 // Static files
-app.use(express.static(path.join(__dirname, '../frontend/public')));
+app.use(express.static(path.join(projectRoot, 'frontend/public')));
 
 // API 404 handler
 app.use('/api/*', (req, res) => {
@@ -131,7 +134,7 @@ app.use('/api/*', (req, res) => {
 
 // Serve index.html for non-API routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public', 'index.html'));
+  res.sendFile(path.join(projectRoot, 'frontend/public', 'index.html'));
 });
 
 // Error handling middleware

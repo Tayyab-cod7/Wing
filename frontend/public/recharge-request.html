@@ -685,6 +685,12 @@
 
         <!-- Recharge Requests Table -->
         <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5>All Recharge Requests</h5>
+                <button class="btn btn-danger btn-sm" id="delete-all-recharge-requests" disabled>
+                    <i class="fas fa-trash"></i> Delete All Requests
+                </button>
+            </div>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -744,6 +750,60 @@
             alert(message); // You can replace this with a better notification system
         }
 
+        // Add Alert functions (consistent with admin-user.html and withdraw-request.html)
+        function showSuccessAlert(message) {
+            alert(message);
+        }
+
+        function showErrorAlert(message) {
+            alert(message);
+        }
+
+        // New function to delete without confirmation for bulk deletion
+        async function deleteRechargeRequestWithoutConfirm(requestId) {
+            try {
+                if (!requestId) {
+                    console.error('Invalid request ID for deletion');
+                    return false;
+                }
+
+                const token = localStorage.getItem('token');
+                if (!token) {
+                     console.error('No token for deleting request');
+                     // Don't show alert for each failed deletion in bulk, handle after loop
+                    return false;
+                }
+
+                const response = await fetch(`/api/recharge/admin/delete/${requestId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.status === 404) {
+                    console.warn(`Request ${requestId} not found on server, removing from UI logic.`);
+                     // Mark as deleted from local perspective for bulk update
+                    return true; // Treat as successful removal from a UI perspective for bulk
+                }
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    console.error(`Failed to delete recharge request ${requestId}:`, result.error || response.statusText);
+                    return false;
+                }
+
+                console.log(`Recharge request ${requestId} deleted successfully.`);
+                return true;
+
+            } catch (error) {
+                console.error(`Error deleting recharge request ${requestId}:`, error);
+                return false;
+            }
+        }
+
         async function loadRechargeRequests() {
             try {
                 const token = localStorage.getItem('token');
@@ -760,10 +820,22 @@
                 }
 
                 const requests = result.data;
+                currentRequests = requests; // Assign fetched data to currentRequests
                 displayRequests(requests);
+                 // Enable delete button after data is loaded
+                const deleteAllBtn = document.getElementById('delete-all-recharge-requests');
+                if (deleteAllBtn) {
+                    deleteAllBtn.disabled = false;
+                }
+
             } catch (error) {
                 console.error('Error:', error);
                 showError('Error loading recharge requests');
+                 // Ensure button remains disabled on error
+                const deleteAllBtn = document.getElementById('delete-all-recharge-requests');
+                if (deleteAllBtn) {
+                    deleteAllBtn.disabled = true;
+                }
             }
         }
 
@@ -931,13 +1003,25 @@
         }
 
         async function deleteRechargeRequest(requestId) {
+            if (!confirm('Are you sure you want to delete this recharge request? This action cannot be undone.')) {
+                return;
+            }
             try {
                 if (!requestId) {
-                    showError('Invalid request ID');
+                    console.error('Invalid request ID for deletion');
+                    showErrorAlert('Invalid request.'); // Show alert for invalid ID
                     return;
                 }
 
                 const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token for deleting request');
+                    showErrorAlert('Authentication error. Please log in again.'); // Show alert for auth error
+                    // Optionally redirect to login
+                    // window.location.href = 'login.html';
+                    return;
+                }
+
                 const response = await fetch(`/api/recharge/admin/delete/${requestId}`, {
                     method: 'DELETE',
                     headers: {
@@ -947,25 +1031,33 @@
                 });
 
                 if (response.status === 404) {
-                    // If the request is not found in the database, remove it from the UI anyway
-                    showSuccess('Request removed from the list');
-                    loadRechargeRequests();
+                    console.warn(`Request ${requestId} not found on server.`);
+                    showSuccessAlert('Request not found or already deleted.');
+                     // Still remove from UI if not found on server
+                    currentRequests = currentRequests.filter(req => (req.requestId || req._id) !== requestId);
+                    displayRequests(currentRequests);
                     return;
                 }
 
                 const result = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(result.error || 'Error deleting recharge request');
+                    const errorMessage = result.error || response.statusText;
+                    console.error(`Failed to delete recharge request ${requestId}:`, errorMessage);
+                    showErrorAlert(`Failed to delete request: ${errorMessage}`);
+                    return;
                 }
 
-                showSuccess('Recharge request deleted successfully');
-                loadRechargeRequests(); // Reload the table
+                // If successful, remove the request from the local array and update the UI
+                currentRequests = currentRequests.filter(req => (req.requestId || req._id) !== requestId);
+                displayRequests(currentRequests);
+                showSuccessAlert('Recharge request deleted successfully.');
+
             } catch (error) {
-                console.error('Error:', error);
-                // Even if there's an error, try to reload the table
-                loadRechargeRequests();
-                showError('Error deleting recharge request');
+                console.error(`Error deleting recharge request ${requestId}:`, error);
+                showErrorAlert('An error occurred during deletion.');
+                 // Optionally, reload if unsure of state
+                 // loadRechargeRequests();
             }
         }
 
@@ -1087,6 +1179,64 @@
                 event.target.style.display = 'none';
                 document.getElementById('searchInput').value = '';
             }
+        }
+
+        // Delete all recharge requests button
+        const deleteAllRechargeRequestsBtn = document.getElementById('delete-all-recharge-requests');
+        if (deleteAllRechargeRequestsBtn) {
+            deleteAllRechargeRequestsBtn.addEventListener('click', async () => {
+                // Add check here
+                if (!currentRequests || currentRequests.length === 0) {
+                    showErrorAlert('No requests to delete.');
+                    return;
+                }
+
+                const confirmed = confirm('Are you sure you want to delete ALL recharge requests? This action cannot be undone.');
+                if (!confirmed) {
+                    return;
+                }
+
+                showSuccessAlert('Deleting all recharge requests...');
+
+                // Get IDs of all currently filtered requests
+                const requestIdsToDelete = currentRequests.map(req => (req.requestId || req._id));
+
+                let successfulDeletions = 0;
+                let failedDeletions = 0;
+                const failedRequestIds = [];
+
+                // Iterate and delete each request
+                for (const requestId of requestIdsToDelete) {
+                    console.log(`Attempting to delete recharge request: ${requestId}`);
+                    const success = await deleteRechargeRequestWithoutConfirm(requestId);
+                    if (success) {
+                        successfulDeletions++;
+                         // Remove from local list immediately for better UI feedback during bulk delete
+                        currentRequests = currentRequests.filter(req => (req.requestId || req._id) !== requestId);
+                    } else {
+                        failedDeletions++;
+                        failedRequestIds.push(requestId);
+                    }
+                }
+
+                // After attempting all deletions, update UI once and show summary
+                displayRequests(currentRequests);
+
+                if (successfulDeletions > 0) {
+                    showSuccessAlert(`${successfulDeletions} recharge requests deleted successfully.`);
+                }
+
+                if (failedDeletions > 0) {
+                    showErrorAlert(`${failedDeletions} recharge requests failed to delete. IDs: ${failedRequestIds.join(', ')}`);
+                }
+
+                if (successfulDeletions === 0 && failedDeletions === 0) {
+                     showErrorAlert('No requests were processed for deletion.');
+                }
+
+                // Reload requests after attempting to delete all (optional, depending on desired behavior)
+                // loadRechargeRequests();
+            });
         }
     </script>
 </body>

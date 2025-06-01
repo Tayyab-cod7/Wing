@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F-EARN - Special Events</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css"> <!-- Using dashboard.css for consistent styling -->
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+             padding-bottom: 70px; /* Add padding to the bottom equal to the nav height */
+        }
+
+        .container {
+            padding: 16px;
+            max-width: 600px;
+            margin: auto;
+            color: #fff;
+        }
+
+        .paper {
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+         .content-header {
+             margin-bottom: 16px;
+             text-align: left;
+         }
+
+         .content-title {
+             color: #00ff88;
+             font-weight: 800;
+             font-size: 1.8rem;
+             margin-bottom: 4px;
+             display: block;
+             gap: 0;
+         }
+
+         .content-title i {
+             margin-right: 8px;
+             color: #00ff88;
+         }
+
+         .content-header p {
+             color: #bdbdbd;
+             font-weight: 400;
+             font-size: 1rem;
+         }
+
+         .event-card {
+             background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(33, 150, 243, 0.1));
+             border: 1px solid rgba(0, 255, 136, 0.2);
+             border-radius: 12px;
+             padding: 20px;
+             text-align: center;
+             margin-bottom: 20px;
+             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+         }
+
+         .event-card h3 {
+             color: #00ff88;
+             font-size: 1.6rem;
+             margin-bottom: 8px;
+             font-weight: 700;
+         }
+
+         .event-card p {
+             color: #bdbdbd;
+             font-size: 1rem;
+             margin-bottom: 16px;
+         }
+
+         .event-card .discount {
+             font-size: 2.5rem;
+             font-weight: 800;
+             color: #2196f3;
+             margin-bottom: 12px;
+         }
+
+         .event-card .cta-button {
+             display: inline-block;
+             background-color: #00ff88;
+             color: #121212;
+             padding: 10px 20px;
+             border-radius: 8px;
+             text-decoration: none;
+             font-weight: 700;
+             transition: background-color 0.3s ease;
+         }
+
+         .event-card .cta-button:hover {
+             background-color: #00cc66;
+         }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1e1e1e; /* Dark background color */
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: #666; /* Default color for inactive tabs */
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-item.active {
+            color: #00ff88; /* Green color for active tab */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-header">
+            <h1 class="content-title"><i class="fas fa-calendar-alt"></i> Special Events</h1>
+             <p>Check out our exciting limited-time offers!</p>
+        </div>
+
+        <div class="event-card">
+            <h3>Limited Time Offer!</h3>
+            <div class="discount">10% OFF</div>
+            <p>Get an exclusive 10% discount on **ALL** packages for a limited period. Don't miss out!</p>
+            <a href="basic.html" class="cta-button">View Packages</a>
+        </div>
+
+        <!-- Add more events here if needed -->
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="dashboard.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-clipboard"></i>
+            <span>Task</span>
+        </a>
+        <a class="nav-item" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Team</span>
+        </a>
+        <a class="nav-item" href="basic.html">
+            <i class="fas fa-gem"></i>
+            <span>VIP</span>
+        </a>
+        <a class="nav-item" href="me.html">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+         // Basic script for navigation active state (optional, can be done with server-side logic)
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname.split('/').pop();
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
+                if (item.getAttribute('href') === currentPath) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

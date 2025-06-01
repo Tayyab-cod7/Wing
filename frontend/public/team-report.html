@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F-EARN - Team Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css"> <!-- Using dashboard.css for consistent styling -->
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+             padding-bottom: 70px; /* Add padding to the bottom equal to the nav height */
+        }
+
+        .container {
+            padding: 16px;
+            max-width: 600px; /* Match me.html container width */
+            margin: auto;
+            color: #fff;
+        }
+
+        .paper {
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Styles for the table within the 'paper' container */
+        .team-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0;
+        }
+
+        .team-table th,
+        .team-table td {
+            padding: 12px 8px; /* Adjust padding */
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem; /* Adjust font size */
+        }
+
+        .team-table th {
+            background-color: rgba(255,255,255,0.1); /* Darker header background */
+            font-weight: 600; /* Adjust font weight */
+            color: #00ff88; /* Green header text */
+        }
+
+        .team-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .team-table tbody tr:hover {
+             background-color: rgba(255,255,255,0.08); /* Hover effect */
+        }
+
+        .loading-message,
+        .error-message,
+        .no-data-message {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 1rem; /* Adjust font size */
+            color: #bdbdbd; /* Grayish text color */
+        }
+
+        .error-message {
+             color: #ff4444; /* Red for errors */
+        }
+
+        /* Header adjustments */
+         .content-header {
+             margin-bottom: 16px; /* Adjust margin */
+             text-align: left; /* Align to left */
+         }
+
+         .content-title {
+             color: #00ff88; /* Green title color */
+             font-weight: 800; /* Bold title */
+             font-size: 1.8rem; /* Adjust title size */
+             margin-bottom: 4px; /* Adjust margin */
+             display: block; /* Make it a block element */
+             gap: 0; /* Remove gap if any */
+         }
+
+         .content-title i {
+             margin-right: 8px; /* Space between icon and text */
+             color: #00ff88; /* Ensure icon color is green */
+         }
+
+         .content-header p {
+             color: #bdbdbd; /* Subtitle color */
+             font-weight: 400;
+             font-size: 1rem; /* Subtitle font size */
+         }
+
+        /* Balance/Stats section styling (reused from me.html) */
+        .balance-section {
+            text-align: center;
+             margin-bottom: 12px; /* Add margin between stat sections */
+        }
+
+        .balance-section h6 {
+            color: #bdbdbd;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .balance-section h4 {
+            color: #00ff88;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-top: 4px;
+        }
+
+         .stats-container {
+             display: flex;
+             gap: 12px; /* Space between the two stat boxes */
+             margin-bottom: 12px;
+         }
+
+         .stats-container .paper {
+              flex: 1; /* Make each stat box take equal width */
+             margin-bottom: 0; /* Remove bottom margin from individual boxes */
+         }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1e1e1e; /* Dark background color */
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: #666; /* Default color for inactive tabs */
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-item.active {
+            color: #00ff88; /* Green color for active tab */
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-header">
+            <h1 class="content-title"><i class="fas fa-users"></i> Team Report</h1>
+             <p>View the users who joined using your referral code.</p>
+        </div>
+
+         <!-- Total Referrals Section -->
+        <div class="stats-container">
+         <div class="paper balance-section">
+             <h6>Total Referrals</h6>
+             <h4 id="totalReferralsCount">0</h4>
+         </div>
+
+         <!-- Referral Earnings Section -->
+         <div class="paper balance-section">
+              <h6>Referral Earnings</h6>
+             <h4 id="referralEarnings">Rs. 0.00</h4>
+         </div>
+        </div>
+
+        <div class="paper">
+            <div id="loading-message" class="loading-message">Loading team data...</div>
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            <div id="no-data-message" class="no-data-message" style="display: none;">No users found in your team yet. Share your referral code to invite others!</div>
+
+            <div id="team-table-container" style="display: none;">
+                <table class="team-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Package</th>
+                            <th>Active</th>
+                        </tr>
+                    </thead>
+                    <tbody id="team-table-body">
+                        <!-- Referred user data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="dashboard.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-clipboard"></i>
+            <span>Task</span>
+        </a>
+        <a class="nav-item active" href="refferal.html"> <!-- Mark Team as active -->
+            <i class="fas fa-users"></i>
+            <span>Team</span>
+        </a>
+        <a class="nav-item" href="basic.html">
+            <i class="fas fa-gem"></i>
+            <span>VIP</span>
+        </a>
+        <a class="nav-item" href="me.html">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+
+        async function loadTeamData() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const loadingMessage = document.getElementById('loading-message');
+            const errorMessage = document.getElementById('error-message');
+            const noDataMessage = document.getElementById('no-data-message');
+            const teamTableContainer = document.getElementById('team-table-container');
+            const teamTableBody = document.getElementById('team-table-body');
+            const totalReferralsCountElement = document.getElementById('totalReferralsCount');
+            const referralEarningsElement = document.getElementById('referralEarnings');
+
+            loadingMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+            noDataMessage.style.display = 'none';
+            teamTableContainer.style.display = 'none';
+            teamTableBody.innerHTML = '';
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                     if (response.status === 401) {
+                        localStorage.clear();
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    throw new Error(data.error || 'Failed to fetch team data');
+                }
+
+                if (data.success && data.data) {
+                    const user = data.data;
+
+                    // Update Total Referrals and Referral Earnings
+                    totalReferralsCountElement.textContent = user.referralCount || 0;
+                    referralEarningsElement.textContent = `Rs. ${user.referralEarnings !== undefined ? user.referralEarnings.toFixed(2) : '0.00'}`;
+
+
+                    const referrals = user.referrals;
+
+                    if (referrals.length > 0) {
+                        referrals.forEach(referral => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${referral.username || 'N/A'}</td>
+                                <td>${referral.email || 'N/A'}</td>
+                                <td>${referral.activePackage || 'None'}</td>
+                                <td>${referral.active ? 'Yes' : 'No'}</td>
+                            `;
+                            teamTableBody.appendChild(row);
+                        });
+                        teamTableContainer.style.display = 'block';
+                    } else {
+                        noDataMessage.style.display = 'block';
+                    }
+                } else {
+                     // Handle cases where data or referrals are missing but success is true
+                     noDataMessage.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Error loading team data:', error);
+                errorMessage.textContent = `Error: ${error.message}`;
+                errorMessage.style.display = 'block';
+            } finally {
+                loadingMessage.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadTeamData);
+    </script>
+</body>
+</html>

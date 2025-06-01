@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 // Get all users
 exports.getUsers = async (req, res) => {
     try {
-        const users = await User.find().select('-password');
+        const users = await User.find()
+            .select('_id email username referralCode balance activePackage packageAmount referredBy referralCount isAdmin');
         
         res.status(200).json({
             success: true,
@@ -33,7 +34,7 @@ exports.deleteUser = async (req, res) => {
         }
         
         // Check if the user is an admin
-        if (user.isAdmin || user.phone === process.env.ADMIN_PHONE) {
+        if (user.isAdmin || user.email === process.env.ADMIN_EMAIL) {
             return res.status(403).json({
                 success: false,
                 error: 'Admin user cannot be deleted'

@@ -42,26 +42,34 @@ const generateUniqueReferralCode = async () => {
 // @access  Public
 const register = async (req, res) => {
   try {
-    const { phone, password, referralCode } = req.body;
+    const { username, email, password, referralCode } = req.body;
 
     // Validate input
-    if (!phone || !password || !referralCode) {
+    if (!username || !email || !password || !referralCode) {
       return res.status(400).json({
         success: false,
         error: 'Please provide all required fields'
       });
     }
 
-    // Phone number validation
-    if (!validatePhoneNumber(phone)) {
+    // Username validation
+    if (!/^[a-zA-Z][a-zA-Z0-9]{5,7}$/.test(username)) {
       return res.status(400).json({
         success: false,
-        error: 'Phone number must be exactly 11 digits, numbers only'
+        error: 'Username must start with a letter, be 6-8 characters long, and contain only letters and numbers'
+      });
+    }
+
+    // Email validation
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Please provide a valid Gmail address'
       });
     }
 
     // Password validation
-    if (!validatePassword(password)) {
+    if (!/^[A-Za-z0-9]{6,8}$/.test(password)) {
       return res.status(400).json({
         success: false,
         error: 'Password must be 6-8 characters, letters and numbers only'
@@ -69,33 +77,39 @@ const register = async (req, res) => {
     }
 
     // Referral code validation
-    if (!validateReferralCode(referralCode)) {
+    if (!/^[0-9]{6}$/.test(referralCode)) {
       return res.status(400).json({
         success: false,
         error: 'Referral code must be exactly 6 digits, numbers only'
       });
     }
 
-    // Check if trying to register with admin phone number
-    if (phone === process.env.ADMIN_PHONE) {
+    // Check if trying to register with admin email
+    if (email === process.env.ADMIN_EMAIL) {
       return res.status(403).json({
         success: false,
-        error: 'This phone number is reserved and cannot be used for registration'
+        error: 'This email is reserved and cannot be used for registration'
       });
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ phone });
+    const existingUser = await User.findOne({
+      $or: [
+        { email: email },
+        { username: username }
+      ]
+    });
+    
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        error: 'Phone number already registered'
+        error: existingUser.email === email ? 'Email already registered' : 'Username already taken'
       });
     }
 
     // Validate referral code and update referrer's count
     let referringUser = null;
-    if (referralCode !== process.env.ADMIN_REFERRAL) {
+    if (referralCode) {
       referringUser = await User.findOne({ referralCode });
       if (!referringUser) {
         return res.status(400).json({
@@ -103,7 +117,7 @@ const register = async (req, res) => {
           error: 'Invalid referral code'
         });
       }
-      // Increment referral count for the referring user
+      // Increment referral count for the referring user regardless of whether it's admin's code
       await User.findByIdAndUpdate(referringUser._id, {
         $inc: { referralCount: 1 }
       });
@@ -122,10 +136,12 @@ const register = async (req, res) => {
 
     // Create user with the generated referral code and referredBy
     const user = await User.create({
-      phone,
+      username,
+      email,
       password,
       referralCode: newReferralCode,
-      referredBy: referralCode // Save the referral code of the person who referred
+      referredBy: referralCode, // Save the referral code of the person who referred
+      active: false // Set default active status to false
     });
 
     sendTokenResponse(user, 201, res);
@@ -144,17 +160,17 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         console.log('Login function called with body:', JSON.stringify(req.body));
-        const { phone, password } = req.body;
+        const { email, password } = req.body;
 
         // Validate input
-        if (!phone || !password) {
-            console.log('Missing phone or password');
-            return res.status(400).json({ success: false, message: 'Please provide phone and password' });
+        if (!email || !password) {
+            console.log('Missing email or password');
+            return res.status(400).json({ success: false, message: 'Please provide email and password' });
         }
 
-        console.log('Looking for user with phone:', phone);
+        console.log('Looking for user with email:', email);
         // Check if user exists
-        const user = await User.findOne({ phone }).select('+password');
+        const user = await User.findOne({ email }).select('+password');
         if (!user) {
             console.log('User not found');
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
@@ -190,12 +206,21 @@ const login = async (req, res) => {
             // Return token and user data (excluding password)
             const userData = {
                 _id: user._id,
-                phone: user.phone,
-                name: user.name,
+                email: user.email,
+                username: user.username,
                 balance: user.balance,
                 referralCode: user.referralCode,
                 isAdmin: user.isAdmin
             };
+
+            // Fetch leader information if referredBy exists
+            if (user.referredBy) {
+                const leader = await User.findOne({ referralCode: user.referredBy });
+                if (leader) {
+                    userData.leaderUsername = leader.username;
+                    userData.leaderReferralCode = leader.referralCode; // Although redundant, explicitly adding
+                }
+            }
 
             console.log('Sending successful response');
             return res.status(200).json({
@@ -233,7 +258,7 @@ const getMe = async (req, res) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       // Get user with all necessary fields
-      const user = await User.findById(decoded.id).select('+password');
+      const user = await User.findById(decoded.id).select('+referredBy');
 
       if (!user) {
         return res.status(404).json({
@@ -244,30 +269,46 @@ const getMe = async (req, res) => {
 
       // Get referrals (users who used this user's referral code) with package info
       const referrals = await User.find({ referredBy: user.referralCode })
-        .select('phone activePackage packageAmount');
+        .select('email username activePackage active');
 
       // Map referrals without commission
       const referralsWithoutCommission = referrals.map(referral => {
         return {
-          phone: referral.phone,
+          email: referral.email,
+          username: referral.username,
           activePackage: referral.activePackage,
-          packageAmount: referral.packageAmount || 0
+          active: referral.active
         };
       });
 
       // Get user's total referral earnings (keep the actual total)
       const totalReferralEarnings = user.referralEarnings || 0;
 
+      let leaderUsername = null;
+      let leaderReferralCode = null;
+
+      // Fetch leader information if referredBy exists
+      if (user.referredBy) {
+          const leader = await User.findOne({ referralCode: user.referredBy }).select('username referralCode');
+          if (leader) {
+              leaderUsername = leader.username;
+              leaderReferralCode = leader.referralCode;
+          }
+      }
+
       res.status(200).json({
         success: true,
         data: {
-          phone: user.phone,
+          email: user.email,
+          username: user.username,
           createdAt: user.createdAt,
           referralCode: user.referralCode,
           referralCount: user.referralCount || 0,
           referrals: referralsWithoutCommission,
           referralEarnings: totalReferralEarnings,
-          isAdmin: user.phone === process.env.ADMIN_PHONE
+          isAdmin: user.isAdmin,
+          leaderUsername: leaderUsername,
+          leaderReferralCode: leaderReferralCode
         }
       });
     } catch (err) {
@@ -287,10 +328,10 @@ const getMe = async (req, res) => {
 // Admin Login
 const adminLogin = async (req, res) => {
     try {
-        const { phone, password } = req.body;
+        const { email, password } = req.body;
 
         // Check if user exists
-        const user = await User.findOne({ phone });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({
                 success: false,
@@ -330,7 +371,8 @@ const adminLogin = async (req, res) => {
             token,
             user: {
                 id: user._id,
-                phone: user.phone,
+                email: user.email,
+                username: user.username,
                 isAdmin: user.isAdmin
             }
         });
@@ -357,7 +399,10 @@ const sendTokenResponse = (user, statusCode, res, isAdmin = false) => {
     token,
     user: {
       id: user._id,
-      phone: user.phone,
+      email: user.email,
+      username: user.username,
+      balance: user.balance,
+      referralCode: user.referralCode,
       isAdmin: user.isAdmin
     }
   });

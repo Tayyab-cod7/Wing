@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoo System - Me | Manage Your Account</title>
+    <meta name="description" content="Manage your Zoo System account. View your balance, access recharge and withdrawal options, and navigate to other account-related sections.">
+    <meta name="keywords" content="zoo system me, user account, balance, recharge, withdraw, personal info, order history, account details, VIP, transaction, wallet, team report, messages, event, download app, invite friends, special events, about us, contact us, logout">
+    <meta name="author" content="Zoo System">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Zoo System - Me | Account Management">
+    <meta property="og:description" content="Manage your Zoo System account. View your balance, access recharge and withdrawal options, and navigate to other account-related sections.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/me.html">
+    <meta property="og:image" content="/images/zoo-system-me-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Zoo System - Me | Account Management">
+    <meta name="twitter:description" content="Manage your Zoo System account. View your balance, access recharge and withdrawal options, and navigate to other account-related sections.">
+    <meta name="twitter:image" content="/images/zoo-system-me-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/me.html">
+    <meta name="theme-color" content="#121212">
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="/images/Favicon.jpg">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .me-container {
+            padding: 16px;
+            padding-bottom: 8px;
+            padding-left: 8px;
+            padding-right: 8px;
+            max-width: 600px;
+            margin: auto;
+            color: #fff;
+        }
+
+        .paper {
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .balance-section {
+            text-align: center;
+        }
+
+        .balance-section h6 {
+            color: #bdbdbd;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .balance-section h4 {
+            color: #00ff88;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-top: 4px;
+        }
+
+        .recharge-withdraw-section {
+            display: flex;
+            gap: 8px;
+        }
+
+        .recharge-withdraw-section button {
+            flex-grow: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .recharge-withdraw-section button i {
+             font-size: 1.5rem;
+        }
+
+        .recharge-button {
+            background-color: #00ff88;
+            color: #121212;
+        }
+
+        .recharge-button:hover {
+            background-color: #00cc66;
+        }
+
+        .withdraw-button {
+            background-color: #2196f3;
+            color: #fff;
+        }
+
+        .withdraw-button:hover {
+            background-color: #1976d2;
+        }
+
+        .menu-items-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+            gap: 8px;
+            padding: 8px;
+        }
+
+        .menu-item-card {
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.04);
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-item-card:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .menu-item-card i {
+            font-size: 2rem;
+            margin-bottom: 4px;
+        }
+
+         .menu-item-card span {
+            display: block;
+            margin-top: 2px;
+            font-size: 0.75rem;
+        }
+
+        .icon-personal-info { color: #fff; }
+        .icon-order-history { color: #ff4081; }
+        .icon-account-details { color: #bdbdbd; }
+        .icon-vip { color: #ffc107; }
+        .icon-transaction { color: #00bcd4; }
+        .icon-wallet { color: #9e9e9e; }
+        .icon-team-report { color: #9c27b0; }
+        .icon-messages { color: #4caf50; }
+        .icon-event { color: #ff5722; }
+        .icon-download-app { color: #2196f3; }
+        .icon-invite-friends { color: #ff9800; }
+        .icon-special-events { color: #e91e63; }
+        .icon-about-us { color: #ff4081; }
+        .icon-contact-us { color: #ff9800; }
+        .icon-logout { color: #ff1744; font-weight: bold; }
+        .logout-text { color: #ff1744; font-weight: bold; }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1e1e1e; /* Dark background color */
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: #666; /* Default color for inactive tabs */
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-item.active {
+            color: #00ff88; /* Green color for active tab */
+        }
+    </style>
+</head>
+<body>
+    <div class="me-container">
+        <!-- Balance Section -->
+        <div class="paper balance-section">
+            <h6>Current Balance</h6>
+            <h4 id="currentBalance">Rs. 0.00</h4>
+        </div>
+
+        <!-- Recharge and Withdraw Section -->
+        <div class="paper recharge-withdraw-section">
+            <button class="recharge-button" onclick="window.location.href='recharge.html'">
+                <i class="fas fa-credit-card"></i>
+                Recharge
+            </button>
+            <button class="withdraw-button" onclick="window.location.href='withdraw.html'">
+                <i class="fas fa-wallet"></i>
+                Withdraw
+            </button>
+        </div>
+
+        <!-- Menu Items Section -->
+        <div class="paper">
+            <div class="menu-items-grid">
+                <!-- Menu Item: Personal info -->
+                <div class="menu-item-card" onclick="window.location.href='personal-info.html'">
+                    <i class="fas fa-user icon-personal-info"></i>
+                    <span>Personal info</span>
+                </div>
+                <!-- Menu Item: VIP -->
+                <div class="menu-item-card" onclick="window.location.href='basic.html'">
+                    <i class="fas fa-star icon-vip"></i>
+                    <span>VIP</span>
+                </div>
+                <!-- Menu Item: Recharge Record -->
+                <div class="menu-item-card" onclick="window.location.href='recharge-record.html'">
+                    <i class="fas fa-history icon-order-history"></i>
+                    <span>Recharge Record</span>
+                </div>
+                <!-- Menu Item: Withdraw Record -->
+                <div class="menu-item-card" onclick="window.location.href='withdrawal-record.html'">
+                    <i class="fas fa-money-check-alt icon-transaction"></i>
+                    <span>Withdraw Record</span>
+                </div>
+                <!-- Menu Item: Team report -->
+                <div class="menu-item-card" onclick="window.location.href='team-report.html'">
+                    <i class="fas fa-users icon-team-report"></i>
+                    <span>Team report</span>
+                </div>
+                <!-- Menu Item: Invite friends -->
+                <div class="menu-item-card" onclick="window.location.href='refferal.html'">
+                    <i class="fas fa-user-plus icon-invite-friends"></i>
+                    <span>Invite friends</span>
+                </div>
+                <!-- Menu Item: Special Events -->
+                <div class="menu-item-card" onclick="window.location.href='special-events.html'">
+                    <i class="fas fa-gifts icon-special-events"></i>
+                    <span>Special Events</span>
+                </div>
+                <!-- Menu Item: About Us -->
+                <div class="menu-item-card" onclick="window.location.href='about.html'">
+                    <i class="fas fa-info-circle icon-about-us"></i>
+                    <span>About Us</span>
+                </div>
+                <!-- Menu Item: Contact Us -->
+                <div class="menu-item-card" onclick="window.location.href='contact.html'">
+                    <i class="fas fa-envelope icon-contact-us"></i>
+                    <span>Contact Us</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Button Section -->
+        <div class="paper" style="text-align: center;">
+            <div class="menu-item-card" onclick="logout()" style="display: inline-block; width: 100%; max-width: 150px;">
+                <i class="fas fa-sign-out-alt icon-logout"></i>
+                <span class="logout-text">Logout</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="dashboard.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-clipboard"></i>
+            <span>Task</span>
+        </a>
+        <a class="nav-item" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Team</span>
+        </a>
+        <a class="nav-item" href="basic.html">
+            <i class="fas fa-gem"></i>
+            <span>VIP</span>
+        </a>
+        <a class="nav-item active" href="me.html">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        const API_URL = 'http://69.62.119.91:5000';
+
+        // Check Authentication and Load Balance
+        async function loadUserData() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                     if (response.status === 401) {
+                        localStorage.clear();
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    throw new Error('Failed to load user data');
+                }
+
+                const userData = await response.json();
+
+                if (userData.success && userData.data) {
+                    document.getElementById('currentBalance').textContent = `Rs. ${userData.data.balance.toFixed(2)}`;
+                } else {
+                    throw new Error(userData.error || 'Failed to load user data');
+                }
+
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+        });
+    </script>
+</body>
+</html> 

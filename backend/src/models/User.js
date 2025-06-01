@@ -8,22 +8,26 @@ function generateReferralCode() {
 }
 
 const userSchema = new mongoose.Schema({
-  phone: {
+  email: {
     type: String,
-    required: [true, 'Please add a phone number'],
+    required: [true, 'Please add an email address'],
     unique: true,
     trim: true,
-    minlength: [11, 'Phone number must be 11 digits'],
-    maxlength: [11, 'Phone number must be 11 digits']
+    match: [/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Please add a valid Gmail address']
   },
   password: {
     type: String,
     required: [true, 'Please add a password'],
     select: false
   },
-  name: {
+  username: {
     type: String,
-    default: ''
+    required: [true, 'Please add a username'],
+    unique: true,
+    trim: true,
+    minlength: [6, 'Username must be at least 6 characters'],
+    maxlength: [8, 'Username cannot be more than 8 characters'],
+    match: [/^[a-zA-Z][a-zA-Z0-9]*$/, 'Username must start with a letter and contain only letters and numbers']
   },
   isAdmin: {
     type: Boolean,
@@ -100,12 +104,6 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  username: {
-    type: String,
-    default: function() {
-      return this.phone || 'user_' + Date.now(); // Use phone number or timestamp if phone not available
-    }
-  },
   packageStartDate: {
     type: Date,
     default: null
@@ -119,7 +117,8 @@ const userSchema = new mongoose.Schema({
 });
 
 // Create indexes
-userSchema.index({ phone: 1 }, { unique: true });
+userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ username: 1 }, { unique: true });
 userSchema.index({ referralCode: 1 }, { unique: true });
 
 // Pre-save middleware
@@ -127,11 +126,6 @@ userSchema.pre('save', async function(next) {
   if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-  }
-
-  // Set username if not set
-  if (!this.username) {
-    this.username = this.phone;
   }
 
   // Handle referral code

@@ -980,18 +980,26 @@
             <div class="card">
                 <div class="card-header">
                     <span>All Users</span>
-                    <button class="btn btn-primary btn-sm" id="refresh-users">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
+                    <div>
+                        <button class="btn btn-danger btn-sm" id="delete-all-non-admin-users">
+                            <i class="fas fa-trash"></i> Delete All Non-Admin
+                        </button>
+                        <button class="btn btn-primary btn-sm" id="refresh-users">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-container">
                         <table id="users-table">
                             <thead>
                                 <tr>
-                                    <th>Phone</th>
+                                    <th>Gmail</th>
+                                    <th>Username</th>
                                     <th>Referral Code</th>
                                     <th>Referred By</th>
+                                    <th>Total Referrals</th>
+                                    <th>Active</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -1161,7 +1169,7 @@
 
     <script>
         // API Base URL
-        const API_URL = 'http://69.62.119.91:5000';
+        const API_URL = 'http://localhost:5000';
         
         // DOM Elements
         const navLinks = document.querySelectorAll('.nav-link[data-section]');
@@ -1178,6 +1186,7 @@
         const logoutLink = document.getElementById('logout-link');
         const alertSuccess = document.getElementById('alert-success');
         const alertDanger = document.getElementById('alert-danger');
+        const deleteAllNonAdminBtn = document.getElementById('delete-all-non-admin-users');
         
         // State variables
         let currentPage = 1;
@@ -1338,9 +1347,12 @@
                     </button>`;
                 
                 row.innerHTML = `
-                    <td>${user.phone}</td>
-                    <td>${user.referralCode}</td>
+                    <td>${user.email || 'N/A'}</td>
+                    <td>${user.username || 'N/A'}</td>
+                    <td>${user.referralCode || 'N/A'}</td>
                     <td>${user.referredBy || 'N/A'}</td>
+                    <td>${user.referralCount !== undefined ? user.referralCount : '0'}</td>
+                    <td>${user.active ? 'Active' : 'Inactive'}</td>
                     <td>${deleteButton}</td>
                 `;
                 
@@ -1588,7 +1600,37 @@
                 localStorage.removeItem('user');
                 window.location.href = 'index.html';
             });
+
+            // Delete all non-admin users button
+            deleteAllNonAdminBtn.addEventListener('click', async () => {
+                const confirmed = confirm('Are you sure you want to delete ALL non-admin users? This action cannot be undone.');
+                if (!confirmed) {
+                    return;
+                }
+
+                showSuccessAlert('Deleting non-admin users...');
+
+                // Filter out admin users
+                const nonAdminUsers = allUsers.filter(user => !user.isAdmin);
+
+                // Iterate and delete each non-admin user
+                for (const user of nonAdminUsers) {
+                    console.log(`Attempting to delete user: ${user.phone}`);
+                    // Using the existing deleteUser function
+                    await deleteUser(user._id);
+                }
+
+                // Reload users after attempting to delete all
+                loadUsers();
+            });
         });
+
+        // Fetch users data when the page loads
+        loadUsers();
+
+        // Periodically fetch users data to update the table (e.g., every 10 seconds)
+        const refreshInterval = 10000; // 10 seconds
+        setInterval(loadUsers, refreshInterval);
     </script>
 </body>
 </html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Deposit Processing - E-TuBE</title>
+    <meta name="description" content="Your deposit is being processed. View details and contact support if needed.">
+    <meta name="theme-color" content="#121212">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: #181c23;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .processing-container {
+            max-width: 420px;
+            margin: 2.5rem auto;
+            padding: 2rem 1rem 1.5rem 1rem;
+            background: rgba(30, 32, 40, 0.98);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+        .processing-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            letter-spacing: 0.01em;
+        }
+        .processing-check {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+        }
+        .processing-check .circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #23272f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+        .processing-check .circle i {
+            color: #00ff88;
+            font-size: 2.5rem;
+        }
+        .processing-status {
+            font-size: 1.1rem;
+            color: #bdbdbd;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+        .processing-details {
+            background: #23272f;
+            border-radius: 12px;
+            padding: 1.2rem 1rem 1.2rem 1rem;
+            margin-bottom: 2rem;
+            text-align: left;
+            font-size: 1rem;
+            color: #fff;
+        }
+        .processing-details-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.7rem;
+        }
+        .processing-details-row:last-child {
+            margin-bottom: 0;
+        }
+        .processing-details-label {
+            color: #bdbdbd;
+        }
+        .processing-details-value {
+            color: #fff;
+            font-weight: 500;
+        }
+        .processing-btn {
+            width: 100%;
+            background: #ffe082;
+            color: #23272f;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .processing-btn:hover {
+            background: #ffd54f;
+        }
+        .processing-btn-secondary {
+            width: 100%;
+            background: transparent;
+            color: #ffe082;
+            border: 2px solid #ffe082;
+            border-radius: 8px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .processing-btn-secondary:hover {
+            background: #ffe082;
+            color: #23272f;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 600px) {
+            .processing-container { padding: 1rem 0.2rem 1rem 0.2rem; border-radius: 10px; }
+            .processing-details { padding: 0.7rem 0.3rem; font-size: 0.95rem; }
+            .processing-title { font-size: 1.1rem; }
+            .processing-btn, .processing-btn-secondary { font-size: 1rem; padding: 0.7rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="processing-container">
+        <div class="processing-title">Deposit</div>
+        <div class="processing-check">
+            <div class="circle"><i class="fas fa-check-circle"></i></div>
+        </div>
+        <div class="processing-status">Processing Deposit</div>
+        <div class="processing-details">
+            <div class="processing-details-row">
+                <span class="processing-details-label">Deposit method</span>
+                <span class="processing-details-value">Binance</span>
+            </div>
+            <div class="processing-details-row">
+                <span class="processing-details-label">Order number</span>
+                <span class="processing-details-value" id="orderNumber"></span>
+            </div>
+            <div class="processing-details-row">
+                <span class="processing-details-label">Deposit amount</span>
+                <span class="processing-details-value" id="depositAmount"></span>
+            </div>
+            <div class="processing-details-row">
+                <span class="processing-details-label">Currency</span>
+                <span class="processing-details-value">USDT</span>
+            </div>
+            <div class="processing-details-row">
+                <span class="processing-details-label">Conversion rate</span>
+                <span class="processing-details-value">1 : 1</span>
+            </div>
+            <div class="processing-details-row">
+                <span class="processing-details-label">Amount after exchange</span>
+                <span class="processing-details-value" id="amountAfterExchange"></span>
+            </div>
+            <div class="processing-details-row">
+                <span class="processing-details-label">Actually receive</span>
+                <span class="processing-details-value" id="actuallyReceive"></span>
+            </div>
+            <div class="processing-details-row">
+                <span class="processing-details-label">Wallet Address</span>
+                <span class="processing-details-value">USDT-TRC20</span>
+            </div>
+        </div>
+        <button class="processing-btn" onclick="window.location.href='recharge-record.html'">Receipt Page</button>
+        <button class="processing-btn-secondary" onclick="window.location.href='contact.html'">Contact customer service</button>
+    </div>
+    <script>
+        // Generate a random 10-digit order number
+        function generateOrderNumber() {
+            let num = Math.floor(1000000000 + Math.random() * 9000000000); // ensures 10 digits, does not start with 0
+            return num.toString();
+        }
+        // Get amount from URL
+        function getAmountFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('amount') || '0';
+        }
+        // Set values
+        document.getElementById('orderNumber').textContent = generateOrderNumber();
+        document.getElementById('depositAmount').textContent = getAmountFromURL();
+        document.getElementById('amountAfterExchange').textContent = getAmountFromURL();
+        document.getElementById('actuallyReceive').textContent = getAmountFromURL();
+    </script>
+</body>
+</html> 

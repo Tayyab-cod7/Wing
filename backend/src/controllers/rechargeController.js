@@ -35,7 +35,10 @@ const upload = multer({
 // Submit recharge request
 exports.submitRechargeRequest = async (req, res) => {
     try {
+        console.log('submitRechargeRequest called');
         upload(req, res, async function (err) {
+            console.log('Request body:', req.body);
+            console.log('File info:', req.file);
             if (err) {
                 return res.status(400).json({
                     success: false,

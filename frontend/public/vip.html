@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Tube - VIP Packages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        * {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        :root {
+            --primary-color: #00ff88;
+            --primary-hover: #00cc66;
+            --bg-color: #121212;
+            --card-bg: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: #bdbdbd;
+            --border-color: rgba(255,255,255,0.1);
+            --transition-speed: 0.3s;
+            --vip-gold: #ffd700;
+            --vip-silver: #c0c0c0;
+            --vip-bronze: #cd7f32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding-bottom: 70px;
+            position: relative;
+        }
+
+        .container {
+            padding: clamp(16px, 5vw, 20px);
+            max-width: min(800px, 95%);
+            margin: auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            color: var(--vip-gold);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: clamp(0.9rem, 3vw, 1rem);
+        }
+
+        .balance-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .balance-section h6 {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .balance-section h4 {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-top: 4px;
+        }
+
+        .vip-benefits {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .benefits-title {
+            color: var(--vip-gold);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .benefits-list {
+            list-style: none;
+        }
+
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        .benefits-list li i {
+            color: var(--vip-gold);
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .package-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: transform var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .package-card.bronze {
+            border-color: var(--vip-bronze);
+        }
+
+        .package-card.silver {
+            border-color: var(--vip-silver);
+        }
+
+        .package-card.gold {
+            border-color: var(--vip-gold);
+        }
+
+        .package-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .bronze .package-icon {
+            color: var(--vip-bronze);
+        }
+
+        .silver .package-icon {
+            color: var(--vip-silver);
+        }
+
+        .gold .package-icon {
+            color: var(--vip-gold);
+        }
+
+        .package-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .package-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .bronze .package-price {
+            color: var(--vip-bronze);
+        }
+
+        .silver .package-price {
+            color: var(--vip-silver);
+        }
+
+        .gold .package-price {
+            color: var(--vip-gold);
+        }
+
+        .package-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .package-features li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .upgrade-btn {
+            background: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            width: 100%;
+        }
+
+        .upgrade-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .upgrade-btn:disabled {
+            opacity: 0.5;
+            background: #bdbdbd;
+            color: #888;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .current-plan {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-color);
+            color: var(--bg-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px;
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all var(--transition-speed);
+        }
+
+        .nav-item i {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+            transition: transform var(--transition-speed);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .nav-item:hover i {
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .nav-item.active i {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+            .packages-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 12px;
+            }
+
+            .package-card {
+                padding: 15px;
+            }
+        }
+
+        .buy-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.55);
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        .buy-modal[style*="display: flex"] {
+            display: flex !important;
+        }
+        .buy-modal-content {
+            background: #181c1f;
+            color: #fff;
+            border-radius: 18px;
+            padding: 2.5rem 2rem 2rem 2rem;
+            min-width: 320px;
+            max-width: 95vw;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            position: relative;
+            text-align: center;
+            animation: slideUp 0.3s;
+        }
+        .close-buy-modal {
+            position: absolute;
+            top: 18px;
+            right: 28px;
+            font-size: 2.2rem;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 2100;
+            transition: color 0.2s;
+        }
+        .close-buy-modal:hover {
+            color: #00ff88;
+        }
+        .modal-package-details {
+            margin: 1.5rem 0 2rem 0;
+            text-align: left;
+            font-size: 1.1rem;
+            background: rgba(0,255,136,0.07);
+            border-radius: 10px;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,255,136,0.08);
+        }
+        .modal-package-details div {
+            margin-bottom: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-top: 1.2rem;
+        }
+        .modal-confirm-btn {
+            background: linear-gradient(90deg, #00ff88 0%, #00cc66 100%);
+            color: #181c1f;
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem 2.2rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,255,136,0.12);
+            transition: background 0.2s, color 0.2s;
+        }
+        .modal-confirm-btn:hover {
+            background: linear-gradient(90deg, #00cc66 0%, #00ff88 100%);
+            color: #fff;
+        }
+        .modal-cancel-btn {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            padding: 0.8rem 2.2rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .modal-cancel-btn:hover {
+            background: #00ff88;
+            color: #181c1f;
+        }
+        @media (max-width: 600px) {
+            .buy-modal-content {
+                min-width: 90vw;
+                padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+            }
+            .modal-package-details {
+                padding: 0.8rem 0.7rem;
+                font-size: 1rem;
+            }
+            .close-buy-modal {
+                top: 10px;
+                right: 15px;
+                font-size: 1.6rem;
+            }
+        }
+        .package-timer {
+            background: rgba(255,255,255,0.07);
+            color: #ffb300;
+            border-radius: 8px;
+            padding: 8px 0;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: background 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>VIP Packages</h1>
+            <p>Upgrade your account and unlock exclusive benefits</p>
+        </div>
+
+        <!-- Current Balance Section -->
+        <div class="balance-section">
+            <h6>Your Current Balance</h6>
+            <h4 id="currentBalance">$ 0.00</h4>
+        </div>
+
+        <!-- VIP Benefits -->
+        <div class="vip-benefits">
+            <h2 class="benefits-title">
+                <i class="fas fa-crown"></i>
+                VIP Benefits
+            </h2>
+            <ul class="benefits-list">
+                <li><i class="fas fa-check-circle"></i> Higher daily earning rates</li>
+                <li><i class="fas fa-check-circle"></i> Priority customer support</li>
+                <li><i class="fas fa-check-circle"></i> Exclusive bonus rewards</li>
+                <li><i class="fas fa-check-circle"></i> Faster withdrawal processing</li>
+                <li><i class="fas fa-check-circle"></i> Special VIP events and promotions</li>
+            </ul>
+        </div>
+
+        <!-- VIP Packages -->
+        <div class="packages-grid">
+            <!-- Basic Plan 01 -->
+            <div class="package-card bronze">
+                <div class="package-icon"><i class="fas fa-leaf"></i></div>
+                <div class="package-title">Basic Plane 01</div>
+                <div class="package-price">20 USDT</div>
+                <ul class="package-features">
+                    <li>Daily Income: 0.66 USDT</li>
+                    <li>Validity: 1 Year</li>
+                    <li>Return Duration: 30 Days</li>
+                </ul>
+                <button class="upgrade-btn">Buy</button>
+            </div>
+
+            <!-- Basic Plan 02 -->
+            <div class="package-card bronze">
+                <div class="package-icon"><i class="fas fa-seedling"></i></div>
+                <div class="package-title">Basic Plane 02</div>
+                <div class="package-price">30 USDT</div>
+                <ul class="package-features">
+                    <li>Daily Income: 1.2 USDT</li>
+                    <li>Validity: 1 Year</li>
+                    <li>Return Duration: 25 Days</li>
+                </ul>
+                <button class="upgrade-btn">Buy</button>
+            </div>
+
+            <!-- Basic Plan 03 -->
+            <div class="package-card silver">
+                <div class="package-icon"><i class="fas fa-tree"></i></div>
+                <div class="package-title">Basic Plane 03</div>
+                <div class="package-price">50 USDT</div>
+                <ul class="package-features">
+                    <li>Daily Income: 2.5 USDT</li>
+                    <li>Validity: 1 Year</li>
+                    <li>Return Duration: 20 Days</li>
+                </ul>
+                <button class="upgrade-btn">Buy</button>
+            </div>
+
+            <!-- Pro Plan 01 -->
+            <div class="package-card gold">
+                <div class="package-icon"><i class="fas fa-gem"></i></div>
+                <div class="package-title">Pro Plane 01</div>
+                <div class="package-price">100 USDT</div>
+                <ul class="package-features">
+                    <li>Daily Income: 6 USDT</li>
+                    <li>Validity: 1 Year</li>
+                    <li>Return Duration: 17 Days</li>
+                </ul>
+                <button class="upgrade-btn">Buy</button>
+            </div>
+
+            <!-- Pro Plan 02 -->
+            <div class="package-card gold">
+                <div class="package-icon"><i class="fas fa-star"></i></div>
+                <div class="package-title">Pro Plane 02</div>
+                <div class="package-price">150 USDT</div>
+                <ul class="package-features">
+                    <li>Daily Income: 10 USDT</li>
+                    <li>Validity: 1 Year</li>
+                    <li>Return Duration: 15 Days</li>
+                </ul>
+                <button class="upgrade-btn">Buy</button>
+            </div>
+
+            <!-- Pro Plan 03 -->
+            <div class="package-card gold">
+                <div class="package-icon"><i class="fas fa-crown"></i></div>
+                <div class="package-title">Pro Plane 03</div>
+                <div class="package-price">200 USDT</div>
+                <ul class="package-features">
+                    <li>Daily Income: 20 USDT</li>
+                    <li>Validity: 1 Year</li>
+                    <li>Return Duration: 10 Days</li>
+                </ul>
+                <button class="upgrade-btn">Buy</button>
+            </div>
+        </div>
+
+        <!-- Premium Packages -->
+        <div class="packages-grid">
+            <!-- Premium Plan 01 -->
+            <div class="package-card gold">
+                <div class="package-icon"><i class="fas fa-gem"></i></div>
+                <div class="package-title">Premium Plane 01</div>
+                <div class="package-price">300 USDT</div>
+                <ul class="package-features">
+                    <li>Daily Income: 50 USDT</li>
+                    <li>Validity: 1 Year</li>
+                    <li>Return Duration: 6 Days</li>
+                </ul>
+                <button class="upgrade-btn">Buy</button>
+            </div>
+
+            <!-- Premium Plan 02 -->
+            <div class="package-card gold">
+                <div class="package-icon"><i class="fas fa-crown"></i></div>
+                <div class="package-title">Premium Plane 02</div>
+                <div class="package-price">500 USDT</div>
+                <ul class="package-features">
+                    <li>Daily Income: 200 USDT</li>
+                    <li>Validity: 1 Year</li>
+                    <li>Return Duration: 2.5 Days</li>
+                </ul>
+                <button class="upgrade-btn">Buy</button>
+            </div>
+
+            <!-- Premium Plan 03 (Coming Soon) -->
+            <div class="package-card" style="opacity: 0.6;">
+                <div class="package-icon"><i class="fas fa-clock"></i></div>
+                <div class="package-title">Premium Plane 03</div>
+                <div class="package-price">Coming Soon</div>
+                <ul class="package-features">
+                    <li>Daily Income: N/A</li>
+                    <li>Validity: N/A</li>
+                    <li>Return Duration: N/A</li>
+                </ul>
+                 <button class="upgrade-btn" disabled>Coming Soon</button>
+            </div>
+
+            <!-- Premium Plan 04 (Coming Soon) -->
+             <div class="package-card" style="opacity: 0.6;">
+                <div class="package-icon"><i class="fas fa-clock"></i></div>
+                <div class="package-title">Premium Plane 04</div>
+                <div class="package-price">Coming Soon</div>
+                <ul class="package-features">
+                    <li>Daily Income: N/A</li>
+                    <li>Validity: N/A</li>
+                    <li>Return Duration: N/A</li>
+                </ul>
+                 <button class="upgrade-btn" disabled>Coming Soon</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="home.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-clipboard"></i>
+            <span>Task</span>
+        </a>
+        <a class="nav-item" href="refferal.html">
+            <i class="fas fa-users"></i>
+            <span>Team</span>
+        </a>
+        <a class="nav-item active" href="vip.html">
+            <i class="fas fa-gem"></i>
+            <span>VIP</span>
+        </a>
+        <a class="nav-item" href="me.html">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <!-- Buy Confirmation Modal -->
+    <div id="buyModal" class="buy-modal" style="display:none;">
+        <div class="buy-modal-content">
+            <span class="close-buy-modal">&times;</span>
+            <h2 id="modalPackageTitle"></h2>
+            <div class="modal-package-details">
+                <div><strong>Price:</strong> <span id="modalPackagePrice"></span></div>
+                <div><strong>Daily Income:</strong> <span id="modalPackageIncome"></span></div>
+                <div><strong>Validity:</strong> <span id="modalPackageValidity"></span></div>
+                <div><strong>Return Duration:</strong> <span id="modalPackageReturn"></span></div>
+            </div>
+            <div class="modal-actions">
+                <button id="confirmBuyBtn" class="modal-confirm-btn">Confirm Buy</button>
+                <button id="cancelBuyBtn" class="modal-cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin; // Use the origin of the frontend
+
+        async function loadUserDataAndVIPStatus() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.clear();
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    throw new Error('Failed to load user data and VIP status');
+                }
+
+                const data = await response.json();
+
+                // Log the data to the console for debugging
+                console.log('API Response Data:', data);
+
+                if (data.success && data.data) {
+                    // Update balance display
+                    const balanceElement = document.getElementById('currentBalance');
+                    if (balanceElement && typeof data.data.balance === 'number') {
+                        balanceElement.textContent = `$ ${data.data.balance.toFixed(2)}`;
+                    } else if (balanceElement) {
+                        balanceElement.textContent = '$ 0.00';
+                    }
+
+                    // Update VIP status display (assuming VIP status is in data.data)
+                    if (data.data.vip) { // Assuming VIP status is nested under 'vip' or similar
+                         updateVIPDisplay(data.data.vip); // Pass the relevant part of the data
+                    } else {
+                         // Handle case where no VIP data is available or user is not VIP
+                         updateVIPDisplay(null); // Indicate no active VIP
+                    }
+
+                    // Disable all Buy buttons if user has an active package
+                    const userLevel = data.data && data.data.level ? data.data.level : 'None';
+                    if (userLevel && userLevel !== 'None') {
+                        document.querySelectorAll('.package-card:not([style*="opacity"]) .upgrade-btn').forEach(button => {
+                            button.disabled = true;
+                            button.textContent = 'Active Package';
+                            button.style.opacity = '0.5';
+                            button.style.background = '#bdbdbd';
+                            button.style.color = '#888';
+                            button.style.cursor = 'not-allowed';
+                        });
+                    }
+
+                } else {
+                    throw new Error(data.error || 'Failed to load user data');
+                }
+
+            } catch (error) {
+                console.error('Error loading user data and VIP status:', error);
+                 // Optionally display an error message on the page
+            }
+        }
+
+        function updateVIPDisplay(vipData) {
+            const cards = document.querySelectorAll('.package-card');
+            cards.forEach(card => {
+                const currentPlan = card.querySelector('.current-plan');
+                if (currentPlan) {
+                    currentPlan.remove();
+                }
+                 // Also reset upgrade button state
+                 const upgradeBtn = card.querySelector('.upgrade-btn');
+                 if (upgradeBtn && !card.style.opacity) { // Don't enable if opacity is set (Coming Soon)
+                      upgradeBtn.textContent = 'Buy';
+                      upgradeBtn.disabled = false;
+                      upgradeBtn.style.opacity = '1';
+                 }
+                 // Remove timer if exists
+                 const timerDiv = card.querySelector('.package-timer');
+                 if (timerDiv) timerDiv.remove();
+            });
+
+            // If there's active VIP data
+            if (vipData && vipData.currentPlan) { // Adjust condition based on actual data structure
+                // Find the card matching the current plan. You might need a data attribute or class that maps to the plan type.
+                // For now, let's assume the plan type is part of the card's classes or data attributes.
+                // Example: <div class="package-card gold pro-plane-03">...</div>
+                // You would need to adjust the selector based on your HTML structure.
+                // As a fallback, let's try matching the package title text content.
+                const currentPlanTitle = vipData.currentPlan; // Adjust based on actual data
+                 let currentCard = null;
+                 cards.forEach(card => {
+                      const titleElement = card.querySelector('.package-title');
+                      if (titleElement && titleElement.textContent.trim() === currentPlanTitle) {
+                           currentCard = card;
+                      }
+                 });
+
+                if (currentCard) {
+                    const currentPlanDiv = document.createElement('div');
+                    currentPlanDiv.className = 'current-plan';
+                    currentPlanDiv.textContent = 'Current Plan';
+                    currentCard.appendChild(currentPlanDiv);
+
+                    const upgradeBtn = currentCard.querySelector('.upgrade-btn');
+                    if (upgradeBtn) {
+                        upgradeBtn.textContent = 'Current Plan';
+                        upgradeBtn.disabled = true;
+                        upgradeBtn.style.opacity = '0.7';
+                    }
+                    // Add timer below the button
+                    let timerDiv = document.createElement('div');
+                    timerDiv.className = 'package-timer';
+                    timerDiv.style.marginTop = '10px';
+                    timerDiv.style.fontWeight = 'bold';
+                    timerDiv.style.color = '#ffb300';
+                    timerDiv.textContent = 'Time left: 01:00';
+                    upgradeBtn.parentNode.insertBefore(timerDiv, upgradeBtn.nextSibling);
+                    startPackageTimer(timerDiv);
+                }
+            } else {
+                 // No active VIP plan, ensure all upgrade buttons are enabled (except Coming Soon)
+                 cards.forEach(card => {
+                      if (!card.style.opacity) { // Check if it's not a 'Coming Soon' card
+                           const upgradeBtn = card.querySelector('.upgrade-btn');
+                           if (upgradeBtn) {
+                               upgradeBtn.textContent = 'Buy';
+                               upgradeBtn.disabled = false;
+                               upgradeBtn.style.opacity = '1';
+                           }
+                      }
+                      // Remove timer if exists
+                      const timerDiv = card.querySelector('.package-timer');
+                      if (timerDiv) timerDiv.remove();
+                 });
+            }
+        }
+
+        // Timer logic
+        let packageTimerInterval = null;
+        function startPackageTimer(timerDiv) {
+            if (packageTimerInterval) clearInterval(packageTimerInterval);
+            let timeLeft = 60; // 1 minute in seconds
+            function updateTimer() {
+                const min = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+                const sec = String(timeLeft % 60).padStart(2, '0');
+                timerDiv.textContent = `Time left: ${min}:${sec}`;
+            }
+            updateTimer();
+            packageTimerInterval = setInterval(async () => {
+                timeLeft--;
+                updateTimer();
+                if (timeLeft <= 0) {
+                    clearInterval(packageTimerInterval);
+                    timerDiv.textContent = 'Cancelling package...';
+                    // Call backend to cancel package
+                    const token = localStorage.getItem('token');
+                    try {
+                        const response = await fetch('/api/vip/cancel', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        const data = await response.json();
+                        if (data.success) {
+                            timerDiv.textContent = 'Package cancelled.';
+                            setTimeout(() => { loadUserDataAndVIPStatus(); }, 1000);
+                        } else {
+                            timerDiv.textContent = 'Failed to cancel package.';
+                        }
+                    } catch (error) {
+                        timerDiv.textContent = 'Failed to cancel package.';
+                    }
+                }
+            }, 1000);
+        }
+
+        async function upgradePackage(packageType, packagePrice) { // Now also receives price
+             // You need to determine the packageType from the clicked button/card.
+             // This function likely needs to be triggered by an event listener on the upgrade buttons,
+             // and the package identifier should be passed based on which button was clicked.
+             // For example, add an onclick attribute or event listener to each button.
+             console.log('Attempting to upgrade to package:', packageType);
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/vip/upgrade`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ package: packageType }) // Ensure backend expects 'package' field
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('Successfully upgraded to ' + packageType + ' VIP!');
+                    window.location.href = 'home.html';
+                } else {
+                    alert(data.message || 'Failed to upgrade package');
+                }
+            } catch (error) {
+                console.error('Error upgrading package:', error);
+                alert('Failed to upgrade package. Please try again.');
+            }
+        }
+
+        // Modify the upgrade buttons to add a click listener
+        document.querySelectorAll('.package-card:not([style*="opacity"]) .upgrade-btn').forEach(button => {
+            const packageCard = button.closest('.package-card');
+            const packageTitleElement = packageCard ? packageCard.querySelector('.package-title') : null;
+            const packagePriceElement = packageCard ? packageCard.querySelector('.package-price') : null;
+            const featuresList = packageCard ? packageCard.querySelectorAll('.package-features li') : [];
+            const packageType = packageTitleElement ? packageTitleElement.textContent.trim() : null;
+            const packagePriceText = packagePriceElement ? packagePriceElement.textContent.trim() : '0 USDT';
+            const packagePrice = parseFloat(packagePriceText.replace(/[^0-9.-]+/g, " "));
+            let dailyIncome = '', validity = '', returnDuration = '';
+            if (featuresList.length > 0) {
+                featuresList.forEach(li => {
+                    if (li.textContent.includes('Daily Income')) dailyIncome = li.textContent.split(':')[1].trim();
+                    if (li.textContent.includes('Validity')) validity = li.textContent.split(':')[1].trim();
+                    if (li.textContent.includes('Return Duration')) returnDuration = li.textContent.split(':')[1].trim();
+                });
+            }
+            if (packageType && packageType !== 'Coming Soon' && !isNaN(packagePrice)) {
+                button.addEventListener('click', () => {
+                    const currentBalanceElement = document.getElementById('currentBalance');
+                    const currentBalanceText = currentBalanceElement ? currentBalanceElement.textContent.trim() : '$ 0.00';
+                    const currentBalance = parseFloat(currentBalanceText.replace(/[^0-9.-]+/g, " "));
+                    if (!isNaN(currentBalance) && currentBalance >= packagePrice) {
+                        // Show modal with package details
+                        document.getElementById('modalPackageTitle').textContent = packageType;
+                        document.getElementById('modalPackagePrice').textContent = packagePriceText;
+                        document.getElementById('modalPackageIncome').textContent = dailyIncome;
+                        document.getElementById('modalPackageValidity').textContent = validity;
+                        document.getElementById('modalPackageReturn').textContent = returnDuration;
+                        document.getElementById('buyModal').style.display = 'flex';
+                        // Store packageType and price for confirmation
+                        document.getElementById('confirmBuyBtn').dataset.packageType = packageType;
+                        document.getElementById('confirmBuyBtn').dataset.packagePrice = packagePrice;
+                    } else {
+                        alert('Insufficient balance. Please recharge.');
+                        window.location.href = 'recharge.html';
+                    }
+                });
+            }
+        });
+
+        // Modal logic
+        const buyModal = document.getElementById('buyModal');
+        const closeBuyModal = document.querySelector('.close-buy-modal');
+        const cancelBuyBtn = document.getElementById('cancelBuyBtn');
+        closeBuyModal.onclick = cancelBuyBtn.onclick = function() {
+            buyModal.style.display = 'none';
+        };
+        // Confirm buy
+        document.getElementById('confirmBuyBtn').onclick = function() {
+            const packageType = this.dataset.packageType;
+            const packagePrice = parseFloat(this.dataset.packagePrice);
+            buyModal.style.display = 'none';
+            upgradePackage(packageType, packagePrice);
+        };
+        // Close modal on outside click
+        window.onclick = function(event) {
+            if (event.target === buyModal) {
+                buyModal.style.display = 'none';
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserDataAndVIPStatus(); // Load data and VIP status on page load
+        });
+    </script>
+</body>
+</html> 

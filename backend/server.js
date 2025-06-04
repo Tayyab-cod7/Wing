@@ -9,6 +9,11 @@ const rechargeRoutes = require('./src/routes/rechargeRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const contactRoutes = require('./src/routes/contactRoutes');
 const withdrawalRoutes = require('./src/routes/withdrawalRoutes');
+const bonusRoutes = require('./src/routes/bonusRoutes');
+const vipRoutes = require('./src/routes/vipRoutes');
+const activityRoutes = require('./src/routes/activityRoutes');
+const userRoutes = require('./src/routes/userRoutes');
+const taskRoutes = require('./src/routes/taskRoutes');
 
 // Load env vars
 dotenv.config({ path: path.join(__dirname, '.env') });
@@ -20,17 +25,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
 app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.indexOf('*') !== -1) {
-      return callback(null, true);
-    }
-    console.log('Origin blocked by CORS:', origin);
-    callback(new Error('Not allowed by CORS'));
-  },
+  origin: ['http://localhost:5000', 'http://192.168.18.5:5000', 'http://127.0.0.1:5000'],
   credentials: true
 }));
 
@@ -83,6 +79,11 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/earnings', require('./src/routes/earningRoutes'));
 app.use('/api/contact', contactRoutes);
 app.use('/api/withdrawal', withdrawalRoutes);
+app.use('/api/bonus', bonusRoutes);
+app.use('/api/vip', vipRoutes);
+app.use('/api/activities', activityRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/tasks', taskRoutes);
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -118,6 +119,18 @@ app.use((req, res, next) => {
     next();
 });
 
+// Static files
+app.use((req, res, next) => {
+  console.log('Static file request:', {
+    path: req.path,
+    method: req.method,
+    headers: req.headers
+  });
+  next();
+}, express.static(path.join(__dirname, '../frontend/public')));
+
+app.use('/images', express.static(path.join(__dirname, '../frontend/public/images')));
+
 // API 404 handler
 app.use('/api/*', (req, res) => {
   res.status(404).json({
@@ -128,20 +141,19 @@ app.use('/api/*', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Error:', err.stack);
-  
-  // Add more detailed error logging
-  if (req.path === '/api/auth/login') {
-    console.error('Login error details:', {
-      message: err.message,
-      name: err.name,
-      code: err.code
-    });
-  }
+  console.error('Error details:', {
+    message: err.message,
+    stack: err.stack,
+    path: req.path,
+    method: req.method,
+    headers: req.headers,
+    body: req.body
+  });
   
   res.status(500).json({
     success: false,
-    error: 'Something went wrong!'
+    error: 'Something went wrong!',
+    details: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
 });
 

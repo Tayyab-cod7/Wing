@@ -18,7 +18,7 @@ const rechargeSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
         required: true,
-        enum: ['jazzcash', 'easypaisa']
+        enum: ['jazzcash', 'easypaisa', 'binance']
     },
     status: {
         type: String,

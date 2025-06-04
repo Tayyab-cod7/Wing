@@ -145,6 +145,7 @@ router.post('/purchase', protect, async (req, res) => {
                 $inc: { balance: -numericAmount },
                 $set: { 
                     activePackage: packageId,
+                    level: packageId, // Set level to packageId (or use a more descriptive name if needed)
                     packageAmount: numericAmount, // Save the package amount
                     dailyEarningRate: packageId === 'basic1' ? 75 :
                                     packageId === 'basic2' ? 150 :
@@ -162,6 +163,14 @@ router.post('/purchase', protect, async (req, res) => {
             },
             { new: true }
         );
+
+        // Reset today's task completions for this user
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        await require('../models/Task').deleteMany({
+            userId: user._id,
+            completedAt: { $gte: today }
+        });
 
         // If user was referred by someone, update referrer's earnings
         if (user.referredBy && user.referredBy !== '000000') {

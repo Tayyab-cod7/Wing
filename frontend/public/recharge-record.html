@@ -2,775 +2,374 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoo System - Recharge Records | Track Your Investment History</title>
-    <meta name="description" content="View and track your Wing System recharge history. Access detailed records of all your investment recharges, including status, amounts, and transaction details.">
-    <meta name="keywords" content="wing system recharge records, recharge history, investment history, recharge status, online investment pakistan, recharge tracking">
-    <meta name="author" content="Wing System">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Wing System - Recharge Records | Investment History">
-    <meta property="og:description" content="Track your recharge history with Wing System. View detailed records of all your investment recharges and their current status.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:5000/recharge-record.html">
-    <meta property="og:image" content="/images/wing-system-recharge-og.jpg">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Wing System - Recharge Records | Investment History">
-    <meta name="twitter:description" content="Track your recharge history with Wing System. View detailed records of all your investment recharges and their current status.">
-    <meta name="twitter:image" content="/images/wing-system-recharge-og.jpg">
-    <link rel="canonical" href="http://localhost:5000/recharge-record.html">
-    <meta name="theme-color" content="#2196F3">
-    <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" sizes="32x32" href="/images/Favicon.jpg">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="manifest" href="/site.webmanifest">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Recharge Records - E-TuBE</title>
+    <meta name="description" content="View your recharge records and receipts.">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="recharge-record.css">
     <style>
-        * {
+        body {
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
         }
-
-        body {
-            background-color: #f4f4f4;
+        .records-container {
+            width: 100vw;
+            margin: 0;
+            padding: 0;
         }
-
-        .header {
-            background-color: #8BC34A;
-            color: white;
-            padding: 15px;
+        .record-card {
+            background: #f7fafc;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+            margin: 0 6rem 2rem 6rem;
+            overflow: hidden;
+            padding: 0 0 2rem 0;
+            width: calc(100vw - 12rem);
+        }
+        .record-card:last-child {
+            margin-bottom: 10rem;
+        }
+        .record-header {
+            background: #e3f6e8;
+            color: #222;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 16px 24px 16px 24px;
             display: flex;
             align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-        }
-
-        .back-button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            padding: 5px 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .header-title {
-            flex-grow: 1;
-            text-align: center;
-            margin-right: 40px; /* To offset the back button width */
-        }
-
-        .content {
-            margin-top: 60px;
-            padding: 15px;
-        }
-
-        .recharge-item {
-            background: white;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .order-number {
-            background-color: #8BC34A;
-            color: white;
-            padding: 10px;
-            border-radius: 4px;
-            margin: -15px -15px 15px -15px;
-        }
-
-        .detail-row {
-            display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
         }
-
-        .detail-row:last-child {
-            border-bottom: none;
+        .record-header .request-id {
+            color: #388e3c;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
         }
-
-        .label {
-            color: #666;
-        }
-
-        .value {
-            font-weight: bold;
-        }
-
-        .value.amount {
-            color: #E53935;
-        }
-
-        .status {
+        .record-header .status-badge {
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 6px 18px;
+            background: #fffbe6;
+            color: #ff9800;
             display: inline-block;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-size: 14px;
+        }
+        .record-header .status-badge.approved {
+            background: #e8f5e9;
+            color: #43a047;
+        }
+        .record-header .status-badge.rejected {
+            background: #fce4ec;
+            color: #d81b60;
+        }
+        .record-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f7fafc;
+        }
+        .record-table tr {
+            border-bottom: 1px solid #e0e7ef;
+        }
+        .record-table td {
+            padding: 14px 18px;
+            color: #222;
+            font-size: 1rem;
+            text-align: right;
+        }
+        .record-table td.label {
+            color: #6b7280;
+            font-weight: 500;
+            width: 180px;
+            text-align: right;
+        }
+        .record-table td.value.amount {
+            color: #388e3c;
             font-weight: bold;
         }
-
-        .status.pending {
-            background-color: #FFF3E0;
+        .record-table td.value.status {
+            font-weight: bold;
+        }
+        .record-table td.value.status.pending {
             color: #FF9800;
+            background: #23272f;
+            border-radius: 12px;
+            padding: 6px 18px;
+            display: inline-block;
         }
-
-        .status.approved {
-            background-color: #E8F5E9;
-            color: #4CAF50;
+        .record-table td.value.status.approved {
+            color: #00ff88;
+            background: #23272f;
+            border-radius: 12px;
+            padding: 6px 18px;
+            display: inline-block;
         }
-
-        .status.rejected {
-            background-color: #fce4ec;
+        .record-table td.value.status.rejected {
             color: #d81b60;
-            border-radius: 15px;
-            padding: 5px 15px;
-            text-transform: uppercase;
-            font-size: 12px;
+            background: #23272f;
+            border-radius: 12px;
+            padding: 6px 18px;
+            display: inline-block;
         }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
+        .receipt-link {
             display: flex;
-            justify-content: space-around;
-            padding: 10px;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-        }
-
-        .nav-item {
-            text-decoration: none;
-            color: #666;
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            font-size: 12px;
+            justify-content: flex-end;
+            gap: 8px;
+            color: #2196F3;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: default;
         }
-
-        .nav-item i {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .nav-item.active {
-            color: #8BC34A;
-        }
-
-        .no-records {
-            text-align: center;
-            padding: 30px;
-            color: #666;
-        }
-
-        .receipt-preview {
-            width: 100px;
-            height: 100px;
+        .receipt-link img {
+            width: 48px;
+            height: 48px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 10px;
+            border: 2px solid #388e3c;
+            transition: transform 0.2s;
             cursor: pointer;
-            transition: transform 0.2s ease;
         }
-
-        .receipt-preview:hover {
-            transform: scale(1.05);
+        .receipt-link img:hover {
+            transform: none;
         }
-
+        /* Responsive styles */
+        @media (max-width: 1024px) {
+            .record-card {
+                margin: 2rem 2rem 1.5rem 2rem;
+                width: calc(100vw - 4rem);
+            }
+            .record-card:last-child {
+                margin-bottom: 7rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .records-container { padding: 0; }
+            .record-card {
+                margin: 1rem 0.5rem 1.2rem 0.5rem;
+                width: calc(100vw - 1rem);
+                border-radius: 1rem;
+                padding: 0 0 1.2rem 0;
+            }
+            .record-card:last-child {
+                margin-bottom: 6rem;
+            }
+            .record-header {
+                font-size: 1rem;
+                padding: 10px 8px 10px 8px;
+            }
+            .record-header .request-id {
+                font-size: 1rem;
+            }
+            .record-header .status-badge {
+                font-size: 0.95rem;
+                padding: 5px 12px;
+            }
+            .record-table td, .record-header { font-size: 0.95rem; padding: 8px 4px; }
+            .record-table td.label { width: 90px; }
+            .receipt-link img {
+                width: 36px;
+                height: 36px;
+            border-radius: 8px;
+            }
+        }
+        /* Modal responsiveness */
+        @media (max-width: 600px) {
+            .modal-content {
+                padding: 0.5rem;
+                border-radius: 10px;
+            }
+            .modal-content img {
+                max-width: 95vw;
+                max-height: 60vh;
+                border-radius: 8px;
+            }
+            .close-modal {
+                font-size: 2rem;
+                top: 8px;
+                right: 12px;
+                padding: 0 6px;
+            }
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar { display: none; }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        body { -ms-overflow-style: none; scrollbar-width: none; }
         /* Modal styles */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
+            z-index: 2000;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-content {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
             justify-content: center;
             align-items: center;
         }
-
-        .modal-image {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            border-radius: 8px;
+        .modal-content {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            max-width: 95vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-
+        .modal-content img {
+            max-width: 80vw;
+            max-height: 70vh;
+            border-radius: 10px;
+        }
         .close-modal {
+            color: #222;
+            font-size: 2.5rem;
+            font-weight: bold;
             position: absolute;
-            top: 10px;
-            right: 10px;
-            color: white;
-            font-size: 30px;
+            top: 18px;
+            right: 32px;
             cursor: pointer;
-            background: none;
-            border: none;
-            padding: 10px;
-            z-index: 1001;
+            z-index: 2100;
+            transition: color 0.2s;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            background: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            padding: 0 10px;
         }
-
-        /* Make receipt images clickable */
-        .receipt-image {
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .receipt-image:hover {
-            transform: scale(1.05);
-        }
-
-        /* Add responsive styles */
-        @media screen and (max-width: 768px) {
-            .header {
-                padding: 12px;
-            }
-
-            .header-title {
-                font-size: 1.2rem;
-            }
-
-            .content {
-                margin-top: 55px;
-                padding: 10px;
-                padding-bottom: 70px; /* Space for bottom nav */
-            }
-
-            .recharge-item {
-                padding: 12px;
-                margin-bottom: 12px;
-            }
-
-            .order-number {
-                padding: 8px;
-                margin: -12px -12px 12px -12px;
-                font-size: 0.9rem;
-            }
-
-            .detail-row {
-                padding: 4px 0;
-                margin-bottom: 8px;
-                font-size: 0.9rem;
-            }
-
-            .status {
-                padding: 4px 12px;
-                font-size: 0.8rem;
-            }
-
-            .bottom-nav {
-                padding: 8px 5px;
-            }
-
-            .nav-item {
-                font-size: 11px;
-            }
-
-            .nav-item i {
-                font-size: 18px;
-                margin-bottom: 3px;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .header {
-                padding: 10px;
-            }
-
-            .header-title {
-                font-size: 1.1rem;
-                margin-right: 30px;
-            }
-
-            .back-button {
-                font-size: 14px;
-                padding: 4px 8px;
-            }
-
-            .content {
-                margin-top: 50px;
-                padding: 8px;
-            }
-
-            .recharge-item {
-                padding: 10px;
-                margin-bottom: 10px;
-            }
-
-            .order-number {
-                padding: 7px;
-                margin: -10px -10px 10px -10px;
-                font-size: 0.85rem;
-            }
-
-            .detail-row {
-                padding: 3px 0;
-                margin-bottom: 6px;
-                font-size: 0.85rem;
-            }
-
-            .label {
-                font-size: 0.85rem;
-            }
-
-            .value {
-                font-size: 0.85rem;
-            }
-
-            .value.amount {
-                font-size: 0.9rem;
-            }
-
-            .status {
-                padding: 3px 10px;
-                font-size: 0.75rem;
-            }
-
-            .receipt-preview {
-                width: 80px;
-                height: 80px;
-            }
-
-            .bottom-nav {
-                padding: 6px 3px;
-            }
-
-            .nav-item {
-                font-size: 10px;
-            }
-
-            .nav-item i {
-                font-size: 16px;
-                margin-bottom: 2px;
-            }
-
-            .no-records {
-                padding: 20px;
-            }
-
-            .no-records i {
-                font-size: 2.5em;
-                margin-bottom: 10px;
-            }
-
-            .no-records p {
-                font-size: 0.9rem;
-            }
-        }
-
-        /* Ensure modal works well on mobile */
-        @media screen and (max-width: 768px) {
-            .modal {
-                padding: 10px;
-            }
-
-            .close-modal {
-                top: 5px;
-                right: 5px;
-                font-size: 24px;
-                padding: 8px;
-            }
-        }
-
-        /* Mobile Responsiveness Enhancements */
-        @media (max-width: 768px) {
-            .recharge-container {
-                padding: 15px;
-            }
-
-            .recharge-card {
-                padding: 15px;
-            }
-
-            .recharge-title {
-                font-size: 1.5rem;
-            }
-
-            .recharge-table {
-                font-size: 0.9rem;
-            }
-
-            .recharge-table th,
-            .recharge-table td {
-                padding: 8px;
-            }
-
-            .recharge-table th {
-                font-size: 0.85rem;
-            }
-
-            .status-badge {
-                padding: 4px 8px;
-                font-size: 0.8rem;
-            }
-
-            .action-btn {
-                padding: 6px 12px;
-                font-size: 0.85rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .recharge-container {
-                padding: 10px;
-            }
-
-            .recharge-card {
-                padding: 10px;
-            }
-
-            .recharge-title {
-                font-size: 1.3rem;
-            }
-
-            .recharge-table {
-                font-size: 0.85rem;
-            }
-
-            .recharge-table th,
-            .recharge-table td {
-                padding: 6px;
-            }
-
-            .recharge-table th {
-                font-size: 0.8rem;
-            }
-
-            .status-badge {
-                padding: 3px 6px;
-                font-size: 0.75rem;
-            }
-
-            .action-btn {
-                padding: 4px 8px;
-                font-size: 0.8rem;
-            }
-
-            .recharge-table td:nth-child(3),
-            .recharge-table th:nth-child(3) {
-                display: none;
-            }
-        }
-
-        /* Print styles */
-        @media print {
-            .bottom-nav {
-                display: none !important;
-            }
-
-            .recharge-card {
-                box-shadow: none;
-                border: 1px solid #ccc;
-            }
-
-            .recharge-table {
-                border-collapse: collapse;
-            }
-
-            .recharge-table th,
-            .recharge-table td {
-                border: 1px solid #ccc;
-            }
+        .close-modal:hover {
+            color: #ff1744;
+            background: #fff;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <button class="back-button" onclick="history.back()">
-            <i class="fas fa-arrow-left"></i> Back
-        </button>
-        <h2 class="header-title">Recharge Record</h2>
+    <div class="records-container">
+        <h2 style="text-align:center; color:#00ff88; font-size:2rem; font-weight:700; margin:2rem 0 2rem 0; letter-spacing:1px;">Recharge Record</h2>
+        <div id="recordsList"></div>
     </div>
-
-    <div class="content" id="rechargeRecords">
-        <!-- Records will be loaded here -->
-    </div>
-
-    <!-- Keep only one modal -->
-    <div class="modal" id="receiptModal">
+    <!-- Receipt Modal -->
+    <div id="receiptModal" class="modal">
         <div class="modal-content">
-            <button class="close-modal">&times;</button>
-            <img id="modalImage" class="modal-image" src="" alt="Receipt preview">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <img id="modalImage" src="" alt="Receipt Image">
         </div>
     </div>
-
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <a class="nav-item" href="dashboard.html">
-            <i class="fas fa-home"></i>
+    <nav style="position:fixed;left:0;right:0;bottom:0;height:60px;background:#18191c;display:flex;justify-content:space-around;align-items:center;z-index:1000;border-top:1px solid #23272f;width:100%;">
+        <a href="home.html" style="text-decoration:none;flex:1;display:flex;flex-direction:column;align-items:center;color:#888;font-size:13px;transition:color 0.2s;">
+            <i class="fa fa-home" style="font-size:22px;"></i>
             <span>Home</span>
         </a>
-        <a class="nav-item" href="earn.html">
-            <i class="fas fa-clipboard"></i>
+        <a href="earn.html" style="text-decoration:none;flex:1;display:flex;flex-direction:column;align-items:center;color:#888;font-size:13px;transition:color 0.2s;">
+            <i class="fa fa-briefcase" style="font-size:22px;"></i>
             <span>Task</span>
         </a>
-        <a class="nav-item" href="refferal.html">
-            <i class="fas fa-users"></i>
+        <a href="referral.html" style="text-decoration:none;flex:1;display:flex;flex-direction:column;align-items:center;color:#888;font-size:13px;transition:color 0.2s;">
+            <i class="fa fa-users" style="font-size:22px;"></i>
             <span>Team</span>
         </a>
-        <a class="nav-item active" href="basic.html">
-            <i class="fas fa-gem"></i>
+        <a href="vip.html" style="text-decoration:none;flex:1;display:flex;flex-direction:column;align-items:center;color:#888;font-size:13px;transition:color 0.2s;">
+            <i class="fa fa-gem" style="font-size:22px;"></i>
             <span>VIP</span>
         </a>
-        <a class="nav-item" href="me.html">
-            <i class="fas fa-user"></i>
+        <a href="me.html" style="text-decoration:none;flex:1;display:flex;flex-direction:column;align-items:center;color:#888;font-size:13px;transition:color 0.2s;">
+            <i class="fa fa-user" style="font-size:22px;"></i>
             <span>Me</span>
         </a>
     </nav>
-
-    <!-- Structured Data for Recharge Records Page -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "Wing System Recharge Records",
-        "description": "Track and view your recharge history with Wing System",
-        "mainEntity": {
-            "@type": "Table",
-            "name": "Recharge History",
-            "description": "Detailed records of all recharge requests and their status",
-            "about": {
-                "@type": "Thing",
-                "name": "Recharge Transactions",
-                "description": "History of recharge requests and their processing status"
-            }
-        }
+    <style>
+    nav a:hover {
+        color: #00ff88 !important;
     }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [{
-            "@type": "Question",
-            "name": "How can I track my recharge requests?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "You can track your recharge requests through the recharge records page, which shows all your recharge history including request ID, amount, status, and processing details."
-            }
-        },{
-            "@type": "Question",
-            "name": "What do the different recharge statuses mean?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Recharge statuses include: Pending (under review), Approved (processed), and Rejected (declined). Each status indicates the current state of your recharge request."
-            }
-        },{
-            "@type": "Question",
-            "name": "How long does recharge processing take?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Recharge processing typically takes 24-48 hours after approval. The exact time may vary depending on the payment method and verification requirements."
-            }
-        },{
-            "@type": "Question",
-            "name": "Can I cancel a recharge request?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Recharge requests can only be cancelled if they are in 'Pending' status. Once approved or rejected, the request cannot be cancelled."
-            }
-        }]
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [{
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "http://localhost:5000/"
-        },{
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Dashboard",
-            "item": "http://localhost:5000/dashboard"
-        },{
-            "@type": "ListItem",
-            "position": 3,
-            "name": "Recharge Records",
-            "item": "http://localhost:5000/recharge-record.html"
-        }]
-    }
-    </script>
-
+    </style>
     <script>
-        // Initialize modal elements
-        const modal = document.getElementById('receiptModal');
-        const modalImage = document.getElementById('modalImage');
-        const closeModalBtn = document.querySelector('.close-modal');
-
-        // Function to close the modal
-        function closeModal() {
-            modal.style.display = 'none';
-        }
-
-        // Function to open modal with receipt image
-        function openModal(imageSrc) {
-            const decodedSrc = decodeURIComponent(imageSrc);
-            console.log('Opening modal with image:', decodedSrc);
-            
-            // Set image source
-            modalImage.src = decodedSrc;
-            
-            // Add error handler for image loading failures
-            modalImage.onerror = function() {
-                console.error('Modal image failed to load:', decodedSrc);
-                this.onerror = null;
-                this.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF6GlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDUgNzkuMTYzNDk5LCAyMDE4LzA4LzEzLTE2OjQwOjIyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDI1LTAzLTI5VDIwOjUwOjE2KzA1OjMwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyNS0wMy0yOVQyMDo1MToxOCswNTozMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyNS0wMy0yOVQyMDo1MToxOCswNTozMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDowNzVlZGZlNi05OGJk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';
-            };
-            
-            // Show the modal
-            modal.style.display = 'block';
-        }
-        
-        // Close modal when clicking the close button
-        closeModalBtn.addEventListener('click', closeModal);
-        
-        // Close modal when clicking outside the image
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-
-        // Load records when page loads
-        document.addEventListener('DOMContentLoaded', loadRechargeRecords);
-
-        async function loadRechargeRecords() {
-            const recordsContainer = document.getElementById('rechargeRecords');
-
+    async function fetchRechargeRecords() {
             try {
                 const token = localStorage.getItem('token');
-                
-                // Use the correct API URL with origin
-                const apiUrl = `${window.location.origin}/api/recharge/my-records`;
-                console.log('Fetching recharge records from:', apiUrl);
-                
-                const response = await fetch(apiUrl, {
+            const response = await fetch('/api/recharge/my-records', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-
-                const result = await response.json();
-                
-                console.log('Recharge records response:', result);
-
-                if (!response.ok) {
-                    throw new Error(result.error || 'Error fetching recharge records');
-                }
-
-                const recharges = result.data;
-
-                if (recharges.length === 0) {
-                    recordsContainer.innerHTML = `
-                        <div class="no-records">
-                            <i class="fas fa-history fa-3x" style="color: #ccc; margin-bottom: 15px;"></i>
-                            <p>No recharge records found</p>
-                        </div>
-                    `;
+            const data = await response.json();
+            if (!data.success || !Array.isArray(data.data)) {
+                document.getElementById('recordsList').innerHTML = '<p style="color:#ff4d4f;">Failed to load records.</p>';
+                return;
+            }
+            if (data.data.length === 0) {
+                document.getElementById('recordsList').innerHTML = '<p style="color:#bdbdbd;">No recharge records found.</p>';
                     return;
                 }
-
-                recordsContainer.innerHTML = recharges.map(record => {
-                    console.log('Processing record:', record.requestId, 'Image:', record.receiptImage);
-                    
-                    // Fix image path - strip the server file system path
-                    let imagePath = record.receiptImage;
-                    if (imagePath) {
-                        // Check if path contains server file system path
-                        if (imagePath.includes('/var/www/Wing/backend/uploads/')) {
-                            // Extract just the filename from the path
-                            const filename = imagePath.split('/').pop();
-                            // Create a proper URL to the uploads folder
-                            imagePath = `${window.location.origin}/uploads/receipts/${filename}`;
-                        }
-                        // If it's already a relative path, ensure it has origin
-                        else if (!imagePath.startsWith('http')) {
-                            imagePath = `${window.location.origin}/${imagePath}`;
-                        }
-                    }
-                    
+            // Show the most recent record first
+            const sorted = [...data.data].sort((a, b) => new Date(b.createdAt || b.receiptUploadDate) - new Date(a.createdAt || a.receiptUploadDate));
+            document.getElementById('recordsList').innerHTML = sorted.map(record => {
+                let statusClass = 'pending';
+                if (record.status === 'approved') statusClass = 'approved';
+                if (record.status === 'rejected') statusClass = 'rejected';
                     return `
-                        <div class="recharge-item">
-                            <div class="order-number">
-                                Request ID: ${record.requestId}
+                <div class="record-card">
+                    <div class="record-header">
+                        <span class="request-id">Request ID: ${record.requestId || ''}</span>
+                        <span class="status-badge ${statusClass}">${record.status}</span>
                             </div>
-                            <div class="detail-row">
-                                <span class="label">Amount</span>
-                                <span class="value amount">Rs. ${record.amount}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="label">Payment Method</span>
-                                <span class="value">${record.paymentMethod}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="label">Status</span>
-                                <span class="status ${record.status.toLowerCase()}">
-                                    ${record.status}
+                    <table class="record-table">
+                        <tr>
+                            <td class="label">Amount</td>
+                            <td class="value amount">${record.amount} USDT</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Payment Method</td>
+                            <td class="value">${record.paymentMethod}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">TID</td>
+                            <td class="value">${record.tid || ''}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Date</td>
+                            <td class="value">${new Date(record.createdAt || record.receiptUploadDate).toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Receipt</td>
+                            <td class="value">
+                                <span class="receipt-link">
+                                    <img src="${record.receiptImage || ''}" alt="Receipt" onclick="openReceiptModal('${record.receiptImage || ''}')">
                                 </span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="label">TID</span>
-                                <span class="value">${record.tid}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="label">Date</span>
-                                <span class="value">${new Date(record.createdAt).toLocaleString()}</span>
-                            </div>
-                            ${record.receiptImage ? `
-                                <div class="detail-row">
-                                    <span class="label">Receipt</span>
-                                    <span class="value">
-                                        <img src="${imagePath}" 
-                                             alt="Receipt" 
-                                             class="receipt-preview"
-                                             onerror="this.onerror=null; this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF6GlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDUgNzkuMTYzNDk5LCAyMDE4LzA4LzEzLTE2OjQwOjIyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDI1LTAzLTI5VDIwOjUwOjE2KzA1OjMwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyNS0wMy0yOVQyMDo1MToxOCswNTozMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyNS0wMy0yOVQyMDo1MToxOCswNTozMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDowNzVlZGZlNi05OGJk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'; console.error('Failed to load image:', '${imagePath}');"
-                                             onclick="openModal('${encodeURIComponent(imagePath)}')">
-                                    </span>
-                                </div>
-                            ` : ''}
+                            </td>
+                        </tr>
+                    </table>
                         </div>
                     `;
                 }).join('');
-
-            } catch (error) {
-                console.error('Error:', error);
-                recordsContainer.innerHTML = `
-                    <div class="no-records">
-                        <i class="fas fa-exclamation-circle fa-3x" style="color: #dc3545; margin-bottom: 15px;"></i>
-                        <p>Error loading recharge records</p>
-                    </div>
-                `;
-            }
+        } catch (err) {
+            document.getElementById('recordsList').innerHTML = '<p style="color:#ff4d4f;">Error loading records.</p>';
         }
+    }
+    fetchRechargeRecords();
+    // Modal logic
+    function openReceiptModal(imgUrl) {
+        const modal = document.getElementById('receiptModal');
+        const modalImg = document.getElementById('modalImage');
+        modalImg.src = imgUrl;
+        modal.style.display = 'flex';
+    }
+    document.getElementById('closeModal').onclick = function() {
+        document.getElementById('receiptModal').style.display = 'none';
+    };
+    window.onclick = function(event) {
+        const modal = document.getElementById('receiptModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
     </script>
 </body>
 </html> 

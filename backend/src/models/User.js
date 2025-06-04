@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
   },
   balance: {
     type: Number,
-    default: 50,
+    default: 0,
     min: 0
   },
   referralCode: {
@@ -111,6 +111,14 @@ const userSchema = new mongoose.Schema({
   packageEndDate: {
     type: Date,
     default: null
+  },
+  bonusClaimed: {
+    type: Boolean,
+    default: false
+  },
+  level: {
+    type: String,
+    default: 'None'
   }
 }, {
   timestamps: true

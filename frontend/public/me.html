@@ -3,38 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoo System - Me | Manage Your Account</title>
-    <meta name="description" content="Manage your Zoo System account. View your balance, access recharge and withdrawal options, and navigate to other account-related sections.">
-    <meta name="keywords" content="zoo system me, user account, balance, recharge, withdraw, personal info, order history, account details, VIP, transaction, wallet, team report, messages, event, download app, invite friends, special events, about us, contact us, logout">
-    <meta name="author" content="Zoo System">
+    <title>E-tube - Me | Manage Your Account</title>
+    <meta name="description" content="Manage your E-tube account. View your balance, access recharge and withdrawal options, and navigate to other account-related sections.">
+    <meta name="keywords" content="E-tube me, user account, balance, recharge, withdraw, personal info, order history, account details, VIP, transaction, wallet, team report, messages, event, download app, invite friends, special events, about us, contact us, logout">
+    <meta name="author" content="E-tube">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Zoo System - Me | Account Management">
-    <meta property="og:description" content="Manage your Zoo System account. View your balance, access recharge and withdrawal options, and navigate to other account-related sections.">
+    <meta property="og:title" content="E-tube - Me | Account Management">
+    <meta property="og:description" content="Manage your E-tube account. View your balance, access recharge and withdrawal options, and navigate to other account-related sections.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="http://localhost:5000/me.html">
-    <meta property="og:image" content="/images/zoo-system-me-og.jpg">
+    <meta property="og:image" content="/images/e-tube-me-og.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Zoo System - Me | Account Management">
-    <meta name="twitter:description" content="Manage your Zoo System account. View your balance, access recharge and withdrawal options, and navigate to other account-related sections.">
-    <meta name="twitter:image" content="/images/zoo-system-me-og.jpg">
+    <meta name="twitter:title" content="E-tube - Me | Account Management">
+    <meta name="twitter:description" content="Manage your E-tube account. View your balance, access recharge and withdrawal options, and navigate to other account-related sections.">
+    <meta name="twitter:image" content="/images/e-tube-me-og.jpg">
     <link rel="canonical" href="http://localhost:5000/me.html">
     <meta name="theme-color" content="#121212">
-    <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" sizes="32x32" href="/images/Favicon.jpg">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
 
     <style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        * {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             background-color: #121212;
             color: #fff;
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
+            position: relative;
         }
 
         .me-container {
@@ -45,6 +57,13 @@
             max-width: 600px;
             margin: auto;
             color: #fff;
+            overflow-y: auto;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        .me-container::-webkit-scrollbar {
+            display: none;
         }
 
         .paper {
@@ -76,6 +95,7 @@
         .recharge-withdraw-section {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .recharge-withdraw-section button {
@@ -89,6 +109,7 @@
             align-items: center;
             justify-content: center;
             gap: 4px;
+            min-width: 120px;
         }
 
         .recharge-withdraw-section button i {
@@ -115,14 +136,14 @@
 
         .menu-items-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 items per row */
-            gap: 8px;
-            padding: 8px;
+            grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
+            gap: 15px; /* Default gap for larger screens */
+            padding: 12px; /* Default padding for larger screens */
         }
 
         .menu-item-card {
-            padding: 8px;
-            border-radius: 8px;
+            padding: 12px; /* Default padding for larger screens */
+            border-radius: 10px;
             background: rgba(255,255,255,0.04);
             text-align: center;
             cursor: pointer;
@@ -134,14 +155,14 @@
         }
 
         .menu-item-card i {
-            font-size: 2rem;
-            margin-bottom: 4px;
+            font-size: 2rem; /* Default icon size for larger screens */
+            margin-bottom: 6px; /* Default margin below icon for larger screens */
         }
 
          .menu-item-card span {
             display: block;
-            margin-top: 2px;
-            font-size: 0.75rem;
+            margin-top: 3px; /* Default margin above text for larger screens */
+            font-size: 0.85rem; /* Default text size for larger screens */
         }
 
         .icon-personal-info { color: #fff; }
@@ -161,13 +182,75 @@
         .icon-logout { color: #ff1744; font-weight: bold; }
         .logout-text { color: #ff1744; font-weight: bold; }
 
-        /* Bottom Navigation */
+        .gift-box-container {
+            color: #ff69b4;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            margin-left: auto;
+            padding: 8px;
+        }
+
+        .gift-box-container i {
+             font-size: 2.5rem;
+        }
+
+        .gift-box-container:hover {
+             transform: scale(1.1);
+        }
+
+        .gift-box-container:active {
+             transform: scale(0.9);
+        }
+
+        .claimed-bonus {
+             opacity: 0.7;
+             cursor: default;
+        }
+
+        .claimed-bonus i {
+            color: #bdbdbd;
+        }
+
+        .bonus-message {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 255, 136, 0.9);
+            color: #121212;
+            padding: 10px 20px;
+            border-radius: 8px;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            font-weight: bold;
+            text-align: center;
+            max-width: 90%;
+            box-sizing: border-box;
+        }
+
+        .bonus-message.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @keyframes openGiftBox {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(20deg) scale(1.1); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        .gift-box-container.claimed-bonus i {
+            animation: openGiftBox 0.8s ease-in-out;
+        }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: #1e1e1e; /* Dark background color */
+            background: #1e1e1e;
             display: flex;
             justify-content: space-around;
             padding: 0.8rem;
@@ -176,7 +259,7 @@
         }
 
         .nav-item {
-            color: #666; /* Default color for inactive tabs */
+            color: #666;
             text-decoration: none;
             display: flex;
             flex-direction: column;
@@ -190,16 +273,209 @@
         }
 
         .nav-item.active {
-            color: #00ff88; /* Green color for active tab */
+            color: #00ff88; /* Updated active color */
+        }
+
+        .nav-item.active i {
+             transform: translateY(-2px);
+        }
+        
+        /* Ensure 3 columns on all screen sizes */
+        @media (max-width: 10000px) { /* A large value to target all screens */
+            .menu-items-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px; /* Match the decreased gap */
+            }
+        }
+
+        .user-info-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .user-info-section .user-details {
+            flex-grow: 1;
+        }
+
+         .user-details h5 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #fff;
+         }
+
+         .user-details p {
+             margin: 4px 0 0;
+             font-size: 0.9rem;
+             color: #bdbdbd;
+         }
+
+        .balance-section h6,
+        .balance-section h4 {
+            text-align: center;
+        }
+
+        .contact-section {
+            margin-top: 16px;
+            padding: 12px;
+            border: 1px dashed #ffc107;
+            border-radius: 8px;
+            background: rgba(255, 193, 7, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffc107;
+            cursor: pointer;
+            flex-wrap: wrap;
+        }
+
+        .contact-section i {
+            font-size: 1.5rem;
+        }
+
+        .contact-section p {
+            margin: 0;
+            font-size: 0.9rem;
+            flex-grow: 1;
+        }
+
+        .contact-section .arrow-icon {
+            font-size: 1.2rem;
+            color: #ffc107;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            /* Adjust layout for tablets and smaller screens */
+            .me-container {
+                padding: 12px;
+            }
+
+            .menu-items-grid {
+                grid-template-columns: repeat(3, 1fr); /* Keep 3 columns */
+                gap: 10px; /* Smaller gap on tablets */
+                padding: 10px; /* Smaller padding on tablets */
+            }
+
+            .menu-item-card {
+                padding: 10px; /* Smaller padding on tablets */
+            }
+
+            .menu-item-card i {
+                font-size: 1.8rem; /* Smaller icon size on tablets */
+                margin-bottom: 5px;
+            }
+
+             .menu-item-card span {
+                margin-top: 3px;
+                font-size: 0.8rem; /* Smaller text size on tablets */
+            }
+
+            .recharge-withdraw-section {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .recharge-withdraw-section button {
+                 min-width: 100%;
+            }
+
+            .bonus-message {
+                 bottom: 80px;
+                 padding: 8px 15px;
+                 font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Further adjustments for small mobile screens */
+            .me-container {
+                padding: 8px;
+            }
+
+            .menu-items-grid {
+                grid-template-columns: repeat(3, 1fr); /* Keep 3 columns */
+                gap: 8px; /* Even smaller gap on mobile */
+                padding: 8px; /* Even smaller padding on mobile */
+            }
+
+            .menu-item-card {
+                padding: 8px; /* Even smaller padding on mobile */
+            }
+
+            .menu-item-card i {
+                font-size: 1.5rem; /* Even smaller icons on mobile */
+                margin-bottom: 4px;
+            }
+
+             .menu-item-card span {
+                margin-top: 2px;
+                font-size: 0.75rem; /* Even smaller text on mobile */
+            }
+
+             .gift-box-container i {
+                 font-size: 2rem;
+            }
+
+            .bonus-message {
+                bottom: 60px;
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+
+            .bottom-nav {
+                 padding: 0.6rem;
+            }
+
+             .nav-item i {
+                 font-size: 1rem;
+             }
+
+              .nav-item span {
+                 font-size: 0.7rem;
+             }
         }
     </style>
 </head>
 <body>
     <div class="me-container">
+        <!-- User Info Section -->
+        <div class="user-info-section">
+            <div class="user-details">
+                <h5 id="username"></h5>
+                <p id="invitationCode"></p>
+            </div>
+            <!-- Gift Box -->
+            <div class="gift-box-container" id="registrationBonusGift" onclick="claimRegistrationBonus()">
+                <i class="fas fa-gift"></i>
+            </div>
+        </div>
+
+        <!-- Bonus Claimed Message -->
+        <div id="bonusMessage" class="bonus-message">
+             Registration bonus claimed!
+        </div>
+
         <!-- Balance Section -->
         <div class="paper balance-section">
             <h6>Current Balance</h6>
-            <h4 id="currentBalance">Rs. 0.00</h4>
+            <h4 id="currentBalance">$ 0.00</h4>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="me-container">
+             <a href="contact.html" style="text-decoration: none;">
+                 <div class="contact-section">
+                     <i class="fas fa-bullhorn"></i>
+                     <p>If you have any questions, please contact the support team</p>
+                 </div>
+             </a>
         </div>
 
         <!-- Recharge and Withdraw Section -->
@@ -223,7 +499,7 @@
                     <span>Personal info</span>
                 </div>
                 <!-- Menu Item: VIP -->
-                <div class="menu-item-card" onclick="window.location.href='basic.html'">
+                <div class="menu-item-card" onclick="window.location.href='vip.html'">
                     <i class="fas fa-star icon-vip"></i>
                     <span>VIP</span>
                 </div>
@@ -266,7 +542,7 @@
         </div>
 
         <!-- Logout Button Section -->
-        <div class="paper" style="text-align: center;">
+        <div class="paper" style="text-align: center; margin-bottom: 80px;">
             <div class="menu-item-card" onclick="logout()" style="display: inline-block; width: 100%; max-width: 150px;">
                 <i class="fas fa-sign-out-alt icon-logout"></i>
                 <span class="logout-text">Logout</span>
@@ -276,7 +552,7 @@
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-        <a class="nav-item" href="dashboard.html">
+        <a class="nav-item" href="home.html">
             <i class="fas fa-home"></i>
             <span>Home</span>
         </a>
@@ -288,7 +564,7 @@
             <i class="fas fa-users"></i>
             <span>Team</span>
         </a>
-        <a class="nav-item" href="basic.html">
+        <a class="nav-item" href="vip.html">
             <i class="fas fa-gem"></i>
             <span>VIP</span>
         </a>
@@ -330,13 +606,197 @@
                 const userData = await response.json();
 
                 if (userData.success && userData.data) {
-                    document.getElementById('currentBalance').textContent = `Rs. ${userData.data.balance.toFixed(2)}`;
+                    const balanceElement = document.getElementById('currentBalance');
+                    if (balanceElement && typeof userData.data.balance === 'number') {
+                        balanceElement.textContent = `$ ${userData.data.balance.toFixed(2)}`;
+                    } else if (balanceElement) {
+                        balanceElement.textContent = '$ 0.00';
+                    }
+
+                    const usernameElement = document.getElementById('username');
+                    let currentUsername = null; // Variable to store the fetched username
+                    if (usernameElement && userData.data.username) {
+                        currentUsername = userData.data.username; // Store username
+                        usernameElement.textContent = `User : ${currentUsername}`;
+                    }
+
+                    const invitationCodeElement = document.getElementById('invitationCode');
+                    if (invitationCodeElement && userData.data.referralCode) {
+                        invitationCodeElement.textContent = `Referral code : ${userData.data.referralCode}`;
+                    } else if (invitationCodeElement && userData.data.invitationCode) {
+                        invitationCodeElement.textContent = `Referral code : ${userData.data.invitationCode}`;
+                    }
+
+                    // Now, check bonus status from the server
+                    checkBonusStatusFromServer(token);
+
                 } else {
                     throw new Error(userData.error || 'Failed to load user data');
                 }
 
             } catch (error) {
                 console.error('Error loading user data:', error);
+            }
+        }
+
+        // Check bonus status from the server
+        async function checkBonusStatusFromServer(token) {
+            const giftBoxElement = document.getElementById('registrationBonusGift');
+            const giftIconElement = giftBoxElement ? giftBoxElement.querySelector('i') : null;
+
+            if (!token || !giftBoxElement || !giftIconElement) {
+                return; // Cannot check status without token or elements
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/bonus/status`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                     // Handle error, maybe the bonus status endpoint doesn't exist yet
+                     console.error('Failed to fetch bonus status:', response.status);
+                     return;
+                }
+
+                const bonusStatusData = await response.json();
+
+                if (bonusStatusData.success && bonusStatusData.claimed) {
+                    // Bonus is claimed, update UI
+                    giftBoxElement.classList.add('claimed-bonus');
+                    giftBoxElement.onclick = null; // Disable click
+                    giftIconElement.classList.remove('fa-gift');
+                    giftIconElement.classList.add('fa-box-open'); // Change to open box icon
+                }
+
+            } catch (error) {
+                console.error('Error checking bonus status:', error);
+            }
+        }
+
+        // Function to claim registration bonus
+        async function claimRegistrationBonus() {
+             const token = localStorage.getItem('token');
+             const giftBoxElement = document.getElementById('registrationBonusGift');
+             const giftIconElement = giftBoxElement ? giftBoxElement.querySelector('i') : null;
+             const bonusMessageElement = document.getElementById('bonusMessage');
+
+             if (!token || !giftBoxElement || !giftIconElement || !bonusMessageElement) {
+                  console.error('Missing token or elements.');
+                 return;
+             }
+
+             // Check bonus status from the server before attempting to claim
+             // (This is a redundant check if checkBonusStatusFromServer runs on load,
+             // but adds robustness if the user clicks very quickly)
+             const statusResponse = await fetch(`${API_URL}/api/bonus/status`, {
+                 method: 'GET',
+                 headers: {
+                     'Authorization': `Bearer ${token}`,
+                     'Accept': 'application/json'
+                 }
+             });
+
+             if (statusResponse.ok) {
+                 const statusData = await statusResponse.json();
+                 if (statusData.success && statusData.claimed) {
+                     // Bonus already claimed, update UI and show message
+                      giftBoxElement.classList.add('claimed-bonus');
+                      giftBoxElement.onclick = null; // Disable click
+                       giftIconElement.classList.remove('fa-gift');
+                       giftIconElement.classList.add('fa-box-open'); // Change to open box icon
+                     if (bonusMessageElement) {
+                          bonusMessageElement.textContent = 'You have already claimed your registration bonus.';
+                          bonusMessageElement.classList.add('show');
+                          setTimeout(() => {
+                               bonusMessageElement.classList.remove('show');
+                          }, 3000); // Hide message after 3 seconds
+                     }
+                     return;
+                 }
+             }
+
+
+             // Attempt to claim bonus by calling the backend API
+             try {
+                 const claimResponse = await fetch(`${API_URL}/api/bonus/claim`, {
+                     method: 'POST',
+                     headers: {
+                         'Authorization': `Bearer ${token}`,
+                         'Accept': 'application/json',
+                         'Content-Type': 'application/json'
+                     },
+                     // You might need to send user ID or other info if your backend requires it
+                     body: JSON.stringify({}) // Sending an empty body for now
+                 });
+
+                 const claimData = await claimResponse.json();
+
+                 if (claimResponse.ok && claimData.success) {
+                     // Bonus claimed successfully according to backend
+
+                     // Update balance display (you might want to fetch the new balance from backend response)
+                     const balanceElement = document.getElementById('currentBalance');
+                      if (balanceElement && typeof claimData.newBalance === 'number') {
+                           balanceElement.textContent = `$ ${claimData.newBalance.toFixed(2)}`;
+                       } else if (balanceElement) {
+                           // If backend doesn't return new balance, refetch user data or show a generic success
+                            alert('Bonus claimed! Please refresh to see updated balance.'); // Or refetch loadUserData()
+                       }
+
+                     // Show bonus claimed message
+                     if (bonusMessageElement) {
+                          bonusMessageElement.textContent = 'Registration bonus of $1.00 claimed!'; // Or use message from backend
+                          bonusMessageElement.classList.add('show');
+                          setTimeout(() => {
+                               bonusMessageElement.classList.remove('show');
+                          }, 3000); // Hide message after 3 seconds
+                     }
+
+                     // Update gift box appearance
+                     if (giftBoxElement) {
+                         giftBoxElement.classList.add('claimed-bonus');
+                         giftBoxElement.onclick = null; // Disable click
+                         if (giftIconElement) {
+                             giftIconElement.classList.remove('fa-gift');
+                             giftIconElement.classList.add('fa-box-open'); // Change to open box icon
+                         }
+                     }
+
+                 } else {
+                     // Handle claim failure (e.g., already claimed, server error)
+                      const errorMessage = claimData.error || 'Failed to claim bonus.';
+                     if (bonusMessageElement) {
+                          bonusMessageElement.textContent = errorMessage;
+                          bonusMessageElement.style.backgroundColor = 'rgba(255, 0, 0, 0.9)'; // Red background for error
+                          bonusMessageElement.classList.add('show');
+                          setTimeout(() => {
+                               bonusMessageElement.classList.remove('show');
+                               bonusMessageElement.style.backgroundColor = ''; // Reset background
+                          }, 3000); // Hide message after 3 seconds
+                     } else {
+                         alert(errorMessage);
+                     }
+                     console.error('Bonus claim failed:', claimResponse.status, claimData);
+                 }
+
+             } catch (error) {
+                 console.error('Error during bonus claim API call:', error);
+                 if (bonusMessageElement) {
+                      bonusMessageElement.textContent = 'An error occurred while trying to claim the bonus.';
+                      bonusMessageElement.style.backgroundColor = 'rgba(255, 0, 0, 0.9)'; // Red background for error
+                      bonusMessageElement.classList.add('show');
+                      setTimeout(() => {
+                           bonusMessageElement.classList.remove('show');
+                           bonusMessageElement.style.backgroundColor = ''; // Reset background
+                      }, 3000); // Hide message after 3 seconds
+                 } else {
+                      alert('An error occurred while trying to claim the bonus.');
+                 }
             }
         }
 
@@ -349,6 +809,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             loadUserData();
+            // Bonus status check is now initiated within loadUserData after auth/me call
         });
     </script>
 </body>

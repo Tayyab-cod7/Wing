@@ -301,6 +301,7 @@ const getMe = async (req, res) => {
         data: {
           email: user.email,
           username: user.username,
+          balance: user.balance,
           createdAt: user.createdAt,
           referralCode: user.referralCode,
           referralCount: user.referralCount || 0,
@@ -308,7 +309,8 @@ const getMe = async (req, res) => {
           referralEarnings: totalReferralEarnings,
           isAdmin: user.isAdmin,
           leaderUsername: leaderUsername,
-          leaderReferralCode: leaderReferralCode
+          leaderReferralCode: leaderReferralCode,
+          level: user.level || 'None'
         }
       });
     } catch (err) {

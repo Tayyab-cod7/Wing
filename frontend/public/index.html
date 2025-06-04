@@ -31,11 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" sizes="32x32" href="/images/Favicon.jpg">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="manifest" href="/site.webmanifest">
+    
     <style>
         .error-message,
         .success-message {
@@ -309,7 +305,7 @@
                             if (data.user.email === 'admin@gmail.com') {
                                 window.location.href = 'admin-user.html';
                             } else {
-                                window.location.href = 'basic.html';
+                                window.location.href = 'home.html';
                             }
                         } else {
                             showError(data.message || 'Login failed. Please check your Gmail and password.');
@@ -357,8 +353,8 @@
                             // Save token and user data to localStorage after successful registration
                             localStorage.setItem('token', data.token);
                             localStorage.setItem('user', JSON.stringify(data.user));
-                            // Redirect to basic.html after successful registration
-                            window.location.href = 'basic.html';
+                            // Redirect to home.html after successful registration
+                            window.location.href = 'home.html';
                         } else {
                             const errorData = data; // data already contains the parsed JSON
                             let errorMessage = 'Registration failed. Please try again.';

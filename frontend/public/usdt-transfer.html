@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>USDT Transfer - E-TuBE</title>
+    <meta name="description" content="Transfer USDT to recharge your E-TuBE account. Scan the QR code or copy the address.">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --secondary-gradient: linear-gradient(135deg, #00ff88 0%, #2196F3 100%);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #bdbdbd;
+            --accent-color: #00ff88;
+        }
+        body {
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .transfer-container {
+            max-width: 420px;
+            margin: 2rem auto;
+            padding: 2rem;
+            padding-bottom: 80px;
+        }
+        .transfer-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem 1.5rem 2.5rem 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+        .transfer-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+            margin-bottom: 1.2rem;
+        }
+        .usdt-logo {
+            width: 32px;
+            height: 32px;
+            vertical-align: middle;
+        }
+        .tron-logo {
+            width: 32px;
+            height: 32px;
+            vertical-align: middle;
+        }
+        .network-label {
+            font-weight: 700;
+            color: #2196f3;
+            font-size: 1.1rem;
+            letter-spacing: 0.02em;
+        }
+        .transfer-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 1.2rem;
+        }
+        .qr-section {
+            margin: 1.5rem 0 1.2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .qr-code {
+            background: #fff;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            margin-bottom: 1rem;
+        }
+        .usdt-address-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,255,136,0.08);
+            border: 1px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 1.1rem;
+            word-break: break-all;
+            position: relative;
+            margin-bottom: 0.7rem;
+        }
+        .usdt-address {
+            color: var(--accent-color);
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            margin-right: 1rem;
+            flex: 1;
+            overflow-wrap: anywhere;
+        }
+        .copy-btn {
+            background: var(--secondary-gradient);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            white-space: nowrap;
+            margin: 0;
+        }
+        .copy-btn:hover {
+            background: var(--primary-gradient);
+            transform: scale(1.05);
+        }
+        .copy-btn:active {
+            transform: scale(0.97);
+        }
+        .confirm-btn {
+            width: 100%;
+            margin-top: 1.5rem;
+            background: var(--secondary-gradient);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,255,136,0.08);
+        }
+        .confirm-btn:hover {
+            background: var(--primary-gradient);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 5px 15px rgba(0,255,136,0.18);
+        }
+        .confirm-btn:active {
+            transform: scale(0.98);
+        }
+        .address-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 600px) {
+            .transfer-container { padding: 0.5rem; margin: 0.5rem; }
+            .transfer-card { padding: 1.2rem 0.5rem 1.5rem 0.5rem; border-radius: 12px; }
+            .transfer-amount { font-size: 1.3rem; }
+            .usdt-logo, .tron-logo { width: 24px; height: 24px; }
+            .usdt-address-box { font-size: 0.95rem; padding: 0.7rem; flex-direction: row; }
+            .copy-btn { font-size: 0.95rem; padding: 0.4rem 0.7rem; }
+        }
+        /* Hide number input spinners for Chrome, Safari, Edge, Opera */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        /* Hide number input spinners for Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .file-upload-label {
+            display: block;
+            color: var(--accent-color);
+            font-weight: 500;
+            margin: 1.2rem 0 0.5rem 0;
+            text-align: left;
+        }
+        .file-upload-input {
+            width: 100%;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 0.7rem 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .file-upload-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+        .file-error {
+            color: #ff4d4f;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: none;
+        }
+        .records-container {
+            width: 100vw;
+            margin: 0;
+            padding: 0 0 2rem 0;
+        }
+        .record-card {
+            background: #fff;
+            border-radius: 0;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+            margin: 0;
+            overflow: hidden;
+            padding: 0 0 2rem 0;
+            width: 100vw;
+        }
+        .records-container > *:first-child {
+            margin-top: 0 !important;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+</head>
+<body>
+    <div class="transfer-container">
+        <div class="transfer-card">
+            <div class="transfer-header">
+                <!-- <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=026" alt="USDT" class="usdt-logo"> -->
+                <span class="network-label">USDT-TRC20</span>
+                <!-- <img src="https://cryptologos.cc/logos/tron-trx-logo.png?v=026" alt="TRON" class="tron-logo"> -->
+            </div>
+            <div class="transfer-amount" id="usdtAmount">0 USDT</div>
+            <div class="qr-section">
+                <canvas id="qrCode" class="qr-code"></canvas>
+            </div>
+            <div class="address-label">USDT Wallet Address</div>
+            <div class="usdt-address-box">
+                <span class="usdt-address" id="usdtAddress">TVFAtr33Xjx7hbxKSv1ToNWhsXwRJhJP3n</span>
+                <button class="copy-btn" onclick="copyUSDTAddress()"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+            <label class="file-upload-label" for="receiptScreenshot">Upload Receipt Screenshot</label>
+            <input class="file-upload-input" type="file" id="receiptScreenshot" accept="image/*" required>
+            <div class="file-error" id="fileError">Please upload a screenshot of your receipt before confirming payment.</div>
+            <button class="confirm-btn" id="confirmBtn" onclick="goToProcessing()" disabled>Confirm Payment</button>
+        </div>
+    </div>
+    <script>
+        // Get amount from URL
+        function getAmountFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('amount') || '0';
+        }
+        // Set amount
+        document.getElementById('usdtAmount').textContent = getAmountFromURL() + ' USDT';
+        // USDT address
+        const usdtAddress = document.getElementById('usdtAddress').textContent;
+        // Generate QR code
+        const qr = new QRious({
+            element: document.getElementById('qrCode'),
+            value: usdtAddress,
+            size: 200,
+            background: 'white',
+            foreground: 'black',
+            level: 'H'
+        });
+        // Copy address
+        function copyUSDTAddress() {
+            navigator.clipboard.writeText(usdtAddress).then(function() {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                }, 1500);
+            });
+        }
+        // Enable confirm button only if file is selected
+        const fileInput = document.getElementById('receiptScreenshot');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const fileError = document.getElementById('fileError');
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files && fileInput.files.length > 0) {
+                confirmBtn.disabled = false;
+                fileError.style.display = 'none';
+            } else {
+                confirmBtn.disabled = true;
+            }
+        });
+        function goToProcessing() {
+            if (!fileInput.files || fileInput.files.length === 0) {
+                fileError.style.display = 'block';
+                return;
+            }
+            const amount = getAmountFromURL();
+            const file = fileInput.files[0];
+            const requestId = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+            const tid = requestId;
+            const formData = new FormData();
+            formData.append('amount', amount);
+            formData.append('paymentMethod', 'binance');
+            formData.append('requestId', requestId);
+            formData.append('tid', tid);
+            formData.append('receipt', file);
+            const token = localStorage.getItem('token');
+            console.log('Submitting formData:', [...formData.entries()]);
+
+            // Timeout logic
+            const fetchWithTimeout = (url, options, timeout = 10000) => {
+                return Promise.race([
+                    fetch(url, options),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), timeout))
+                ]);
+            };
+
+            fetchWithTimeout('/api/recharge/request', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            }, 10000)
+            .then(async response => {
+                console.log('Fetch response:', response);
+                let data;
+                try {
+                    data = await response.json();
+                } catch (e) {
+                    // Try to get text for debugging
+                    const text = await response.text();
+                    throw new Error(`Server did not return JSON. Status: ${response.status}. Response: ${text}`);
+                }
+                return data;
+            })
+            .then(data => {
+                console.log('Fetch data:', data); // Log full backend response
+                if (data && data.success) {
+                    window.location.href = `deposit-processing.html?amount=${encodeURIComponent(amount)}`;
+                } else {
+                    // Show backend error message if present
+                    fileError.textContent = (data && data.error) ? data.error : 'Failed to submit recharge. Please try again.';
+                    fileError.style.display = 'block';
+                    // If you keep seeing this, check your backend /api/recharge/request endpoint for errors or missing fields.
+                }
+            })
+            .catch((err) => {
+                console.error('Fetch error:', err);
+                fileError.textContent = err.message || 'Failed to submit recharge. Please try again.';
+                fileError.style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html> 

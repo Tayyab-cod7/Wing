@@ -941,10 +941,34 @@
             }
 
             try {
+                // Map package names to backend IDs
+                const packageMap = {
+                    'Basic Plane 01': 'basic1',
+                    'Basic Plane 02': 'basic2',
+                    'Basic Plane 03': 'basic3',
+                    'Basic Plane 04': 'basic4',
+                    'Pro Plane 01': 'pro1',
+                    'Pro Plane 02': 'pro2',
+                    'Pro Plane 03': 'pro3',
+                    'Premium Plane 01': 'premium1',
+                    'Premium Plane 02': 'premium2',
+                    'Premium Plane 03': 'premium3'
+                };
+
+                const packageId = packageMap[packageType];
+                if (!packageId) {
+                    throw new Error('Invalid package type');
+                }
+
                 // Clear any existing task timer state
                 localStorage.removeItem('taskResetEndTime');
                 
-                const response = await fetch(getApiUrl('/earning/purchase'), {
+                console.log('Sending purchase request:', {
+                    amount: packagePrice,
+                    packageId: packageId
+                });
+
+                const response = await fetch(getApiUrl('/packages/purchase'), {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -953,7 +977,7 @@
                     credentials: 'include',
                     body: JSON.stringify({ 
                         amount: packagePrice,
-                        packageId: packageType.toLowerCase().replace(/\s+/g, '')
+                        packageId: packageId
                     })
                 });
 
@@ -965,9 +989,12 @@
                 const data = await response.json();
                 if (data.success) {
                     alert('Successfully upgraded to ' + packageType + '!');
+                    // Reload user data to update UI
+                    await loadUserDataAndVIPStatus();
+                    // Then redirect
                     window.location.href = 'home.html';
                 } else {
-                    alert(data.message || 'Failed to upgrade package');
+                    throw new Error(data.message || 'Failed to upgrade package');
                 }
             } catch (error) {
                 console.error('Error upgrading package:', error);

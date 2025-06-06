@@ -119,7 +119,26 @@ const userSchema = new mongoose.Schema({
   level: {
     type: String,
     default: 'None'
-  }
+  },
+  activities: [{
+    type: {
+      type: String,
+      enum: ['package_purchase', 'task_complete', 'referral', 'withdrawal', 'deposit'],
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now
+    }
+  }]
 }, {
   timestamps: true
 });

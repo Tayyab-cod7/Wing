@@ -159,6 +159,14 @@ router.post('/purchase', protect, async (req, res) => {
                                     packageId === 'premium3' ? 3000 : 100,
                     packageStartDate: packageStartDate,
                     packageEndDate: packageEndDate
+                },
+                $push: {
+                    activities: {
+                        type: 'package_purchase',
+                        title: 'Package Purchased',
+                        description: `Purchased ${packageId} package for $${numericAmount}`,
+                        timestamp: packageStartDate
+                    }
                 }
             },
             { new: true }
@@ -314,6 +322,50 @@ router.post('/cancel-package', protect, async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Failed to cancel package'
+        });
+    }
+});
+
+// Add a route to get user activities
+router.get('/activities', protect, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id)
+            .select('activities packageStartDate packageEndDate activePackage');
+
+        // Initialize activities array
+        let activities = [];
+
+        // Add package purchase if there's an active package
+        if (user.activePackage) {
+            activities.push({
+                type: 'package_purchase',
+                title: 'Package Purchased',
+                description: `Activated ${user.activePackage} package`,
+                timestamp: user.packageStartDate
+            });
+        }
+
+        // Add other activities from user's activity history if they exist
+        if (user.activities && Array.isArray(user.activities)) {
+            activities = [...activities, ...user.activities];
+        }
+
+        // Sort activities by timestamp, most recent first
+        activities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        // Limit to last 10 activities
+        activities = activities.slice(0, 10);
+
+        res.json({
+            success: true,
+            activities
+        });
+
+    } catch (error) {
+        console.error('Error fetching activities:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch activities'
         });
     }
 });

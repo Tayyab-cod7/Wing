@@ -818,6 +818,103 @@
             
             // Update team members count
             setElementText('teamMembers', user.referralCount || '0');
+
+            // Load recent activities
+            loadRecentActivities();
+        }
+
+        // Function to format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return 'Just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+            if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+            
+            return date.toLocaleDateString();
+        }
+
+        // Function to load recent activities
+        async function loadRecentActivities() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+
+                const response = await fetch(getApiUrl('/earnings/activities'), {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load activities');
+                }
+
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.message || 'Failed to load activities');
+                }
+
+                const activityList = document.getElementById('activityList');
+                if (!activityList) return;
+
+                // Clear existing activities
+                activityList.innerHTML = '';
+
+                // If no activities
+                if (!data.activities || data.activities.length === 0) {
+                    activityList.innerHTML = `
+                        <div class="activity-item">
+                            <i class="fas fa-info-circle"></i>
+                            <div class="content">
+                                <h4>No Recent Activity</h4>
+                                <p>Your activities will appear here</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Display activities
+                data.activities.forEach(activity => {
+                    const icon = activity.type === 'package_purchase' ? 'fa-gem' :
+                               activity.type === 'task_complete' ? 'fa-check-circle' :
+                               activity.type === 'referral' ? 'fa-user-plus' :
+                               activity.type === 'withdrawal' ? 'fa-money-bill-wave' :
+                               activity.type === 'deposit' ? 'fa-coins' : 'fa-circle';
+
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'activity-item';
+                    activityItem.innerHTML = `
+                        <i class="fas ${icon}"></i>
+                        <div class="content">
+                            <h4>${activity.title}</h4>
+                            <p>${activity.description}</p>
+                        </div>
+                        <div class="time">${formatDate(activity.timestamp)}</div>
+                    `;
+                    activityList.appendChild(activityItem);
+                });
+
+            } catch (error) {
+                console.error('Error loading activities:', error);
+                const activityList = document.getElementById('activityList');
+                if (activityList) {
+                    activityList.innerHTML = `
+                        <div class="activity-item">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div class="content">
+                                <h4>Error Loading Activities</h4>
+                                <p>Please try again later</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
         }
 
         // Function to handle API errors

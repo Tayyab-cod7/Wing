@@ -32,9 +32,15 @@ app.use(cors({
         // Allow requests with no origin (like mobile apps, curl requests, or same-origin)
         if (!origin) return callback(null, true);
         
+        console.log('Request from origin:', origin);
+        // In production, allow all origins
+        if (process.env.NODE_ENV === 'production') {
+            return callback(null, true);
+        }
+        
+        // In development, check against allowedOrigins
         if (allowedOrigins.indexOf(origin) === -1) {
-            console.log('Request from origin:', origin);
-            return callback(null, true); // Allow all origins in production
+            return callback(new Error('Not allowed by CORS'));
         }
         return callback(null, true);
     },
@@ -47,6 +53,7 @@ app.use(cors({
 
 // Essential middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Log all requests for debugging
 app.use((req, res, next) => {
@@ -96,6 +103,13 @@ app.all('/api/*', (req, res) => {
 
 // Catch-all route for SPA - make sure this comes after API routes
 app.get('*', (req, res) => {
+    // Don't serve index.html for API routes
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({
+            success: false,
+            error: 'API endpoint not found'
+        });
+    }
     res.sendFile(path.join(__dirname, '../../frontend/public/index.html'));
 });
 

@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Tube - VIP Membership Benefits</title>
-    
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+
     <!-- SEO Meta Tags -->
     <meta name="description" content="Unlock exclusive benefits with E-Tube VIP membership. Get higher rewards, special bonuses, and premium features. Choose from Bronze, Silver, and Gold packages.">
     <meta name="keywords" content="E-tube VIP, membership benefits, premium features, exclusive rewards, VIP packages, Bronze VIP, Silver VIP, Gold VIP">
@@ -786,7 +790,8 @@
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    credentials: 'include'
                 });
 
                 if (!response.ok) {
@@ -841,6 +846,34 @@
             
             // Update progress bars and other VIP-related elements
             updateVIPProgress(user);
+
+            // Update package buttons based on current VIP status
+            updatePackageButtons(user);
+        }
+
+        // Function to update package buttons based on user's VIP status
+        function updatePackageButtons(user) {
+            const cards = document.querySelectorAll('.package-card');
+            cards.forEach(card => {
+                const upgradeBtn = card.querySelector('.upgrade-btn');
+                if (!upgradeBtn) return;
+
+                // Reset button state
+                upgradeBtn.disabled = false;
+                upgradeBtn.style.opacity = '1';
+                upgradeBtn.textContent = 'Buy';
+                upgradeBtn.style.background = '';
+                upgradeBtn.style.cursor = 'pointer';
+
+                // If user has an active package, disable the button
+                if (user.activePackage) {
+                    upgradeBtn.disabled = true;
+                    upgradeBtn.textContent = 'Active Package';
+                    upgradeBtn.style.opacity = '0.5';
+                    upgradeBtn.style.background = '#bdbdbd';
+                    upgradeBtn.style.cursor = 'not-allowed';
+                }
+            });
         }
 
         // Function to update VIP progress
@@ -891,6 +924,123 @@
             // You can add more specific error handling here
         }
 
+        // Function to upgrade package
+        async function upgradePackage(packageType, packagePrice) {
+            console.log('Attempting to upgrade to package:', packageType);
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            try {
+                // Clear any existing task timer state
+                localStorage.removeItem('taskResetEndTime');
+                
+                const response = await fetch(getApiUrl('/vip/upgrade'), {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ 
+                        package: packageType,
+                        price: packagePrice 
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('Successfully upgraded to ' + packageType + ' VIP!');
+                    window.location.href = 'home.html';
+                } else {
+                    alert(data.message || 'Failed to upgrade package');
+                }
+            } catch (error) {
+                console.error('Error upgrading package:', error);
+                alert('Failed to upgrade package. Please try again.');
+            }
+        }
+
+        // Initialize package buttons
+        function initializePackageButtons() {
+            document.querySelectorAll('.package-card:not([style*="opacity"]) .upgrade-btn').forEach(button => {
+                const packageCard = button.closest('.package-card');
+                const packageTitleElement = packageCard ? packageCard.querySelector('.package-title') : null;
+                const packagePriceElement = packageCard ? packageCard.querySelector('.package-price') : null;
+                const featuresList = packageCard ? packageCard.querySelectorAll('.package-features li') : [];
+                
+                const packageType = packageTitleElement ? packageTitleElement.textContent.trim() : null;
+                const packagePriceText = packagePriceElement ? packagePriceElement.textContent.trim() : '0 USDT';
+                const packagePrice = parseFloat(packagePriceText.replace(/[^0-9.-]+/g, ""));
+
+                // Extract package details
+                let dailyIncome = '', validity = '', returnDuration = '';
+                featuresList.forEach(li => {
+                    const text = li.textContent.trim();
+                    if (text.includes('Daily Income')) dailyIncome = text.split(':')[1].trim();
+                    if (text.includes('Validity')) validity = text.split(':')[1].trim();
+                    if (text.includes('Return Duration')) returnDuration = text.split(':')[1].trim();
+                });
+
+                // Add click handler
+                if (packageType && packageType !== 'Coming Soon' && !isNaN(packagePrice)) {
+                    button.addEventListener('click', () => {
+                        const currentBalanceElement = document.getElementById('currentBalance');
+                        const currentBalanceText = currentBalanceElement ? currentBalanceElement.textContent.trim() : '$ 0.00';
+                        const currentBalance = parseFloat(currentBalanceText.replace(/[^0-9.-]+/g, ""));
+
+                        if (!isNaN(currentBalance) && currentBalance >= packagePrice) {
+                            // Show confirmation modal
+                            document.getElementById('modalPackageTitle').textContent = packageType;
+                            document.getElementById('modalPackagePrice').textContent = packagePriceText;
+                            document.getElementById('modalPackageIncome').textContent = dailyIncome;
+                            document.getElementById('modalPackageValidity').textContent = validity;
+                            document.getElementById('modalPackageReturn').textContent = returnDuration;
+                            document.getElementById('buyModal').style.display = 'flex';
+
+                            // Store package details for confirmation
+                            document.getElementById('confirmBuyBtn').dataset.packageType = packageType;
+                            document.getElementById('confirmBuyBtn').dataset.packagePrice = packagePrice;
+                        } else {
+                            alert('Insufficient balance. Please recharge.');
+                            window.location.href = 'recharge.html';
+                        }
+                    });
+                }
+            });
+        }
+
+        // Modal event handlers
+        function initializeModal() {
+            const buyModal = document.getElementById('buyModal');
+            const closeBuyModal = document.querySelector('.close-buy-modal');
+            const cancelBuyBtn = document.getElementById('cancelBuyBtn');
+            const confirmBuyBtn = document.getElementById('confirmBuyBtn');
+
+            // Close modal handlers
+            closeBuyModal.onclick = cancelBuyBtn.onclick = function() {
+                buyModal.style.display = 'none';
+            };
+
+            // Confirm purchase handler
+            confirmBuyBtn.onclick = function() {
+                const packageType = this.dataset.packageType;
+                const packagePrice = parseFloat(this.dataset.packagePrice);
+                buyModal.style.display = 'none';
+                upgradePackage(packageType, packagePrice);
+            };
+
+            // Close on outside click
+            window.onclick = function(event) {
+                if (event.target === buyModal) {
+                    buyModal.style.display = 'none';
+                }
+            };
+        }
+
         // Initialize when document is ready
         document.addEventListener('DOMContentLoaded', async () => {
             // Force HTTPS in production
@@ -901,6 +1051,8 @@
 
             try {
                 await loadUserDataAndVIPStatus();
+                initializePackageButtons();
+                initializeModal();
             } catch (error) {
                 console.error('Error during initialization:', error);
             }

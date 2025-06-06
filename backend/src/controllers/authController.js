@@ -62,8 +62,9 @@ const register = async (req, res) => {
       });
     }
 
-    // Phone validation
-    if (!/^[0-9]{7,15}$/.test(phone)) {
+    // Phone validation - accept any valid phone number format
+    const cleanedPhone = phone.replace(/[^0-9]/g, '');
+    if (cleanedPhone.length < 7 || cleanedPhone.length > 15) {
       return res.status(400).json({
         success: false,
         error: 'Phone number must be between 7 and 15 digits'
@@ -90,7 +91,7 @@ const register = async (req, res) => {
     const existingUser = await User.findOne({
       $or: [
         { username: username },
-        { phone: phone }
+        { phone: cleanedPhone } // Use cleaned phone number
       ]
     });
     
@@ -134,11 +135,11 @@ const register = async (req, res) => {
       });
     }
 
-    // Create user with the generated referral code and referredBy
+    // Create user with cleaned phone number
     const user = await User.create({
       username,
       password,
-      phone,
+      phone: cleanedPhone, // Use cleaned phone number
       referralCode: newReferralCode,
       referredBy: referralCode,
       active: false
@@ -162,101 +163,76 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { phone, password } = req.body;
-        console.log('Login attempt with:', { phone, password: '****' });
+        console.log('Login attempt for phone:', phone);
 
         // Validate input
         if (!phone || !password) {
-            console.log('Missing required fields');
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Please provide both phone number and password' 
-            });
-        }
-
-        // Phone validation
-        if (!/^[0-9]{7,15}$/.test(phone)) {
-            console.log('Invalid phone format:', phone);
             return res.status(400).json({
                 success: false,
-                message: 'Phone number must be between 7 and 15 digits'
+                error: 'Please provide both phone and password'
             });
         }
 
-        // Find user by phone number
-        console.log('Searching for user with phone:', phone);
-        const user = await User.findOne({ phone }).select('+password');
-        
+        // Clean phone number
+        const cleanedPhone = phone.replace(/[^0-9]/g, '');
+        if (cleanedPhone.length < 7 || cleanedPhone.length > 15) {
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid phone number format'
+            });
+        }
+
+        // Find user by cleaned phone number
+        const user = await User.findOne({ phone: cleanedPhone }).select('+password');
         if (!user) {
-            console.log('No user found with phone:', phone);
-            return res.status(401).json({ 
-                success: false, 
-                message: 'Invalid phone number or password' 
+            console.log('No user found for phone:', cleanedPhone);
+            return res.status(401).json({
+                success: false,
+                error: 'Invalid credentials'
             });
         }
-
-        console.log('User found:', { 
-            id: user._id, 
-            username: user.username, 
-            phone: user.phone,
-            hasPassword: !!user.password 
-        });
 
         // Check password
-        console.log('Checking password...');
         const isMatch = await user.matchPassword(password);
-        console.log('Password match result:', isMatch);
-
         if (!isMatch) {
-            console.log('Password does not match for user:', user._id);
-            return res.status(401).json({ 
-                success: false, 
-                message: 'Invalid phone number or password' 
+            console.log('Password mismatch for phone:', cleanedPhone);
+            return res.status(401).json({
+                success: false,
+                error: 'Invalid credentials'
             });
         }
 
-        // Generate JWT token
-        console.log('Generating token for user:', user._id);
-        const token = jwt.sign(
-            { id: user._id, isAdmin: user.isAdmin },
-            process.env.JWT_SECRET,
-            { expiresIn: '30d' }
-        );
+        // Generate token
+        const token = user.getSignedJwtToken();
 
-        // Return user data (excluding password)
-        const userData = {
-            _id: user._id,
-            username: user.username,
-            phone: user.phone,
-            isAdmin: user.isAdmin,
-            balance: user.balance,
-            referralCode: user.referralCode,
-            referredBy: user.referredBy,
-            referralCount: user.referralCount,
-            programEarnings: user.programEarnings,
-            referralEarnings: user.referralEarnings,
-            totalEarnings: user.totalEarnings,
-            activePackage: user.activePackage,
-            packageAmount: user.packageAmount,
-            packagePurchaseDate: user.packagePurchaseDate,
-            dailyEarningRate: user.dailyEarningRate,
-            packageValidity: user.packageValidity,
-            packageStartDate: user.packageStartDate,
-            packageEndDate: user.packageEndDate,
-            level: user.level
-        };
-
-        console.log('Login successful for user:', user._id);
+        // Remove password from response
+        user.password = undefined;
 
         res.status(200).json({
             success: true,
             token,
-            user: userData
+            user: {
+                _id: user._id,
+                username: user.username,
+                phone: user.phone,
+                isAdmin: user.isAdmin,
+                balance: user.balance,
+                referralCode: user.referralCode,
+                referredBy: user.referredBy,
+                referralCount: user.referralCount,
+                activePackage: user.activePackage,
+                packageAmount: user.packageAmount,
+                packageStartDate: user.packageStartDate,
+                packageEndDate: user.packageEndDate,
+                dailyEarningRate: user.dailyEarningRate,
+                level: user.level
+            }
         });
     } catch (error) {
         console.error('Login error:', error);
-        res.status(500).json({ 
-            success: false, 
-            message: 'Server error during login' 
+        res.status(500).json({
+            success: false,
+            error: 'Server error during login'
         });
     }
 };

@@ -7,11 +7,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // MongoDB Atlas connection string
-const MONGODB_URI = process.env.MONGO_URI;
+const MONGODB_URI = 'mongodb+srv://Tayyab:Online789@earning.hmvp9.mongodb.net/?retryWrites=true&w=majority&appName=Earning';
 
 async function createAdmin() {
   try {
     console.log('Connecting to MongoDB...');
+    console.log('MongoDB URI:', MONGODB_URI);
     
     await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
@@ -19,17 +20,16 @@ async function createAdmin() {
     });
     console.log('Connected to MongoDB successfully');
 
-    // Admin credentials from environment variables
-    const adminEmail = process.env.ADMIN_EMAIL;
-    const adminUsername = process.env.ADMIN_USERNAME;
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    const adminReferral = process.env.ADMIN_REFERRAL;
-    const adminPhone = process.env.ADMIN_PHONE;
+    // Admin credentials
+    const adminEmail = 'admin@gmail.com';
+    const adminUsername = 'admin12';
+    const adminPassword = 'admin123';
+    const adminReferral = '000000';
 
     console.log('\nAdmin credentials:');
     console.log('- Email:', adminEmail);
     console.log('- Username:', adminUsername);
-    console.log('- Phone:', adminPhone);
+    console.log('- Password:', adminPassword);
     console.log('- Referral Code:', adminReferral);
 
     // Delete existing admin user if exists
@@ -43,7 +43,6 @@ async function createAdmin() {
       email: adminEmail,
       username: adminUsername,
       password: adminPassword, // Save as plain text, let model hash it
-      phone: adminPhone,
       isAdmin: true,
       referralCode: adminReferral,
       referredBy: adminReferral,
@@ -57,7 +56,6 @@ async function createAdmin() {
         id: savedUser._id,
         email: savedUser.email,
         username: savedUser.username,
-        phone: savedUser.phone,
         isAdmin: savedUser.isAdmin
       });
     } catch (saveError) {
@@ -73,14 +71,39 @@ async function createAdmin() {
       throw new Error('Admin user not found after creation');
     }
 
-    console.log('Admin user verified successfully');
-    
+    console.log('Admin user verified:', {
+      id: admin._id,
+      email: admin.email,
+      username: admin.username,
+      isAdmin: admin.isAdmin,
+      referralCode: admin.referralCode,
+      passwordHash: admin.password.substring(0, 20) + '...'
+    });
+
+    // Test password
+    const isMatch = await bcrypt.compare(adminPassword, admin.password);
+    console.log('\nPassword verification:', isMatch ? 'Success ✅' : 'Failed ❌');
+
+    if (!isMatch) {
+      throw new Error('Password verification failed. Admin user may not be able to log in.');
+    }
+
+    console.log('\nAdmin user setup completed successfully!');
+
   } catch (error) {
-    console.error('Error:', error);
+    console.error('\nError in createAdmin:', error);
+    if (error.name === 'ValidationError') {
+      console.error('Validation errors:', error.errors);
+    }
   } finally {
-    await mongoose.connection.close();
-    process.exit(0);
+    try {
+      await mongoose.disconnect();
+      console.log('\nDisconnected from MongoDB');
+    } catch (disconnectError) {
+      console.error('Error disconnecting from MongoDB:', disconnectError);
+    }
   }
 }
 
+// Run the script
 createAdmin(); 

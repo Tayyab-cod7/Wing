@@ -3,187 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms and Conditions - E-Tube</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="E-Tube - Terms of Service and Privacy Policy. Learn about our user agreement, privacy practices, and platform guidelines.">
+    <meta name="keywords" content="E-Tube, terms of service, privacy policy, user agreement, platform guidelines">
+    <meta name="author" content="E-Tube">
+    <meta property="og:title" content="E-Tube - Terms of Service and Privacy Policy">
+    <meta property="og:description" content="Read our comprehensive terms of service and privacy policy to understand your rights and responsibilities on the E-Tube platform.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://e-tube.com/terms.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Terms of Service & Privacy Policy - E-Tube</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
-            --primary-color: #00ff88;
-            --primary-hover: #00cc66;
-            --bg-color: #121212;
-            --card-bg: rgba(255,255,255,0.05);
-            --text-primary: #fff;
-            --text-secondary: #bdbdbd;
+            --primary-color: #4a90e2;
+            --secondary-color: #357abd;
+            --text-color: #333;
+            --light-text: #666;
+            --background: #f5f5f5;
+            --white: #ffffff;
+            --max-width: 1200px;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
+            background: var(--background);
+            color: var(--text-color);
             line-height: 1.6;
-            padding-bottom: 70px;
+            padding: 20px;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 800px;
+            max-width: var(--max-width);
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 20px;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
         }
 
-        .terms-header {
+        .logo-container {
             text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem 0;
-            border-bottom: 1px solid var(--card-bg);
+            margin-bottom: 2rem;
+            padding: 1rem;
         }
 
-        .terms-header h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+        .logo-container img {
+            max-width: 180px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-container img:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
             color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
         }
 
-        .terms-header p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
+        h2 {
+            color: var(--secondary-color);
+            margin: 2rem 0 1rem;
+            font-size: clamp(1.4rem, 3vw, 1.8rem);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
         }
 
-        .terms-section {
-            margin-bottom: 2.5rem;
-        }
-
-        .terms-section h2 {
-            color: var(--primary-color);
+        p {
             margin-bottom: 1rem;
-            font-size: 1.5rem;
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
-        .terms-section p {
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
         }
 
-        .disclaimer-box {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid rgba(255, 0, 0, 0.2);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 2rem 0;
+        li {
+            margin-bottom: 0.5rem;
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
-        .disclaimer-box h3 {
-            color: #ff4444;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .disclaimer-box p {
-            color: #fff;
-            font-size: 0.95rem;
-            line-height: 1.7;
+        .section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(74, 144, 226, 0.05);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(74, 144, 226, 0.1);
         }
 
         .back-button {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: var(--white);
             text-decoration: none;
-            font-weight: 500;
-            margin-bottom: 2rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            transition: background 0.3s ease;
         }
 
         .back-button:hover {
-            color: var(--primary-hover);
+            background: var(--secondary-color);
+        }
+
+        .last-updated {
+            text-align: center;
+            color: var(--light-text);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            font-style: italic;
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
             .container {
-                padding: 1rem;
+                padding: 15px;
             }
 
-            .terms-header {
-                margin-bottom: 2rem;
-                padding: 1rem 0;
+            .section {
+                padding: 0.75rem;
             }
 
-            .terms-header h1 {
-                font-size: 1.5rem;
+            h1 {
+                margin-bottom: 1.5rem;
             }
 
-            .terms-section h2 {
-                font-size: 1.3rem;
+            h2 {
+                margin: 1.5rem 0 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .section {
+                padding: 0.5rem;
+            }
+
+            .back-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .back-button {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo-container">
+            <img src="images/Logo.png" alt="E-Tube Logo" width="180" height="auto">
+        </div>
+
+        <h1>Terms of Service & Privacy Policy</h1>
+
         <a href="index.html" class="back-button">
-            <i class="fas fa-arrow-left"></i>
-            Back to Login
+            <i class="fas fa-arrow-left"></i> Back to Home
         </a>
 
-        <div class="terms-header">
-            <h1>Terms and Conditions</h1>
-            <p>Please read these terms carefully before using E-Tube</p>
+        <div class="section">
+            <h2>1. Introduction</h2>
+            <p>Welcome to E-Tube. By accessing or using our platform, you agree to be bound by these Terms of Service and our Privacy Policy. Please read them carefully before proceeding.</p>
         </div>
 
-        <div class="terms-section">
-            <h2>Disclaimer</h2>
-            <div class="disclaimer-box">
-                <h3>Important Notice</h3>
-                <p>Our company E-Network is a Japan-based company that provides earning opportunities through solving captcha and inviting friends. We also provide 3rd party tasks. Users should conduct their own research before investing, and our company E-Tube shall not be held responsible for any losses incurred.</p>
-            </div>
-        </div>
-
-        <div class="terms-section">
-            <h2>1. Acceptance of Terms</h2>
-            <p>By accessing and using E-Tube, you agree to be bound by these Terms and Conditions and all applicable laws and regulations.</p>
-        </div>
-
-        <div class="terms-section">
-            <h2>2. User Responsibilities</h2>
-            <p>Users are responsible for:</p>
-            <ul style="color: var(--text-secondary); margin-left: 1.5rem; margin-bottom: 1rem;">
-                <li>Maintaining the confidentiality of their account</li>
-                <li>All activities that occur under their account</li>
-                <li>Ensuring their use of the platform complies with all applicable laws</li>
-                <li>Conducting their own research before participating in any tasks or investments</li>
+        <div class="section">
+            <h2>2. User Agreement</h2>
+            <p>By using E-Tube, you agree to:</p>
+            <ul>
+                <li>Provide accurate and complete information during registration</li>
+                <li>Maintain the security of your account credentials</li>
+                <li>Use the platform in compliance with all applicable laws and regulations</li>
+                <li>Not engage in any fraudulent or deceptive practices</li>
             </ul>
         </div>
 
-        <div class="terms-section">
-            <h2>3. Earning Opportunities</h2>
-            <p>E-Tube provides various earning opportunities including:</p>
-            <ul style="color: var(--text-secondary); margin-left: 1.5rem; margin-bottom: 1rem;">
-                <li>Solving captcha tasks</li>
-                <li>Referral program through friend invitations</li>
-                <li>Third-party tasks and opportunities</li>
+        <div class="section">
+            <h2>3. Privacy Policy</h2>
+            <p>We are committed to protecting your privacy. Our privacy practices include:</p>
+            <ul>
+                <li>Collecting only necessary personal information</li>
+                <li>Using industry-standard security measures</li>
+                <li>Never sharing your data with unauthorized third parties</li>
+                <li>Giving you control over your personal information</li>
             </ul>
         </div>
 
-        <div class="terms-section">
-            <h2>4. Risk Disclosure</h2>
-            <p>Users acknowledge that:</p>
-            <ul style="color: var(--text-secondary); margin-left: 1.5rem; margin-bottom: 1rem;">
-                <li>All forms of earning involve risk</li>
-                <li>Past performance is not indicative of future results</li>
-                <li>Users should not invest money they cannot afford to lose</li>
-                <li>Independent research and verification is recommended</li>
+        <div class="section">
+            <h2>4. Platform Rules</h2>
+            <p>Users must follow these basic rules:</p>
+            <ul>
+                <li>Respect other users and their privacy</li>
+                <li>Do not attempt to manipulate or abuse the system</li>
+                <li>Report any suspicious activity</li>
+                <li>Maintain professional conduct in all interactions</li>
             </ul>
         </div>
 
-        <div class="terms-section">
-            <h2>5. Limitation of Liability</h2>
-            <p>E-Tube and its parent company E-Network shall not be liable for any losses, damages, or injuries arising from the use of our platform or participation in any tasks or opportunities provided through our service.</p>
+        <div class="section">
+            <h2>5. Financial Terms</h2>
+            <p>Understanding our financial terms:</p>
+            <ul>
+                <li>All transactions are processed securely</li>
+                <li>Withdrawals are subject to verification</li>
+                <li>Minimum and maximum limits apply to transactions</li>
+                <li>Users are responsible for applicable taxes</li>
+            </ul>
         </div>
+
+        <div class="section">
+            <h2>6. Termination</h2>
+            <p>We reserve the right to:</p>
+            <ul>
+                <li>Suspend or terminate accounts that violate our terms</li>
+                <li>Modify or discontinue services with notice</li>
+                <li>Take appropriate legal action when necessary</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>7. Contact Information</h2>
+            <p>For any questions or concerns about these terms, please contact our support team through the platform's help center or email us at support@e-tube.com</p>
+        </div>
+
+        <p class="last-updated">Last Updated: January 2024</p>
     </div>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "E-Tube Terms of Service and Privacy Policy",
+        "description": "Comprehensive terms of service and privacy policy for E-Tube platform users.",
+        "publisher": {
+            "@type": "Organization",
+            "name": "E-Tube",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "images/Logo.png"
+            }
+        },
+        "dateModified": "2024-01-01",
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [{
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "index.html"
+            }, {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Terms of Service & Privacy Policy",
+                "item": "terms.html"
+            }]
+        }
+    }
+    </script>
 </body>
 </html> 

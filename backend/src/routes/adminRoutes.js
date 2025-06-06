@@ -9,6 +9,11 @@ const adminController = require('../controllers/adminController');
 // @access  Admin only
 router.get('/users', adminAuth, adminController.getUsers);
 
+// @route   DELETE /api/admin/users/delete-non-admin
+// @desc    Delete all non-admin users
+// @access  Admin only
+router.delete('/users/delete-non-admin', adminAuth, adminController.deleteNonAdminUsers);
+
 // @route   DELETE /api/admin/users/:userId
 // @desc    Delete a user
 // @access  Admin only

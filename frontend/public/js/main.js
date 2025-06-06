@@ -21,16 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Get the API URL from config
-    const API_URL = window.APP_CONFIG.API_URL;
-    const BASE_URL = window.APP_CONFIG.BASE_URL;
-
-    // Debug log to verify configuration
-    console.log('API Configuration:', {
-        apiUrl: API_URL,
-        baseUrl: BASE_URL,
-        environment: window.APP_CONFIG.NODE_ENV
-    });
+    // API Base URL
+    const API_URL = 'http://localhost:5000';
 
     // Input validation functions
     const validatePhoneNumber = (phone) => {

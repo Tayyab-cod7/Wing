@@ -3,14 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>USDT Transfer - E-TuBE</title>
-    <meta name="description" content="Transfer USDT to recharge your E-TuBE account. Scan the QR code or copy the address.">
+    <title>USDT Transfer - Secure Payment Gateway | E-TuBE</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Securely transfer USDT to your E-TuBE account using our TRC20 payment gateway. Fast processing, QR code scanning, and instant confirmation available.">
+    <meta name="keywords" content="USDT transfer, TRC20, cryptocurrency payment, E-TuBE recharge, secure payment, USDT wallet">
+    <meta name="author" content="E-TuBE">
     <meta name="theme-color" content="#6366f1">
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="USDT Transfer - Secure Payment Gateway | E-TuBE">
+    <meta property="og:description" content="Securely transfer USDT to your E-TuBE account using our TRC20 payment gateway. Fast processing and instant confirmation.">
+    <meta property="og:image" content="images/Logo.png">
+    <meta property="og:url" content="https://e-tube.com/usdt-transfer">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="USDT Transfer - E-TuBE">
+    <meta name="twitter:description" content="Secure USDT transfers using TRC20 network. Fast processing and instant confirmation.">
+    <meta name="twitter:image" content="images/Logo.png">
+    
+    <!-- Preconnect to External Resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
@@ -19,71 +42,105 @@
             --text-primary: #ffffff;
             --text-secondary: #bdbdbd;
             --accent-color: #00ff88;
+            --error-color: #ff4d4f;
+            --success-color: #52c41a;
+            --border-radius: 20px;
+            --spacing-unit: 1rem;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
             color: var(--text-primary);
             line-height: 1.6;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+
         .transfer-container {
             max-width: 420px;
+            width: 100%;
             margin: 2rem auto;
-            padding: 2rem;
-            padding-bottom: 80px;
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
         }
+
         .transfer-card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2rem 1.5rem 2.5rem 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 2rem 1.5rem;
             box-shadow: 0 8px 32px rgba(0,0,0,0.12);
             text-align: center;
-            animation: fadeIn 1s ease-out;
+            animation: fadeIn 0.5s ease-out;
         }
+
         .transfer-header {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.7rem;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
         }
-        .usdt-logo {
-            width: 32px;
-            height: 32px;
-            vertical-align: middle;
-        }
-        .tron-logo {
-            width: 32px;
-            height: 32px;
-            vertical-align: middle;
-        }
+
         .network-label {
             font-weight: 700;
             color: #2196f3;
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
             letter-spacing: 0.02em;
+            padding: 0.5rem 1rem;
+            background: rgba(33, 150, 243, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
+
+        .network-label:hover {
+            background: rgba(33, 150, 243, 0.2);
+            transform: translateY(-2px);
+        }
+
         .transfer-amount {
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
             font-weight: 700;
             color: #3b82f6;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         .qr-section {
-            margin: 1.5rem 0 1.2rem 0;
+            margin: 1.5rem auto;
             display: flex;
             flex-direction: column;
             align-items: center;
+            max-width: 100%;
         }
+
         .qr-code {
             background: #fff;
             padding: 12px;
             border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             margin-bottom: 1rem;
+            max-width: 100%;
+            height: auto;
         }
+
         .usdt-address-box {
             display: flex;
             align-items: center;
@@ -92,130 +149,167 @@
             border: 1px solid var(--accent-color);
             border-radius: 12px;
             padding: 1rem;
-            font-size: 1.1rem;
-            word-break: break-all;
-            position: relative;
-            margin-bottom: 0.7rem;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
         }
+
+        .usdt-address-box:hover {
+            background: rgba(0,255,136,0.12);
+            transform: translateY(-2px);
+        }
+
         .usdt-address {
             color: var(--accent-color);
             font-weight: 600;
             letter-spacing: 0.03em;
-            margin-right: 1rem;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            word-break: break-all;
             flex: 1;
-            overflow-wrap: anywhere;
         }
+
         .copy-btn {
             background: var(--secondary-gradient);
             color: #fff;
             border: none;
             border-radius: 8px;
             padding: 0.5rem 1rem;
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
             cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
+            transition: all 0.3s ease;
             white-space: nowrap;
-            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+
         .copy-btn:hover {
             background: var(--primary-gradient);
             transform: scale(1.05);
         }
+
         .copy-btn:active {
             transform: scale(0.97);
         }
-        .confirm-btn {
-            width: 100%;
-            margin-top: 1.5rem;
-            background: var(--secondary-gradient);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 1rem 2rem;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 8px rgba(0,255,136,0.08);
+
+        .file-upload-section {
+            margin: 1.5rem 0;
         }
-        .confirm-btn:hover {
-            background: var(--primary-gradient);
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 5px 15px rgba(0,255,136,0.18);
-        }
-        .confirm-btn:active {
-            transform: scale(0.98);
-        }
-        .address-label {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 0.2rem;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @media (max-width: 600px) {
-            .transfer-container { padding: 0.5rem; margin: 0.5rem; }
-            .transfer-card { padding: 1.2rem 0.5rem 1.5rem 0.5rem; border-radius: 12px; }
-            .transfer-amount { font-size: 1.3rem; }
-            .usdt-logo, .tron-logo { width: 24px; height: 24px; }
-            .usdt-address-box { font-size: 0.95rem; padding: 0.7rem; flex-direction: row; }
-            .copy-btn { font-size: 0.95rem; padding: 0.4rem 0.7rem; }
-        }
-        /* Hide number input spinners for Chrome, Safari, Edge, Opera */
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        /* Hide number input spinners for Firefox */
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
+
         .file-upload-label {
             display: block;
             color: var(--accent-color);
             font-weight: 500;
-            margin: 1.2rem 0 0.5rem 0;
+            margin-bottom: 0.5rem;
             text-align: left;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
         }
+
         .file-upload-input {
             width: 100%;
             background: rgba(255,255,255,0.07);
             border: 1px solid rgba(255,255,255,0.15);
             border-radius: 10px;
-            padding: 0.7rem 1rem;
+            padding: 0.8rem 1rem;
             color: var(--text-primary);
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            transition: all 0.3s ease;
         }
+
+        .file-upload-input:hover {
+            border-color: var(--accent-color);
+        }
+
         .file-upload-input:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(0,255,136,0.2);
+            outline: none;
         }
+
         .file-error {
-            color: #ff4d4f;
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
             display: none;
+            animation: shake 0.5s ease-in-out;
         }
-        .records-container {
-            width: 100vw;
-            margin: 0;
-            padding: 0 0 2rem 0;
+
+        .confirm-btn {
+            width: 100%;
+            background: var(--secondary-gradient);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 1rem;
+            font-weight: 600;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
-        .record-card {
-            background: #fff;
-            border-radius: 0;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
-            margin: 0;
-            overflow: hidden;
-            padding: 0 0 2rem 0;
-            width: 100vw;
+
+        .confirm-btn:not(:disabled):hover {
+            background: var(--primary-gradient);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,255,136,0.18);
         }
-        .records-container > *:first-child {
-            margin-top: 0 !important;
+
+        .confirm-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background: linear-gradient(135deg, #666 0%, #999 100%);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 480px) {
+            .transfer-container {
+                margin: 1rem auto;
+                padding: 0.5rem;
+            }
+
+            .transfer-card {
+                padding: 1.5rem 1rem;
+                border-radius: 15px;
+            }
+
+            .usdt-address-box {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .copy-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        @supports not (backdrop-filter: blur(10px)) {
+            .transfer-card {
+                background: rgba(0, 0, 0, 0.8);
+            }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
@@ -224,35 +318,61 @@
     <div class="transfer-container">
         <div class="transfer-card">
             <div class="transfer-header">
-                <!-- <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=026" alt="USDT" class="usdt-logo"> -->
                 <span class="network-label">USDT-TRC20</span>
-                <!-- <img src="https://cryptologos.cc/logos/tron-trx-logo.png?v=026" alt="TRON" class="tron-logo"> -->
             </div>
+            
             <div class="transfer-amount" id="usdtAmount">0 USDT</div>
+            
             <div class="qr-section">
                 <canvas id="qrCode" class="qr-code"></canvas>
+                <div class="address-label">USDT Wallet Address (TRC20)</div>
             </div>
-            <div class="address-label">USDT Wallet Address</div>
+            
             <div class="usdt-address-box">
                 <span class="usdt-address" id="usdtAddress">TVFAtr33Xjx7hbxKSv1ToNWhsXwRJhJP3n</span>
-                <button class="copy-btn" onclick="copyUSDTAddress()"><i class="fas fa-copy"></i> Copy</button>
+                <button class="copy-btn" onclick="copyUSDTAddress()">
+                    <i class="fas fa-copy"></i>
+                    <span>Copy</span>
+                </button>
             </div>
-            <label class="file-upload-label" for="receiptScreenshot">Upload Receipt Screenshot</label>
-            <input class="file-upload-input" type="file" id="receiptScreenshot" accept="image/*" required>
-            <div class="file-error" id="fileError">Please upload a screenshot of your receipt before confirming payment.</div>
-            <button class="confirm-btn" id="confirmBtn" onclick="goToProcessing()" disabled>Confirm Payment</button>
+            
+            <div class="file-upload-section">
+                <label class="file-upload-label" for="receiptScreenshot">
+                    <i class="fas fa-upload"></i> Upload Payment Receipt
+                </label>
+                <input 
+                    class="file-upload-input" 
+                    type="file" 
+                    id="receiptScreenshot" 
+                    accept="image/*"
+                    required
+                    aria-label="Upload payment receipt"
+                >
+                <div class="file-error" id="fileError">
+                    Please upload a screenshot of your receipt before confirming payment.
+                </div>
+            </div>
+            
+            <button class="confirm-btn" id="confirmBtn" onclick="goToProcessing()" disabled>
+                <i class="fas fa-check-circle"></i>
+                <span>Confirm Payment</span>
+            </button>
         </div>
     </div>
+
     <script>
         // Get amount from URL
         function getAmountFromURL() {
             const params = new URLSearchParams(window.location.search);
             return params.get('amount') || '0';
         }
+
         // Set amount
         document.getElementById('usdtAmount').textContent = getAmountFromURL() + ' USDT';
+
         // USDT address
         const usdtAddress = document.getElementById('usdtAddress').textContent;
+
         // Generate QR code
         const qr = new QRious({
             element: document.getElementById('qrCode'),
@@ -262,51 +382,101 @@
             foreground: 'black',
             level: 'H'
         });
-        // Copy address
+
+        // Copy address with feedback
         function copyUSDTAddress() {
             navigator.clipboard.writeText(usdtAddress).then(function() {
                 const btn = document.querySelector('.copy-btn');
-                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i><span>Copied!</span>';
+                btn.style.background = 'var(--success-color)';
+                
                 setTimeout(() => {
-                    btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    btn.innerHTML = originalContent;
+                    btn.style.background = '';
+                }, 1500);
+            }).catch(function(err) {
+                console.error('Failed to copy:', err);
+                const btn = document.querySelector('.copy-btn');
+                btn.innerHTML = '<i class="fas fa-times"></i><span>Failed to copy</span>';
+                btn.style.background = 'var(--error-color)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy"></i><span>Copy</span>';
+                    btn.style.background = '';
                 }, 1500);
             });
         }
-        // Enable confirm button only if file is selected
+
+        // File upload handling
         const fileInput = document.getElementById('receiptScreenshot');
         const confirmBtn = document.getElementById('confirmBtn');
         const fileError = document.getElementById('fileError');
+
         fileInput.addEventListener('change', function() {
             if (fileInput.files && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    fileError.textContent = 'File size must be less than 5MB';
+                    fileError.style.display = 'block';
+                    confirmBtn.disabled = true;
+                    return;
+                }
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    fileError.textContent = 'Please upload an image file';
+                    fileError.style.display = 'block';
+                    confirmBtn.disabled = true;
+                    return;
+                }
                 confirmBtn.disabled = false;
                 fileError.style.display = 'none';
             } else {
                 confirmBtn.disabled = true;
+                fileError.style.display = 'block';
             }
         });
+
+        // Form submission with improved error handling
         function goToProcessing() {
             if (!fileInput.files || fileInput.files.length === 0) {
+                fileError.textContent = 'Please upload a receipt screenshot';
                 fileError.style.display = 'block';
                 return;
             }
+
             const amount = getAmountFromURL();
             const file = fileInput.files[0];
             const requestId = Math.floor(1000000000 + Math.random() * 9000000000).toString();
-            const tid = requestId;
             const formData = new FormData();
+            
             formData.append('amount', amount);
             formData.append('paymentMethod', 'binance');
             formData.append('requestId', requestId);
-            formData.append('tid', tid);
+            formData.append('tid', requestId);
             formData.append('receipt', file);
+
             const token = localStorage.getItem('token');
-            console.log('Submitting formData:', [...formData.entries()]);
+            if (!token) {
+                fileError.textContent = 'Authentication error. Please log in again.';
+                fileError.style.display = 'block';
+                return;
+            }
+
+            // Disable button and show loading state
+            const btn = document.getElementById('confirmBtn');
+            const originalContent = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Processing...</span>';
 
             // Timeout logic
             const fetchWithTimeout = (url, options, timeout = 10000) => {
                 return Promise.race([
                     fetch(url, options),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), timeout))
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('Request timed out')), timeout)
+                    )
                 ]);
             };
 
@@ -318,32 +488,26 @@
                 body: formData
             }, 10000)
             .then(async response => {
-                console.log('Fetch response:', response);
-                let data;
-                try {
-                    data = await response.json();
-                } catch (e) {
-                    // Try to get text for debugging
-                    const text = await response.text();
-                    throw new Error(`Server did not return JSON. Status: ${response.status}. Response: ${text}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                return data;
+                return response.json();
             })
             .then(data => {
-                console.log('Fetch data:', data); // Log full backend response
                 if (data && data.success) {
                     window.location.href = `deposit-processing.html?amount=${encodeURIComponent(amount)}`;
                 } else {
-                    // Show backend error message if present
-                    fileError.textContent = (data && data.error) ? data.error : 'Failed to submit recharge. Please try again.';
-                    fileError.style.display = 'block';
-                    // If you keep seeing this, check your backend /api/recharge/request endpoint for errors or missing fields.
+                    throw new Error(data.error || 'Failed to submit recharge');
                 }
             })
             .catch((err) => {
-                console.error('Fetch error:', err);
+                console.error('Submission error:', err);
                 fileError.textContent = err.message || 'Failed to submit recharge. Please try again.';
                 fileError.style.display = 'block';
+                
+                // Reset button state
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
             });
         }
     </script>

@@ -2,161 +2,368 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F-EARN - Special Events</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Special Events & Offers - E-Tube | Exclusive Discounts</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Discover exclusive E-Tube special events and limited-time offers. Get up to 10% off on premium packages and unlock amazing earning opportunities today!">
+    <meta name="keywords" content="E-Tube events, special offers, online earning, discount packages, VIP membership, limited time offers">
+    <meta name="author" content="E-Tube">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#00ff88">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://e-tube.com/special-events">
+    <meta property="og:title" content="Special Events & Offers - E-Tube | Exclusive Discounts">
+    <meta property="og:description" content="Discover exclusive E-Tube special events and limited-time offers. Get up to 10% off on premium packages and unlock amazing earning opportunities today!">
+    <meta property="og:image" content="images/Logo.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://e-tube.com/special-events">
+    <meta name="twitter:title" content="Special Events & Offers - E-Tube">
+    <meta name="twitter:description" content="Discover exclusive E-Tube special events and limited-time offers. Get up to 10% off on premium packages!">
+    <meta name="twitter:image" content="images/Logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="dashboard.css"> <!-- Using dashboard.css for consistent styling -->
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary-color: #00ff88;
+            --secondary-color: #2196f3;
+            --background-color: #121212;
+            --text-primary: #ffffff;
+            --text-secondary: #bdbdbd;
+            --card-bg: rgba(255,255,255,0.05);
+        }
+
         body {
-            background-color: #121212;
-            color: #fff;
+            background-color: var(--background-color);
+            color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            padding-bottom: 70px; /* Add padding to the bottom equal to the nav height */
-            border: 2px solid red;
+            padding-bottom: 100px;
+            min-height: 100vh;
+            line-height: 1.6;
         }
 
         .container {
-            padding: 16px;
-            max-width: 600px;
+            padding: 20px;
+            max-width: 800px;
             margin: auto;
-            color: #fff;
+            color: var(--text-primary);
         }
 
         .paper {
-            padding: 16px;
-            margin-bottom: 12px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 16px;
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-         .content-header {
-             margin-bottom: 16px;
-             text-align: left;
-         }
+        .paper:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
 
-         .content-title {
-             color: #00ff88;
-             font-weight: 800;
-             font-size: 1.8rem;
-             margin-bottom: 4px;
-             display: block;
-             gap: 0;
-         }
+        .content-header {
+            margin-bottom: 24px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
 
-         .content-title i {
-             margin-right: 8px;
-             color: #00ff88;
-         }
+        .content-title {
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
 
-         .content-header p {
-             color: #bdbdbd;
-             font-weight: 400;
-             font-size: 1rem;
-         }
+        .content-title i {
+            color: var(--primary-color);
+        }
 
-         .event-card {
-             background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(33, 150, 243, 0.1));
-             border: 1px solid rgba(0, 255, 136, 0.2);
-             border-radius: 12px;
-             padding: 20px;
-             text-align: center;
-             margin-bottom: 20px;
-             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-         }
+        .content-header p {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-         .event-card h3 {
-             color: #00ff88;
-             font-size: 1.6rem;
-             margin-bottom: 8px;
-             font-weight: 700;
-         }
+        .event-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(33, 150, 243, 0.1));
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: slideUp 0.8s ease-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-         .event-card p {
-             color: #bdbdbd;
-             font-size: 1rem;
-             margin-bottom: 16px;
-         }
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
 
-         .event-card .discount {
-             font-size: 2.5rem;
-             font-weight: 800;
-             color: #2196f3;
-             margin-bottom: 12px;
-         }
+        .event-card h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
 
-         .event-card .cta-button {
-             display: inline-block;
-             background-color: #00ff88;
-             color: #121212;
-             padding: 10px 20px;
-             border-radius: 8px;
-             text-decoration: none;
-             font-weight: 700;
-             transition: background-color 0.3s ease;
-         }
+        .event-card .discount {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--secondary-color);
+            margin: 20px 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
 
-         .event-card .cta-button:hover {
-             background-color: #00cc66;
-         }
+        .event-card p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            line-height: 1.8;
+        }
 
-        /* Bottom Navigation */
+        .event-card .features {
+            margin: 20px 0;
+            text-align: left;
+            padding: 0 20px;
+        }
+
+        .event-card .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        .event-card .feature-item i {
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--background-color);
+            padding: 14px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+            opacity: 0.9;
+        }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: #1e1e1e; /* Dark background color */
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-around;
-            padding: 0.8rem;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            padding: 12px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
             z-index: 1000;
         }
 
         .nav-item {
-            color: #666; /* Default color for inactive tabs */
+            color: var(--text-secondary);
             text-decoration: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
 
         .nav-item i {
-            font-size: 1.2rem;
-            margin-bottom: 0.2rem;
+            font-size: 1.4rem;
+            margin-bottom: 4px;
         }
 
         .nav-item.active {
-            color: #00ff88; /* Green color for active tab */
+            color: var(--primary-color);
         }
 
-        .record-card {
-            background: rgba(255,255,255,0.8);
+        .nav-item:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .content-title {
+                font-size: 1.8rem;
+            }
+
+            .content-header p {
+                font-size: 1rem;
+                padding: 0 16px;
+            }
+
+            .event-card {
+                padding: 24px 16px;
+            }
+
+            .event-card h3 {
+                font-size: 1.6rem;
+            }
+
+            .event-card .discount {
+                font-size: 3rem;
+            }
+
+            .event-card p {
+                font-size: 1rem;
+                padding: 0 8px;
+            }
+
+            .cta-button {
+                padding: 12px 24px;
+                font-size: 1rem;
+                width: 100%;
+                text-align: center;
+                box-sizing: border-box;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+
+            .content-title {
+                font-size: 1.6rem;
+            }
+
+            .event-card {
+                padding: 20px 12px;
+            }
+
+            .event-card .discount {
+                font-size: 2.5rem;
+            }
+
+            .bottom-nav {
+                padding: 8px;
+            }
+
+            .nav-item {
+                font-size: 0.8rem;
+            }
+
+            .nav-item i {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="content-header">
-            <h1 class="content-title"><i class="fas fa-calendar-alt"></i> Special Events</h1>
-             <p>Check out our exciting limited-time offers!</p>
+            <h1 class="content-title"><i class="fas fa-calendar-alt"></i>Special Events</h1>
+            <p>Unlock premium features and maximize your earning potential with our exclusive limited-time offers!</p>
         </div>
 
         <div class="event-card">
-            <h3>Limited Time Offer!</h3>
+            <h3>Premium Package Flash Sale! 🌟</h3>
             <div class="discount">10% OFF</div>
-            <p>Get an exclusive 10% discount on **ALL** packages for a limited period. Don't miss out!</p>
-            <a href="home.html" class="cta-button">View Packages</a>
+            <p>For a limited time only, enjoy an exclusive 10% discount on all our premium packages. Supercharge your earning potential with enhanced features and benefits!</p>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Higher daily task limits</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Increased earning multiplier</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Priority customer support</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Exclusive VIP rewards</span>
+                </div>
+            </div>
+
+            <p class="offer-timer">⏰ Limited time offer - Don't miss out!</p>
+            <a href="vip.html" class="cta-button">
+                <i class="fas fa-gem"></i> View Packages
+            </a>
         </div>
-
-        <!-- Add more events here if needed -->
-
     </div>
 
     <!-- Bottom Navigation -->
@@ -184,14 +391,12 @@
     </nav>
 
     <script>
-         // Basic script for navigation active state (optional, can be done with server-side logic)
+        // Navigation active state
         document.addEventListener('DOMContentLoaded', () => {
             const currentPath = window.location.pathname.split('/').pop();
             document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
                 if (item.getAttribute('href') === currentPath) {
                     item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
                 }
             });
         });

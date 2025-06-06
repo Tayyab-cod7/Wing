@@ -3,144 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Deposit Processing - E-TuBE</title>
-    <meta name="description" content="Your deposit is being processed. View details and contact support if needed.">
+    <title>Deposit Processing - Track Your Payment | E-TuBE</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Track your E-TuBE deposit status in real-time. View transaction details, payment confirmation, and contact support if needed. Secure and transparent payment processing.">
+    <meta name="keywords" content="deposit processing, payment status, E-TuBE payment, transaction tracking, USDT deposit, crypto payment">
+    <meta name="author" content="E-TuBE">
     <meta name="theme-color" content="#121212">
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Deposit Processing - Track Your Payment | E-TuBE">
+    <meta property="og:description" content="Track your E-TuBE deposit status in real-time. View transaction details and payment confirmation.">
+    <meta property="og:image" content="images/Logo.png">
+    <meta property="og:url" content="https://e-tube.com/deposit-processing">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Deposit Processing - E-TuBE">
+    <meta name="twitter:description" content="Track your payment status and transaction details in real-time.">
+    <meta name="twitter:image" content="images/Logo.png">
+    
+    <!-- Preconnect to External Resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
+        :root {
+            --primary-color: #00ff88;
+            --secondary-color: #ffe082;
+            --bg-primary: #181c23;
+            --bg-secondary: #23272f;
+            --text-primary: #ffffff;
+            --text-secondary: #bdbdbd;
+            --accent-color: #00ff88;
+            --error-color: #ff4d4f;
+            --success-color: #52c41a;
+            --warning-color: #ffe082;
+            --border-radius-lg: 18px;
+            --border-radius-md: 12px;
+            --border-radius-sm: 8px;
+            --spacing-unit: 1rem;
+            --container-width: 420px;
+            --animation-duration: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: #181c23;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             min-height: 100vh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
+
         .processing-container {
-            max-width: 420px;
-            margin: 2.5rem auto;
-            padding: 2rem 1rem 1.5rem 1rem;
+            width: min(var(--container-width), 90%);
+            margin: clamp(1rem, 5vh, 2.5rem) auto;
+            padding: clamp(1rem, 3vw, 2rem);
             background: rgba(30, 32, 40, 0.98);
-            border-radius: 18px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius-lg);
             box-shadow: 0 8px 32px rgba(0,0,0,0.18);
             text-align: center;
-            animation: fadeIn 1s ease-out;
+            animation: fadeIn 0.5s ease-out;
         }
+
         .processing-title {
-            font-size: 1.3rem;
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
             font-weight: 600;
-            margin-bottom: 1.2rem;
+            margin-bottom: clamp(1rem, 3vw, 1.2rem);
             letter-spacing: 0.01em;
+            color: var(--text-primary);
         }
+
         .processing-check {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.2rem;
+            margin-bottom: clamp(1rem, 3vw, 1.2rem);
         }
+
         .processing-check .circle {
-            width: 70px;
-            height: 70px;
+            width: clamp(60px, 15vw, 70px);
+            height: clamp(60px, 15vw, 70px);
             border-radius: 50%;
-            background: #23272f;
+            background: var(--bg-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto;
+            transition: transform var(--animation-duration) ease;
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.1);
         }
+
+        .processing-check .circle:hover {
+            transform: scale(1.05);
+        }
+
         .processing-check .circle i {
-            color: #00ff88;
-            font-size: 2.5rem;
+            color: var(--primary-color);
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            animation: pulse 2s infinite;
         }
+
         .processing-status {
-            font-size: 1.1rem;
-            color: #bdbdbd;
-            margin-bottom: 1.5rem;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            color: var(--text-secondary);
+            margin-bottom: clamp(1.2rem, 4vw, 1.5rem);
             font-weight: 500;
         }
+
         .processing-details {
-            background: #23272f;
-            border-radius: 12px;
-            padding: 1.2rem 1rem 1.2rem 1rem;
-            margin-bottom: 2rem;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-md);
+            padding: clamp(1rem, 3vw, 1.2rem);
+            margin-bottom: clamp(1.5rem, 5vw, 2rem);
             text-align: left;
-            font-size: 1rem;
-            color: #fff;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            color: var(--text-primary);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
+
         .processing-details-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.7rem;
+            align-items: center;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background-color var(--animation-duration) ease;
         }
+
         .processing-details-row:last-child {
-            margin-bottom: 0;
+            border-bottom: none;
         }
+
+        .processing-details-row:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
         .processing-details-label {
-            color: #bdbdbd;
-        }
-        .processing-details-value {
-            color: #fff;
+            color: var(--text-secondary);
             font-weight: 500;
         }
+
+        .processing-details-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
         .processing-btn {
             width: 100%;
-            background: #ffe082;
-            color: #23272f;
+            background: var(--warning-color);
+            color: var(--bg-secondary);
             border: none;
-            border-radius: 8px;
-            padding: 1rem 2rem;
+            border-radius: var(--border-radius-sm);
+            padding: clamp(0.8rem, 2.5vw, 1rem) clamp(1.5rem, 4vw, 2rem);
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
             cursor: pointer;
-            margin-bottom: 1rem;
-            transition: background 0.2s, color 0.2s;
+            transition: all var(--animation-duration) ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
+
         .processing-btn:hover {
             background: #ffd54f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 224, 130, 0.2);
         }
+
         .processing-btn-secondary {
             width: 100%;
             background: transparent;
-            color: #ffe082;
-            border: 2px solid #ffe082;
-            border-radius: 8px;
-            padding: 1rem 2rem;
+            color: var(--warning-color);
+            border: 2px solid var(--warning-color);
+            border-radius: var(--border-radius-sm);
+            padding: clamp(0.8rem, 2.5vw, 1rem) clamp(1.5rem, 4vw, 2rem);
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
             cursor: pointer;
-            margin-bottom: 0.5rem;
-            transition: background 0.2s, color 0.2s;
+            transition: all var(--animation-duration) ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
+
         .processing-btn-secondary:hover {
-            background: #ffe082;
-            color: #23272f;
+            background: var(--warning-color);
+            color: var(--bg-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 224, 130, 0.2);
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @media (max-width: 600px) {
-            .processing-container { padding: 1rem 0.2rem 1rem 0.2rem; border-radius: 10px; }
-            .processing-details { padding: 0.7rem 0.3rem; font-size: 0.95rem; }
-            .processing-title { font-size: 1.1rem; }
-            .processing-btn, .processing-btn-secondary { font-size: 1rem; padding: 0.7rem 1rem; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            .processing-container {
+                margin: 1rem auto;
+                border-radius: var(--border-radius-md);
+            }
+
+            .processing-details-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+
+            .processing-details-value {
+                width: 100%;
+                text-align: left;
+                color: var(--primary-color);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        @supports not (backdrop-filter: blur(10px)) {
+            .processing-container {
+                background: rgba(30, 32, 40, 0.98);
+            }
         }
     </style>
 </head>
 <body>
     <div class="processing-container">
-        <div class="processing-title">Deposit</div>
+        <h1 class="processing-title">Deposit Processing</h1>
+        
         <div class="processing-check">
-            <div class="circle"><i class="fas fa-check-circle"></i></div>
+            <div class="circle" role="status" aria-label="Processing">
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+            </div>
         </div>
-        <div class="processing-status">Processing Deposit</div>
+        
+        <div class="processing-status">Your deposit is being processed</div>
+        
         <div class="processing-details">
             <div class="processing-details-row">
                 <span class="processing-details-label">Deposit method</span>
-                <span class="processing-details-value">Binance</span>
+                <span class="processing-details-value">Binance USDT</span>
             </div>
             <div class="processing-details-row">
                 <span class="processing-details-label">Order number</span>
@@ -152,7 +299,7 @@
             </div>
             <div class="processing-details-row">
                 <span class="processing-details-label">Currency</span>
-                <span class="processing-details-value">USDT</span>
+                <span class="processing-details-value">USDT (TRC20)</span>
             </div>
             <div class="processing-details-row">
                 <span class="processing-details-label">Conversion rate</span>
@@ -167,29 +314,71 @@
                 <span class="processing-details-value" id="actuallyReceive"></span>
             </div>
             <div class="processing-details-row">
-                <span class="processing-details-label">Wallet Address</span>
+                <span class="processing-details-label">Network</span>
                 <span class="processing-details-value">USDT-TRC20</span>
             </div>
         </div>
-        <button class="processing-btn" onclick="window.location.href='recharge-record.html'">Receipt Page</button>
-        <button class="processing-btn-secondary" onclick="window.location.href='contact.html'">Contact customer service</button>
+
+        <div class="button-group">
+            <button class="processing-btn" onclick="window.location.href='recharge-record.html'" aria-label="View Receipt Page">
+                <i class="fas fa-receipt" aria-hidden="true"></i>
+                <span>View Receipt</span>
+            </button>
+            
+            <button class="processing-btn-secondary" onclick="window.location.href='contact.html'" aria-label="Contact Customer Service">
+                <i class="fas fa-headset" aria-hidden="true"></i>
+                <span>Contact Support</span>
+            </button>
+        </div>
     </div>
+
     <script>
-        // Generate a random 10-digit order number
+        // Generate a random 10-digit order number with prefix
         function generateOrderNumber() {
-            let num = Math.floor(1000000000 + Math.random() * 9000000000); // ensures 10 digits, does not start with 0
-            return num.toString();
+            const prefix = 'DEP';
+            const timestamp = Date.now().toString().slice(-6);
+            const random = Math.floor(1000 + Math.random() * 9000).toString();
+            return `${prefix}${timestamp}${random}`;
         }
-        // Get amount from URL
+
+        // Get amount from URL with validation
         function getAmountFromURL() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('amount') || '0';
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const amount = params.get('amount');
+                if (!amount) return '0.00';
+                
+                // Format amount to 2 decimal places
+                const formattedAmount = parseFloat(amount).toFixed(2);
+                return isNaN(formattedAmount) ? '0.00' : formattedAmount;
+            } catch (error) {
+                console.error('Error parsing amount:', error);
+                return '0.00';
+            }
         }
-        // Set values
-        document.getElementById('orderNumber').textContent = generateOrderNumber();
-        document.getElementById('depositAmount').textContent = getAmountFromURL();
-        document.getElementById('amountAfterExchange').textContent = getAmountFromURL();
-        document.getElementById('actuallyReceive').textContent = getAmountFromURL();
+
+        // Format amount with currency
+        function formatAmount(amount) {
+            return `${amount} USDT`;
+        }
+
+        // Initialize page data
+        function initializePageData() {
+            const amount = getAmountFromURL();
+            const orderNum = generateOrderNumber();
+
+            // Set values with proper formatting
+            document.getElementById('orderNumber').textContent = orderNum;
+            document.getElementById('depositAmount').textContent = formatAmount(amount);
+            document.getElementById('amountAfterExchange').textContent = formatAmount(amount);
+            document.getElementById('actuallyReceive').textContent = formatAmount(amount);
+
+            // Add order number to page title for better tracking
+            document.title = `Processing Deposit ${orderNum} - E-TuBE`;
+        }
+
+        // Run initialization
+        initializePageData();
     </script>
 </body>
 </html> 

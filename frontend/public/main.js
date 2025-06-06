@@ -4,9 +4,6 @@ function showLoginForm() {
     document.getElementById('login-form').style.display = 'block';
 }
 
-// Get the API URL from config
-const API_URL = window.APP_CONFIG.API_URL;
-
 // Handle signup form submission
 document.getElementById('signupForm').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -56,7 +53,12 @@ document.getElementById('signupForm').addEventListener('submit', async function(
 
         console.log('Sending registration data:', registrationData);
 
-        const response = await fetch(`${API_URL}/auth/register`, {
+        // Get the current hostname and port
+        const currentHost = window.location.hostname;
+        const currentPort = '5000'; // Keep the backend port
+        const API_URL = `http://${currentHost}:${currentPort}`;
+
+        const response = await fetch(`${API_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -96,5 +98,92 @@ document.getElementById('signupForm').addEventListener('submit', async function(
     } catch (error) {
         console.error('Registration error:', error);
         showError('Error during registration. Please try again.');
+    }
+});
+
+// Handle login form submission
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    try {
+        const phone = document.getElementById('loginPhone').value;
+        const password = document.getElementById('loginPassword').value;
+
+        // Basic validation
+        if (!phone || !password) {
+            showError('Please enter both phone number and password');
+            return;
+        }
+
+        // Phone validation
+        if (!/^[0-9]{7,15}$/.test(phone)) {
+            showError('Phone number must be between 7 and 15 digits');
+            return;
+        }
+
+        // Password validation
+        if (!/^[A-Za-z0-9]{6,8}$/.test(password)) {
+            showError('Password must be 6-8 characters, letters and numbers only');
+            return;
+        }
+
+        const loginData = {
+            phone,
+            password
+        };
+
+        console.log('Attempting login with:', { phone, password: '****' });
+
+        // Get the current hostname and port
+        const currentHost = window.location.hostname;
+        const currentPort = '5000'; // Keep the backend port
+        const API_URL = `http://${currentHost}:${currentPort}`;
+
+        const response = await fetch(`${API_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginData)
+        });
+
+        const data = await response.json();
+        console.log('Login response:', data);
+
+        if (!response.ok) {
+            // If we have a specific error message from the server, use it
+            if (data && data.error) {
+                showError(data.error);
+            } else {
+                showError('Login failed. Please check your credentials and try again.');
+            }
+            return;
+        }
+
+        if (data.success) {
+            // Store token and user data
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            
+            showSuccess('Login successful! Redirecting...');
+            
+            // Redirect based on user type after a short delay
+            setTimeout(() => {
+                if (data.user.isAdmin) {
+                    window.location.href = 'admin-user.html';
+                } else {
+                    window.location.href = 'home.html';
+                }
+            }, 1500);
+        } else {
+            showError(data.error || 'Login failed');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        if (!navigator.onLine) {
+            showError('Please check your internet connection and try again.');
+        } else {
+            showError('Server error. Please try again later.');
+        }
     }
 }); 

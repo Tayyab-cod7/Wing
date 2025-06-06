@@ -2,47 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoo System - Admin Dashboard | User Management</title>
-    <meta name="description" content="Admin dashboard for managing Wing System users. View, edit, and manage user accounts, packages, and transactions securely.">
-    <meta name="keywords" content="wing system admin, user management, admin dashboard, user accounts, package management, transaction management">
-    <meta name="author" content="Wing System">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>E-Tube Admin Dashboard | User Management</title>
+    <meta name="description" content="E-Tube admin dashboard for managing users, transactions, and platform activities. Secure administrative interface for E-Tube platform management.">
+    <meta name="keywords" content="E-Tube admin, user management, admin dashboard, user accounts, transaction management, platform management">
+    <meta name="author" content="E-Tube">
     <meta name="robots" content="noindex, nofollow">
-    <meta property="og:title" content="Wing System - Admin Dashboard | User Management">
-    <meta property="og:description" content="Admin dashboard for managing Wing System users. View, edit, and manage user accounts, packages, and transactions securely.">
+    <meta name="theme-color" content="#00ff88">
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:5000/admin-user.html">
-    <meta property="og:image" content="/images/wing-system-admin-og.jpg">
+    <meta property="og:title" content="E-Tube Admin Dashboard | User Management">
+    <meta property="og:description" content="E-Tube admin dashboard for managing users, transactions, and platform activities. Secure administrative interface for E-Tube platform management.">
+    <meta property="og:image" content="images/Logo.png">
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Wing System - Admin Dashboard | User Management">
-    <meta name="twitter:description" content="Admin dashboard for managing Wing System users. View, edit, and manage user accounts, packages, and transactions securely.">
-    <meta name="twitter:image" content="/images/wing-system-admin-og.jpg">
-    <link rel="canonical" href="http://localhost:5000/admin-user.html">
-    <meta name="theme-color" content="#2196F3">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="twitter:title" content="E-Tube Admin Dashboard | User Management">
+    <meta name="twitter:description" content="E-Tube admin dashboard for managing users, transactions, and platform activities. Secure administrative interface for E-Tube platform management.">
+    <meta name="twitter:image" content="images/Logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
     <style>
         :root {
-            --primary-color: #4361ee;
-            --primary-hover: #3a56d4;
-            --secondary-color: #3f37c9;
+            --primary-color: #00ff88;
+            --primary-hover: #00e67a;
+            --secondary-color: #2196F3;
             --danger-color: #ef476f;
             --danger-hover: #d64062;
             --success-color: #06d6a0;
             --warning-color: #ffd166;
             --light-color: #f8f9fa;
-            --dark-color: #212529;
+            --dark-color: #121212;
             --gray-color: #6c757d;
-            --border-color: #e9ecef;
-            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
             --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
             --radius-sm: 4px;
             --radius-md: 8px;
             --radius-lg: 16px;
             --transition: all 0.3s ease;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-main: 'Inter', sans-serif;
         }
         
         * {
@@ -53,8 +62,8 @@
         }
         
         body {
-            background-color: #f5f7fb;
-            color: var(--dark-color);
+            background-color: var(--dark-color);
+            color: var(--light-color);
             line-height: 1.6;
         }
         
@@ -67,13 +76,14 @@
         
         /* Navbar Styling */
         .navbar {
-            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            background: linear-gradient(135deg, var(--dark-color), #1a1a1a);
             padding: 15px 0;
             color: white;
             position: sticky;
             top: 0;
             z-index: 100;
             box-shadow: var(--shadow-md);
+            border-bottom: 1px solid var(--border-color);
         }
         
         .navbar-container {
@@ -88,7 +98,7 @@
         .navbar-brand {
             font-size: 24px;
             font-weight: 700;
-            color: white;
+            color: var(--primary-color);
             text-decoration: none;
             letter-spacing: 0.5px;
             display: flex;
@@ -126,8 +136,8 @@
         }
         
         .nav-link:hover, .nav-link.active {
-            color: white;
-            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--primary-color);
+            background-color: rgba(0, 255, 136, 0.1);
         }
         
         /* Content Styling */
@@ -143,7 +153,7 @@
         .content-title {
             font-size: 24px;
             font-weight: 700;
-            color: var(--dark-color);
+            color: var(--primary-color);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -155,28 +165,30 @@
         
         /* Card Styling */
         .card {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.05);
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
             margin-bottom: 20px;
             overflow: hidden;
             transition: var(--transition);
             border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
         }
         
         .card:hover {
             box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
         }
         
         .card-header {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.02);
             padding: 18px 20px;
             border-bottom: 1px solid var(--border-color);
             font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: var(--dark-color);
+            color: var(--primary-color);
         }
         
         .card-body {
@@ -198,12 +210,13 @@
         th, td {
             padding: 14px 15px;
             text-align: left;
+            color: var(--light-color);
         }
         
         th {
-            background-color: #f8f9fa;
+            background-color: rgba(255, 255, 255, 0.05);
             font-weight: 600;
-            color: var(--gray-color);
+            color: var(--primary-color);
             border-bottom: 2px solid var(--border-color);
             position: sticky;
             top: 0;
@@ -218,7 +231,7 @@
         }
         
         tr:hover {
-            background-color: rgba(67, 97, 238, 0.03);
+            background-color: rgba(0, 255, 136, 0.05);
         }
         
         /* Button Styling */
@@ -237,13 +250,14 @@
         }
         
         .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--dark-color);
         }
         
         .btn-primary:hover {
-            background-color: var(--primary-hover);
-            box-shadow: 0 2px 5px rgba(67, 97, 238, 0.3);
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
         }
         
         .btn-danger {
@@ -253,16 +267,19 @@
         
         .btn-danger:hover {
             background-color: var(--danger-hover);
-            box-shadow: 0 2px 5px rgba(239, 71, 111, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 71, 111, 0.3);
         }
         
         .btn-secondary {
-            background-color: #e9ecef;
-            color: var(--gray-color);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light-color);
+            border: 1px solid var(--border-color);
         }
         
         .btn-secondary:hover {
-            background-color: #dee2e6;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
         }
         
         .btn-sm {
@@ -288,7 +305,7 @@
         
         .badge-warning {
             background-color: rgba(255, 209, 102, 0.1);
-            color: #e09f3e;
+            color: var(--warning-color);
             border: 1px solid rgba(255, 209, 102, 0.2);
         }
         
@@ -312,13 +329,18 @@
             width: 100%;
             transition: var(--transition);
             font-size: 14px;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--light-color);
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
         
         .search-input:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
         }
         
         .search-icon {
@@ -326,14 +348,14 @@
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--gray-color);
+            color: var(--primary-color);
         }
         
         .search-help {
             display: block;
             margin-top: 5px;
             font-size: 12px;
-            color: var(--gray-color);
+            color: rgba(255, 255, 255, 0.5);
             font-style: italic;
         }
         
@@ -352,8 +374,8 @@
             border-radius: var(--radius-sm);
             cursor: pointer;
             transition: var(--transition);
-            background-color: white;
-            color: var(--dark-color);
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--light-color);
             font-size: 14px;
             display: flex;
             align-items: center;
@@ -361,13 +383,13 @@
         }
         
         .pagination-item:hover {
-            background-color: var(--light-color);
-            border-color: #ced4da;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
         }
         
         .pagination-item.active {
             background-color: var(--primary-color);
-            color: white;
+            color: var(--dark-color);
             border-color: var(--primary-color);
         }
         
@@ -379,15 +401,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(3px);
+            backdrop-filter: blur(5px);
         }
         
         .modal-content {
-            background-color: white;
+            background-color: var(--dark-color);
             border-radius: var(--radius-md);
             width: 90%;
             max-width: 500px;
@@ -413,13 +435,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #f8f9fa;
+            background-color: rgba(255, 255, 255, 0.02);
         }
         
         .modal-title {
             font-size: 18px;
             font-weight: 600;
-            color: var(--dark-color);
+            color: var(--primary-color);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -432,7 +454,7 @@
         .modal-close {
             font-size: 22px;
             cursor: pointer;
-            color: var(--gray-color);
+            color: var(--light-color);
             transition: var(--transition);
             width: 30px;
             height: 30px;
@@ -443,22 +465,23 @@
         }
         
         .modal-close:hover {
-            color: var(--dark-color);
-            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.05);
         }
         
         .modal-body {
             padding: 20px;
             font-size: 15px;
+            color: var(--light-color);
         }
         
         .modal-body p {
             margin-bottom: 15px;
-            color: var(--gray-color);
+            color: rgba(255, 255, 255, 0.7);
         }
         
         .modal-body strong {
-            color: var(--dark-color);
+            color: var(--primary-color);
         }
         
         .modal-footer {
@@ -471,11 +494,11 @@
         
         /* Admin user styling */
         .admin-user {
-            background-color: rgba(6, 214, 160, 0.05);
+            background-color: rgba(0, 255, 136, 0.05);
         }
         
         .admin-user:hover {
-            background-color: rgba(6, 214, 160, 0.1) !important;
+            background-color: rgba(0, 255, 136, 0.1) !important;
         }
         
         /* Loading spinner */
@@ -485,7 +508,7 @@
             height: 20px;
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            border-top-color: white;
+            border-top-color: var(--primary-color);
             animation: spin 1s ease-in-out infinite;
         }
         
@@ -495,483 +518,117 @@
             }
         }
         
-        /* Alert Styling */
-        .alert {
-            padding: 15px;
-            border-radius: var(--radius-md);
-            margin-bottom: 20px;
-            display: none;
-            animation: fadeIn 0.3s;
-            border-left: 4px solid;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .alert-success {
-            background-color: rgba(6, 214, 160, 0.1);
-            color: #06d6a0;
-            border-color: #06d6a0;
-        }
-        
-        .alert-danger {
-            background-color: rgba(239, 71, 111, 0.1);
-            color: #ef476f;
-            border-color: #ef476f;
-        }
-        
-        /* Responsive Styling */
-        @media (max-width: 1024px) {
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
             .container {
                 padding: 15px;
-            }
-
-            .table-container {
-                margin: 0 -15px;
-                width: calc(100% + 30px);
-            }
-
-            th, td {
-                padding: 12px 10px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .navbar-container {
-                flex-direction: row;
-                align-items: center;
-                padding: 10px 15px;
-                flex-wrap: wrap;
-                gap: 15px;
-            }
-            
-            .navbar-nav {
-                margin-top: 0;
-                flex-direction: row;
-                width: auto;
-                gap: 5px;
-                flex-wrap: wrap;
-                margin-left: -5px;
-            }
-            
-            .nav-item {
-                width: auto;
-            }
-            
-            .nav-link {
-                padding: 8px 12px;
-                font-size: 14px;
-                white-space: nowrap;
-            }
-
-            .nav-link i {
-                margin-right: 5px;
-                width: auto;
-                font-size: 14px;
             }
             
             .content-header {
                 flex-direction: column;
-                align-items: flex-start;
                 gap: 15px;
-                padding: 15px 0;
+                align-items: stretch;
             }
+            
+            .search-container {
+                max-width: 100%;
+            }
+            
+            .table-container {
+                margin: 0 -15px;
+            }
+            
+            th, td {
+                padding: 12px 10px;
+                font-size: 14px;
+            }
+            
+            .btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
 
+        @media (max-width: 480px) {
             .content-title {
                 font-size: 20px;
             }
             
-            .search-container {
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .card {
-                margin-bottom: 15px;
-            }
-            
             .card-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
                 padding: 15px;
             }
             
-            .card-header button {
-                width: 100%;
-            }
-
             .card-body {
                 padding: 15px;
-            }
-            
-            .table-container {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                margin: 0 -15px;
-                padding: 0 15px;
-                width: calc(100% + 30px);
-            }
-
-            table {
-                font-size: 14px;
-            }
-
-            th, td {
-                padding: 10px 8px;
-                white-space: nowrap;
-            }
-
-            .btn {
-                padding: 8px 12px;
-            }
-
-            .pagination {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 5px;
-            }
-
-            .pagination-item {
-                padding: 6px 12px;
-                font-size: 13px;
             }
             
             .modal-content {
                 width: 95%;
-                margin: 20px;
             }
             
-            .modal-footer {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .modal-footer .btn {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navbar-container {
-                padding: 8px 12px;
-                gap: 10px;
-            }
-
-            .navbar-brand {
-                font-size: 18px;
-            }
-
-            .navbar-brand i {
-                font-size: 20px;
-                margin-right: 8px;
-            }
-
-            .navbar-nav {
-                gap: 3px;
-            }
-
-            .nav-link {
+            .pagination-item {
                 padding: 6px 10px;
                 font-size: 13px;
-            }
-
-            .nav-link i {
-                font-size: 13px;
-                margin-right: 4px;
-            }
-
-            .content-title {
-                font-size: 18px;
-            }
-
-            .search-input {
-                padding: 8px 15px 8px 35px;
-                font-size: 13px;
-            }
-
-            .search-icon {
-                left: 12px;
-                font-size: 14px;
-            }
-
-            .card-header {
-                padding: 12px;
-            }
-
-            .card-body {
-                padding: 12px;
-            }
-
-            table {
-                font-size: 13px;
-            }
-
-            th, td {
-                padding: 8px 6px;
-            }
-
-            .btn {
-                padding: 7px 10px;
-                font-size: 13px;
-            }
-
-            .btn i {
-                font-size: 12px;
-            }
-
-            .badge {
-                padding: 4px 8px;
-                font-size: 11px;
-            }
-
-            .modal-header {
-                padding: 15px;
-            }
-
-            .modal-title {
-                font-size: 16px;
-            }
-
-            .modal-body {
-                padding: 15px;
-                font-size: 14px;
-            }
-
-            .modal-footer {
-                padding: 12px 15px;
-            }
-        }
-
-        /* Touch device optimizations */
-        @media (hover: none) {
-            .btn:active {
-                transform: scale(0.98);
-            }
-
-            .nav-link:active {
-                background-color: rgba(255, 255, 255, 0.15);
-            }
-
-            .pagination-item:active {
-                background-color: var(--light-color);
-            }
-        }
-
-        /* Height-based adjustments */
-        @media (max-height: 600px) {
-            .navbar {
-                padding: 10px 0;
-            }
-
-            .content-header {
-                padding: 10px 0;
-            }
-
-            .modal-content {
-                max-height: 90vh;
-                overflow-y: auto;
-            }
-        }
-        
-        /* Utility Classes */
-        .text-center {
-            text-align: center;
-        }
-        
-        .text-right {
-            text-align: right;
-        }
-        
-        .text-primary {
-            color: var(--primary-color);
-        }
-        
-        .text-success {
-            color: var(--success-color);
-        }
-        
-        .text-danger {
-            color: var(--danger-color);
-        }
-        
-        .text-warning {
-            color: var(--warning-color);
-        }
-        
-        .text-gray {
-            color: var(--gray-color);
-        }
-        
-        .font-bold {
-            font-weight: 700;
-        }
-        
-        .font-medium {
-            font-weight: 500;
-        }
-
-        /* Mobile Responsiveness Enhancements */
-        @media (max-width: 768px) {
-            .admin-container {
-                padding: 15px;
-            }
-
-            .admin-card {
-                padding: 15px;
-            }
-
-            .admin-title {
-                font-size: 1.5rem;
-            }
-
-            .admin-info {
-                font-size: 0.9rem;
-            }
-
-            .admin-details {
-                font-size: 0.9rem;
-            }
-
-            .admin-steps {
-                font-size: 0.9rem;
-            }
-
-            .admin-steps li {
-                padding: 8px 0;
-            }
-
-            .submit-btn {
-                padding: 12px;
-                font-size: 1rem;
-            }
-
-            .user-card {
-                padding: 12px;
-            }
-
-            .user-icon {
-                font-size: 1.5rem;
-            }
-
-            .user-name {
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .admin-container {
-                padding: 10px;
-            }
-
-            .admin-card {
-                padding: 12px;
-            }
-
-            .admin-title {
-                font-size: 1.3rem;
-            }
-
-            .admin-info {
-                font-size: 0.85rem;
-            }
-
-            .admin-details {
-                font-size: 0.85rem;
-            }
-
-            .admin-steps {
-                font-size: 0.85rem;
-            }
-
-            .admin-steps li {
-                padding: 6px 0;
-            }
-
-            .submit-btn {
-                padding: 10px;
-                font-size: 0.95rem;
-            }
-
-            .user-card {
-                padding: 10px;
-            }
-
-            .user-icon {
-                font-size: 1.3rem;
-            }
-
-            .user-name {
-                font-size: 0.9rem;
-            }
-
-            .amount-input {
-                font-size: 1.2rem;
-            }
-        }
-
-        /* Print styles */
-        @media print {
-            .bottom-nav {
-                display: none !important;
-            }
-
-            .admin-card {
-                box-shadow: none;
-                border: 1px solid #ccc;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="#" class="navbar-brand"><i class="fas fa-feather-alt"></i> Wing Admin</a>
+            <a href="#" class="navbar-brand">
+                <i class="fas fa-cube"></i>
+                E-Tube Admin
+            </a>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active" data-section="users"><i class="fas fa-users"></i> Users</a>
+                    <a href="#" class="nav-link active" data-section="users">
+                        <i class="fas fa-users"></i> Users
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a href="recharge-request.html" class="nav-link"><i class="fas fa-money-bill-wave"></i> Recharge Request</a>
+                    <a href="recharge-request.html" class="nav-link">
+                        <i class="fas fa-money-bill-wave"></i> Recharge Request
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a href="withdraw-request.html" class="nav-link"><i class="fas fa-wallet"></i> Withdraw Request</a>
+                    <a href="withdraw-request.html" class="nav-link">
+                        <i class="fas fa-wallet"></i> Withdraw Request
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a href="contact-request.html" class="nav-link" data-section="contact"><i class="fas fa-envelope"></i> Contact</a>
+                    <a href="contact-request.html" class="nav-link" data-section="contact">
+                        <i class="fas fa-envelope"></i> Contact
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin-functions.html" class="nav-link"><i class="fas fa-cogs"></i> Admin Functions</a>
+                    <a href="admin-functions.html" class="nav-link">
+                        <i class="fas fa-cogs"></i> Admin Functions
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a href="#" class="nav-link" id="logout-link">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="container">
-        <!-- Alerts -->
-        <div id="alert-success" class="alert alert-success"></div>
-        <div id="alert-danger" class="alert alert-danger"></div>
-
         <!-- Users Section -->
         <section id="users-section" class="content-section active">
             <div class="content-header">
-                <h1 class="content-title"><i class="fas fa-users"></i> User Management</h1>
+                <h1 class="content-title">
+                    <i class="fas fa-users"></i>
+                    User Management
+                </h1>
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
                     <input type="text" id="user-search" class="search-input" placeholder="Search by phone, referral code...">
+                    <span class="search-help">Search by phone, referral code, or username</span>
                 </div>
             </div>
 
@@ -1003,9 +660,6 @@
                             </thead>
                             <tbody id="users-table-body">
                                 <!-- User data will be loaded here -->
-                                <tr>
-                                    <td colspan="4" class="text-center">Loading users...</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1015,38 +669,16 @@
                 </div>
             </div>
         </section>
-
-        <!-- Test Sections -->
-        <section id="test2-section" class="content-section" style="display: none;">
-            <div class="content-header">
-                <h1 class="content-title"><i class="fas fa-cog"></i> Test Section 2</h1>
-            </div>
-            <div class="card">
-                <div class="card-header">Test Content 2</div>
-                <div class="card-body">
-                    <p>This is a test section. Replace with actual content as needed.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="test3-section" class="content-section" style="display: none;">
-            <div class="content-header">
-                <h1 class="content-title"><i class="fas fa-bell"></i> Test Section 3</h1>
-            </div>
-            <div class="card">
-                <div class="card-header">Test Content 3</div>
-                <div class="card-body">
-                    <p>This is a test section. Replace with actual content as needed.</p>
-                </div>
-            </div>
-        </section>
     </div>
 
-    <!-- Delete User Confirmation Modal -->
+    <!-- Delete User Modal -->
     <div id="delete-user-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h2>
+                <h2 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Confirm Delete
+                </h2>
                 <span class="modal-close">&times;</span>
             </div>
             <div class="modal-body">
@@ -1055,115 +687,12 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="cancel-delete">Cancel</button>
-                <button class="btn btn-danger" id="confirm-delete"><i class="fas fa-trash"></i> Delete</button>
+                <button class="btn btn-danger" id="confirm-delete">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
             </div>
         </div>
     </div>
-
-    <!-- Structured Data for Admin Dashboard -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "Wing System Admin Dashboard",
-        "description": "Admin dashboard for managing Wing System users and transactions",
-        "mainEntity": {
-            "@type": "Service",
-            "name": "Admin Management Service",
-            "description": "Secure admin service for user and transaction management",
-            "provider": {
-                "@type": "Organization",
-                "name": "Wing System",
-                "url": "http://localhost:5000"
-            }
-        }
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": "How to Manage Users in Wing System Admin Dashboard",
-        "description": "Step-by-step guide to manage users and transactions",
-        "step": [{
-            "@type": "HowToStep",
-            "name": "View Users",
-            "text": "Access the user list to view all registered users"
-        },{
-            "@type": "HowToStep",
-            "name": "Edit User Details",
-            "text": "Click on a user to view and edit their details"
-        },{
-            "@type": "HowToStep",
-            "name": "Manage Transactions",
-            "text": "View and manage user transactions and withdrawals"
-        },{
-            "@type": "HowToStep",
-            "name": "Update Status",
-            "text": "Update user status and package information"
-        }]
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [{
-            "@type": "Question",
-            "name": "What can I do in the admin dashboard?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "The admin dashboard allows you to manage users, view transactions, update user status, and handle withdrawal requests. You can also edit user details and manage package subscriptions."
-            }
-        },{
-            "@type": "Question",
-            "name": "How do I update a user's status?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "To update a user's status, click on the user in the list, then use the status update options in the user details section. Changes are saved automatically."
-            }
-        },{
-            "@type": "Question",
-            "name": "How do I manage withdrawals?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Withdrawal requests can be managed from the user details page. You can approve, reject, or process withdrawals based on the provided information."
-            }
-        },{
-            "@type": "Question",
-            "name": "Is the admin dashboard secure?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes, the admin dashboard is secure. Access is restricted to authorized administrators only, and all actions are logged for security purposes."
-            }
-        }]
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [{
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "http://localhost:5000/"
-        },{
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Admin Dashboard",
-            "item": "http://localhost:5000/admin.html"
-        },{
-            "@type": "ListItem",
-            "position": 3,
-            "name": "User Management",
-            "item": "http://localhost:5000/admin-user.html"
-        }]
-    }
-    </script>
 
     <script>
         // API Base URL (use relative path for deployment)
@@ -1200,25 +729,12 @@
             const user = JSON.parse(localStorage.getItem('user') || '{}');
             
             if (!token || !user || !user.isAdmin) {
-                console.error('Authentication check failed:');
-                console.error('- Token exists:', !!token);
-                console.error('- User exists:', !!user);
-                console.error('- Is admin:', user.isAdmin);
-                
-                // Clear any invalid data
+                console.error('Authentication check failed');
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
-                
-                // Redirect to login page
                 window.location.href = 'index.html';
                 return false;
             }
-            
-            // Log authentication details for debugging
-            console.log('Auth check - Token exists:', !!token);
-            console.log('Auth check - User exists:', !!user);
-            console.log('Auth check - Is admin:', user.isAdmin);
-            
             return true;
         }
         
@@ -1226,7 +742,6 @@
         function showSuccessAlert(message) {
             alertSuccess.textContent = message;
             alertSuccess.style.display = 'block';
-            
             setTimeout(() => {
                 alertSuccess.style.display = 'none';
             }, 3000);
@@ -1236,22 +751,9 @@
         function showErrorAlert(message) {
             alertDanger.textContent = message;
             alertDanger.style.display = 'block';
-            
             setTimeout(() => {
                 alertDanger.style.display = 'none';
             }, 3000);
-        }
-        
-        // Format Date
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
         }
         
         // Load Users
@@ -1266,8 +768,6 @@
                     throw new Error('No authentication token found');
                 }
                 
-                console.log('Using token for API call:', token.substring(0, 10) + '...');
-                
                 const response = await fetch(`${API_URL}/api/admin/users`, {
                     method: 'GET',
                     headers: {
@@ -1276,32 +776,21 @@
                     }
                 });
                 
-                console.log('API response status:', response.status);
-                
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
-                    console.error('API error details:', errorData);
-                    
-                    // If unauthorized, redirect to login
                     if (response.status === 401) {
-                        console.error('Authentication failed. Redirecting to login page...');
                         localStorage.removeItem('token');
                         localStorage.removeItem('user');
-                        setTimeout(() => {
-                            window.location.href = 'index.html';
-                        }, 2000);
+                        window.location.href = 'index.html';
                     }
-                    
-                    throw new Error(`Failed to load users: ${errorData.message || response.statusText}`);
+                    throw new Error(errorData.message || 'Failed to load users');
                 }
                 
                 const data = await response.json();
-                
                 if (data.success) {
                     allUsers = data.users || [];
                     filteredUsers = [...allUsers];
                     totalUsers = filteredUsers.length;
-                    
                     renderUsers();
                     renderPagination();
                 } else {
@@ -1329,13 +818,10 @@
             
             usersToDisplay.forEach(user => {
                 const row = document.createElement('tr');
-                
-                // Add a special class for admin users
                 if (user.isAdmin) {
                     row.classList.add('admin-user');
                 }
                 
-                // Create delete button with appropriate state
                 const deleteButton = user.isAdmin ? 
                     `<button class="btn btn-secondary btn-sm" disabled title="Admin users cannot be deleted">
                         <i class="fas fa-lock"></i> Protected
@@ -1362,7 +848,6 @@
                 button.addEventListener('click', function() {
                     const userId = this.getAttribute('data-id');
                     const userPhone = this.getAttribute('data-phone');
-                    
                     currentUserId = userId;
                     deleteUserPhone.textContent = userPhone;
                     deleteUserModal.style.display = 'flex';
@@ -1375,47 +860,32 @@
             const totalPages = Math.ceil(totalUsers / usersPerPage);
             let paginationHTML = '';
             
-                if (currentPage > 1) {
-                paginationHTML += `<button class="btn btn-secondary btn-sm" data-page="${currentPage - 1}">Previous</button>`;
-                }
-            
-            for (let i = 1; i <= totalPages; i++) {
-                paginationHTML += `<button class="btn btn-secondary btn-sm" data-page="${i}">${i}</button>`;
+            if (currentPage > 1) {
+                paginationHTML += `<button class="pagination-item" onclick="changePage(${currentPage - 1})">
+                    <i class="fas fa-chevron-left"></i>
+                </button>`;
             }
             
-                if (currentPage < totalPages) {
-                paginationHTML += `<button class="btn btn-secondary btn-sm" data-page="${currentPage + 1}">Next</button>`;
-                }
-                
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `<button class="pagination-item ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            
+            if (currentPage < totalPages) {
+                paginationHTML += `<button class="pagination-item" onclick="changePage(${currentPage + 1})">
+                    <i class="fas fa-chevron-right"></i>
+                </button>`;
+            }
+            
             usersPagination.innerHTML = paginationHTML;
-                    
-            // Add event listeners to pagination buttons
-            document.querySelectorAll('.btn-secondary').forEach(button => {
-                button.addEventListener('click', function() {
-                    const page = this.getAttribute('data-page');
-                    currentPage = parseInt(page);
-                    loadUsers();
-                });
-            });
         }
         
-        // Event listeners
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                const section = this.getAttribute('data-section');
-                contentSections.forEach(section => section.style.display = 'none');
-                document.getElementById(`${section}-section`).style.display = 'block';
-                });
-            });
-            
-        logoutLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                window.location.href = 'index.html';
-            });
-
+        // Change Page
+        function changePage(page) {
+            currentPage = page;
+            renderUsers();
+            renderPagination();
+        }
+        
         // Delete User
         async function deleteUser(userId) {
             if (!checkAuth()) return;
@@ -1442,12 +912,9 @@
                 const data = await response.json();
                 if (data.success) {
                     showSuccessAlert('User deleted successfully');
-                    // Remove user from local arrays
                     allUsers = allUsers.filter(user => user._id !== userId);
                     filteredUsers = filteredUsers.filter(user => user._id !== userId);
                     totalUsers = filteredUsers.length;
-                    
-                    // Re-render the table
                     renderUsers();
                     renderPagination();
                 } else {
@@ -1458,7 +925,7 @@
                 showErrorAlert(error.message);
             }
         }
-
+        
         // Delete All Non-Admin Users
         async function deleteAllNonAdminUsers() {
             if (!checkAuth()) return;
@@ -1485,7 +952,6 @@
                 const data = await response.json();
                 if (data.success) {
                     showSuccessAlert('All non-admin users deleted successfully');
-                    // Reload users to get updated list
                     loadUsers();
                 } else {
                     throw new Error(data.message || 'Failed to delete non-admin users');
@@ -1495,18 +961,59 @@
                 showErrorAlert(error.message);
             }
         }
-
-        // Delete user modal event listeners
+        
+        // Event Listeners
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                contentSections.forEach(section => section.style.display = 'none');
+                document.getElementById(`${section}-section`).style.display = 'block';
+            });
+        });
+        
+        logoutLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        });
+        
+        // Search functionality
+        userSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            filteredUsers = allUsers.filter(user => 
+                (user.email && user.email.toLowerCase().includes(searchTerm)) ||
+                (user.username && user.username.toLowerCase().includes(searchTerm)) ||
+                (user.referralCode && user.referralCode.toLowerCase().includes(searchTerm)) ||
+                (user.phone && user.phone.toLowerCase().includes(searchTerm))
+            );
+            currentPage = 1;
+            totalUsers = filteredUsers.length;
+            renderUsers();
+            renderPagination();
+        });
+        
+        refreshUsersBtn.addEventListener('click', loadUsers);
+        
+        deleteAllNonAdminBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to delete all non-admin users? This action cannot be undone.')) {
+                deleteAllNonAdminUsers();
+            }
+        });
+        
+        // Modal Event Listeners
         cancelDeleteBtn.addEventListener('click', () => {
             deleteUserModal.style.display = 'none';
             currentUserId = null;
         });
-
+        
         modalClose.addEventListener('click', () => {
             deleteUserModal.style.display = 'none';
             currentUserId = null;
         });
-
+        
         confirmDeleteBtn.addEventListener('click', async () => {
             if (currentUserId) {
                 await deleteUser(currentUserId);
@@ -1514,22 +1021,14 @@
                 currentUserId = null;
             }
         });
-
-        // Close modal when clicking outside
+        
         deleteUserModal.addEventListener('click', (e) => {
             if (e.target === deleteUserModal) {
                 deleteUserModal.style.display = 'none';
                 currentUserId = null;
             }
         });
-
-        deleteAllNonAdminBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (confirm('Are you sure you want to delete all non-admin users? This action cannot be undone.')) {
-                deleteAllNonAdminUsers();
-            }
-        });
-
+        
         // Initial load
         loadUsers();
     </script>

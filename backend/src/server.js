@@ -16,8 +16,15 @@ const app = express();
 // Connect to database
 connectDB();
 
+// Configure CORS
+app.use(cors({
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow all common methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow common headers
+    credentials: true // Allow credentials
+}));
+
 // Essential middleware
-app.use(cors());
 app.use(express.json());
 
 // Debug middleware to log all requests
@@ -30,7 +37,8 @@ app.use((req, res, next) => {
         body: req.method === 'POST' ? req.body : undefined,
         headers: {
             authorization: req.headers.authorization ? 'Bearer [hidden]' : 'none',
-            'content-type': req.headers['content-type']
+            'content-type': req.headers['content-type'],
+            origin: req.headers.origin
         }
     });
     next();
@@ -50,11 +58,6 @@ console.log('Starting route registration...');
 // Register routes
 app.use('/api/auth', authRoutes);
 app.use('/api/earnings', earningRoutes);
-
-// API root route
-app.get('/api', (req, res) => {
-  res.json({ success: true, message: 'API root' });
-});
 
 // Test route to verify API is working
 app.get('/api/test', (req, res) => {

@@ -51,16 +51,18 @@ app.use(cors({
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir);
-  }
-  
-// Serve static files
-app.use(express.static(path.join(__dirname, '../frontend/public')));
+}
+
+// Serve uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/images', express.static(path.join(__dirname, '../frontend/public/images')));
 
 // API health check
-app.get('/api', (req, res) => {
-  res.json({ message: 'API is running' });
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'API is running',
+    status: 'healthy',
+    timestamp: new Date().toISOString()
+  });
 });
 
 // API Routes
@@ -79,18 +81,29 @@ app.use('/api/bonus', bonusRoutes);
 app.use('/api/vip', vipRoutes);
 app.use('/api/tasks', taskRoutes);
 
-// Serve index.html for all other routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
+// 404 handler for API routes
+app.use('/api/*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'API endpoint not found'
+  });
+});
+
+// General 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'Not found'
+  });
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
-  res.status(500).json({
-    success: false,
+    res.status(500).json({
+        success: false,
         error: 'Something went wrong!'
-  });
+    });
 });
 
 // Connect to MongoDB

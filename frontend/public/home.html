@@ -724,160 +724,93 @@
     </div>
 
     <script>
-        const API_URL = ''; // Use relative path for deployment
+        // Configuration
+        const BASE_URL = window.location.hostname.includes('localhost')
+            ? 'http://localhost:5000'
+            : 'https://wing-production-232c.up.railway.app';
 
+        // Utility function to get full API URL
+        function getApiUrl(endpoint) {
+            return `${BASE_URL}/api${endpoint}`;
+        }
+
+        // Function to load user data
         async function loadUserData() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'index.html';
-                return;
-            }
-
             try {
-                const response = await fetch(`${API_URL}/api/auth/me`, {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                const response = await fetch(getApiUrl('/auth/me'), {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json'
+                        'Content-Type': 'application/json'
                     }
                 });
 
                 if (!response.ok) {
                     if (response.status === 401) {
-                        localStorage.clear();
-                        window.location.href = 'index.html';
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        window.location.href = '/login.html';
                         return;
                     }
                     throw new Error('Failed to load user data');
                 }
 
-                const userData = await response.json();
-
-                if (userData.success && userData.data) {
-                    // Update total earnings
-                    const earningsElement = document.getElementById('totalEarnings');
-                    if (earningsElement && typeof userData.data.balance === 'number') {
-                        earningsElement.textContent = `$${userData.data.balance.toFixed(2)}`;
-                    }
-
-                    // Update team members count
-                    const teamMembersElement = document.getElementById('teamMembers');
-                    if (teamMembersElement && typeof userData.data.teamCount === 'number') {
-                        teamMembersElement.textContent = userData.data.teamCount;
-                    }
-
-                    // Update current level in Recent Activity
-                    const activityList = document.getElementById('activityList');
-                    if (activityList) {
-                        const level = userData.data.level || 'None';
-                        const currentLevelHTML = `
-                            <div class="activity-item" id="currentLevelBlock">
-                                <i class="fas fa-star"></i>
-                                <div class="content">
-                                    <h4>Current Level</h4>
-                                    <p>${level}</p>
-                                    ${level !== 'None' ? '<div id="packageTimer" class="package-timer-bar">01:00</div>' : ''}
-                                    ${level !== 'None' ? '<button class="cancel-package-btn" onclick="cancelPackage()">Cancel</button>' : ''}
-                                </div>
-                                <span class="time">-</span>
-                            </div>
-                        `;
-                        // Remove any existing current level block
-                        activityList.innerHTML = activityList.innerHTML.replace(/<div class=\"activity-item\" id=\"currentLevelBlock\">[\s\S]*?<\/div>/, '');
-                        activityList.innerHTML = currentLevelHTML + activityList.innerHTML;
-                        // Start timer if level is active, after DOM update
-                        if (level !== 'None') {
-                            // Only start timer if the level changed
-                            if (lastTimerLevel !== level) {
-                                lastTimerLevel = level;
-                                setTimeout(() => { homePackageTimerRunning = false; startHomePackageTimer(); }, 0);
-                            }
-                        } else {
-                            localStorage.removeItem('packageTimerStart');
-                            homePackageTimerRunning = false;
-                            if (homePackageTimerInterval) clearInterval(homePackageTimerInterval);
-                            lastTimerLevel = null;
-                        }
-                    }
-
-                    // Load recent activities
-                    loadRecentActivities(token);
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.message || 'Failed to load user data');
                 }
+
+                displayUserData(data.user);
+                return data.user;
             } catch (error) {
                 console.error('Error loading user data:', error);
+                handleApiError(error);
+                throw error;
             }
         }
 
-        async function loadRecentActivities(token) {
+        // Function to display user data
+        function displayUserData(user) {
+            document.getElementById('username').textContent = user.username;
+            document.getElementById('phone').textContent = user.phone;
+            document.getElementById('referralCode').textContent = user.referralCode;
+            document.getElementById('referredBy').textContent = user.referredBy || 'None';
+            document.getElementById('referralCount').textContent = user.referralCount || '0';
+            document.getElementById('balance').textContent = `$${user.balance || '0'}`;
+            
+            const statusBadge = document.getElementById('statusBadge');
+            if (statusBadge) {
+                statusBadge.className = `badge ${user.active ? 'badge-success' : 'badge-danger'}`;
+                statusBadge.textContent = user.active ? 'Active' : 'Inactive';
+            }
+        }
+
+        // Function to handle API errors
+        function handleApiError(error) {
+            console.error('API Error:', error);
+            if (error.status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/login.html';
+                return;
+            }
+            // You can add more specific error handling here
+        }
+
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch(`${API_URL}/api/activities/recent`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to load activities');
-                }
-
-                const activitiesData = await response.json();
-                const activityList = document.getElementById('activityList');
-
-                if (activitiesData.success && activitiesData.data && activityList) {
-                    // Preserve the current level at the top
-                    const currentLevelDiv = document.getElementById('currentLevelBlock');
-                    const currentLevelHTML = currentLevelDiv ? currentLevelDiv.outerHTML : '';
-                    activityList.innerHTML =
-                        currentLevelHTML +
-                        activitiesData.data.map(activity => `
-                            <div class="activity-item">
-                                <i class="fas ${getActivityIcon(activity.type)}"></i>
-                                <div class="content">
-                                    <h4>${activity.title}</h4>
-                                    <p>${activity.description}</p>
-                                </div>
-                                <span class="time">${formatTime(activity.timestamp)}</span>
-                            </div>
-                        `).join('');
-                }
+                await loadUserData();
             } catch (error) {
-                console.error('Error loading activities:', error);
+                console.error('Error during initialization:', error);
             }
-        }
-
-        function getActivityIcon(type) {
-            const icons = {
-                'task': 'fa-tasks',
-                'referral': 'fa-user-plus',
-                'reward': 'fa-gift',
-                'withdrawal': 'fa-money-bill-wave',
-                'default': 'fa-circle'
-            };
-            return icons[type] || icons.default;
-        }
-
-        function formatTime(timestamp) {
-            const date = new Date(timestamp);
-            const now = new Date();
-            const diff = now - date;
-            
-            // Less than 24 hours
-            if (diff < 24 * 60 * 60 * 1000) {
-                const hours = Math.floor(diff / (60 * 60 * 1000));
-                return hours === 0 ? 'Just now' : `${hours}h ago`;
-            }
-            
-            // Less than 7 days
-            if (diff < 7 * 24 * 60 * 60 * 1000) {
-                const days = Math.floor(diff / (24 * 60 * 60 * 1000));
-                return `${days}d ago`;
-            }
-            
-            // Otherwise show date
-            return date.toLocaleDateString();
-        }
+        });
 
         // Image Slider Logic
         const sliderImages = document.querySelectorAll('.slider-image');
@@ -912,11 +845,6 @@
 
         // Initialize first slide
         showSlide(0);
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadUserData();
-        });
 
         function cancelPackage() {
             // Show the modal

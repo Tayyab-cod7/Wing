@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+buildCommand = "cp nginx.conf /etc/nginx/nginx.conf"
+
+[deploy]
+startCommand = "nginx -g 'daemon off;'"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10 

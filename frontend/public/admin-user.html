@@ -696,9 +696,18 @@
 
     <script>
         // Configuration
-        const BASE_URL = window.location.hostname.includes('railway.app')
+        const BASE_URL = window.location.protocol === 'https:'
             ? 'https://wing-production-232c.up.railway.app'
-            : 'http://localhost:5000';
+            : window.location.hostname === 'localhost'
+                ? 'http://localhost:5000'
+                : window.location.origin;
+
+        // Ensure all URLs use the same protocol as the page
+        function getFullUrl(path) {
+            const url = new URL(path, BASE_URL);
+            url.protocol = window.location.protocol;
+            return url.toString();
+        }
 
         // Utility functions
         const getToken = () => localStorage.getItem('token');
@@ -721,7 +730,7 @@
                     throw new Error('No authentication token found');
                 }
 
-                const url = `${BASE_URL}/api/admin/users`;
+                const url = getFullUrl('/api/admin/users');
                 console.log('Making request to:', url);
                 
                 const response = await fetch(url, {
@@ -792,7 +801,7 @@
 
             try {
                 const token = getToken();
-                const response = await fetch(`${BASE_URL}/api/admin/users/${userId}`, {
+                const response = await fetch(getFullUrl(`/api/admin/users/${userId}`), {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -824,7 +833,7 @@
 
             try {
                 const token = getToken();
-                const response = await fetch(`${BASE_URL}/api/admin/users/${userId}/balance`, {
+                const response = await fetch(getFullUrl(`/api/admin/users/${userId}/balance`), {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -851,6 +860,12 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
+            // Force HTTPS in production
+            if (window.location.hostname !== 'localhost' && window.location.protocol !== 'https:') {
+                window.location.href = window.location.href.replace('http:', 'https:');
+                return;
+            }
+
             if (!getToken()) {
                 window.location.href = '/admin-login.html';
                 return;

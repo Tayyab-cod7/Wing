@@ -23,9 +23,16 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
     : [
         'http://localhost:5000',
         'http://localhost:3000',
-        'https://wing-production-232c.up.railway.app',
-        'https://amiable-essence-production.up.railway.app'
+        'https://wing-production-232c.up.railway.app'
     ];
+
+// Force HTTPS in production
+app.use((req, res, next) => {
+    if (process.env.NODE_ENV === 'production' && !req.secure && req.get('x-forwarded-proto') !== 'https') {
+        return res.redirect('https://' + req.get('host') + req.url);
+    }
+    next();
+});
 
 app.use(cors({
     origin: function(origin, callback) {
@@ -51,6 +58,21 @@ app.use(cors({
     optionsSuccessStatus: 204
 }));
 
+// Security headers
+app.use((req, res, next) => {
+    // Force HTTPS
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    // Prevent clickjacking
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    // XSS protection
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    // Prevent MIME type sniffing
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    // Referrer policy
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+});
+
 // Essential middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -62,11 +84,13 @@ app.use((req, res, next) => {
         method: req.method,
         path: req.path,
         originalUrl: req.originalUrl,
-        body: req.body,
+        protocol: req.protocol,
+        secure: req.secure,
         headers: {
             authorization: req.headers.authorization ? 'present' : 'none',
             'content-type': req.headers['content-type'],
-            origin: req.headers.origin
+            origin: req.headers.origin,
+            'x-forwarded-proto': req.headers['x-forwarded-proto']
         }
     });
     next();
@@ -78,6 +102,8 @@ app.get('/health', (req, res) => {
         status: 'ok', 
         timestamp: new Date().toISOString(),
         env: process.env.NODE_ENV,
+        protocol: req.protocol,
+        secure: req.secure,
         mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
     });
 });

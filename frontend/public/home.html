@@ -743,6 +743,12 @@
                     return;
                 }
 
+                // Force HTTPS in production
+                if (window.location.hostname !== 'localhost' && window.location.protocol !== 'https:') {
+                    window.location.href = window.location.href.replace('http:', 'https:');
+                    return;
+                }
+
                 const response = await fetch(getApiUrl('/auth/me'), {
                     method: 'GET',
                     headers: {
@@ -761,15 +767,15 @@
                     throw new Error('Failed to load user data');
                 }
 
-                const data = await response.json();
-                console.log('User data response:', data); // Debug log
+                const responseData = await response.json();
+                console.log('User data response:', responseData);
 
-                if (!data.success || !data.user) {
-                    throw new Error(data.message || 'Failed to load user data');
+                if (!responseData.success || !responseData.data) {
+                    throw new Error(responseData.message || 'Failed to load user data');
                 }
 
-                displayUserData(data.user);
-                return data.user;
+                displayUserData(responseData.data);
+                return responseData.data;
             } catch (error) {
                 console.error('Error loading user data:', error);
                 handleApiError(error);
@@ -800,10 +806,17 @@
             setElementText('referralCount', user.referralCount || '0');
             setElementText('balance', `$${user.balance || '0'}`);
             
+            // Update status badge if it exists
             const statusBadge = document.getElementById('statusBadge');
             if (statusBadge) {
                 statusBadge.className = `badge ${user.active ? 'badge-success' : 'badge-danger'}`;
                 statusBadge.textContent = user.active ? 'Active' : 'Inactive';
+            }
+
+            // Update any additional user-specific elements
+            const userWelcome = document.getElementById('userWelcome');
+            if (userWelcome) {
+                userWelcome.textContent = `Welcome back, ${user.username}!`;
             }
         }
 
@@ -821,6 +834,12 @@
 
         // Initialize when document is ready
         document.addEventListener('DOMContentLoaded', async () => {
+            // Force HTTPS in production
+            if (window.location.hostname !== 'localhost' && window.location.protocol !== 'https:') {
+                window.location.href = window.location.href.replace('http:', 'https:');
+                return;
+            }
+
             try {
                 await loadUserData();
             } catch (error) {

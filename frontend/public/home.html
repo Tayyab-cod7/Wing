@@ -279,6 +279,66 @@
             font-size: 0.8rem;
         }
 
+        /* Package Status Styles */
+        .package-status {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .package-info {
+            text-align: center;
+        }
+
+        .package-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .package-info p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .package-timer {
+            background: linear-gradient(90deg, var(--primary-color) 0%, #ffb300 100%);
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--bg-color);
+            font-weight: bold;
+            margin: 15px 0;
+            font-size: 1.1rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .cancel-package-btn {
+            background: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.2);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cancel-package-btn:hover {
+            background: rgba(255, 59, 48, 0.2);
+            border-color: rgba(255, 59, 48, 0.3);
+        }
+
+        .cancel-package-btn i {
+            font-size: 1rem;
+        }
+
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
@@ -669,6 +729,18 @@
             </div>
         </div>
 
+        <!-- Package Status -->
+        <div id="packageStatus" class="package-status" style="display: none;">
+            <div class="package-info">
+                <h3>Active Package</h3>
+                <p id="activePackageName">Loading...</p>
+                <div id="packageTimer" class="package-timer">Loading...</div>
+                <button id="cancelPackageBtn" class="cancel-package-btn" onclick="cancelPackage()">
+                    <i class="fas fa-times"></i> Cancel Package
+                </button>
+            </div>
+        </div>
+
         <!-- Action Cards -->
         <div class="action-cards">
             <a href="earn.html" class="action-card">
@@ -818,6 +890,35 @@
             
             // Update team members count
             setElementText('teamMembers', user.referralCount || '0');
+
+            // Handle package status
+            const packageStatus = document.getElementById('packageStatus');
+            if (user.activePackage && user.packageEndDate) {
+                // Show package status section
+                packageStatus.style.display = 'block';
+                
+                // Update package name
+                setElementText('activePackageName', user.activePackage);
+                
+                // Start or update timer
+                const endDate = new Date(user.packageEndDate);
+                const now = new Date();
+                const timeLeft = Math.max(0, Math.floor((endDate - now) / 1000));
+                
+                if (timeLeft > 0) {
+                    // Store package start time for timer
+                    if (!localStorage.getItem('packageTimerStart')) {
+                        localStorage.setItem('packageTimerStart', new Date(user.packageStartDate).getTime());
+                    }
+                    startHomePackageTimer();
+                } else {
+                    packageStatus.style.display = 'none';
+                }
+            } else {
+                // Hide package status section if no active package
+                packageStatus.style.display = 'none';
+                localStorage.removeItem('packageTimerStart');
+            }
 
             // Load recent activities
             loadRecentActivities();
@@ -996,7 +1097,7 @@
             // Call backend API to cancel package
             const token = localStorage.getItem('token');
             try {
-                const response = await fetch('/api/vip/cancel', {
+                const response = await fetch(getApiUrl('/earnings/cancel-package'), {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -1061,7 +1162,7 @@
                     if (timerDivLive) timerDivLive.textContent = 'Cancelling...';
                     // Call backend to cancel package
                     const token = localStorage.getItem('token');
-                    fetch('/api/vip/cancel', {
+                    fetch(getApiUrl('/earnings/cancel-package'), {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token}`,

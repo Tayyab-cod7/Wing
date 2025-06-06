@@ -20,22 +20,29 @@ connectDB();
 // Configure CORS
 const allowedOrigins = process.env.ALLOWED_ORIGINS 
     ? process.env.ALLOWED_ORIGINS.split(',') 
-    : ['http://localhost:5000', 'https://wing-production-232c.up.railway.app'];
+    : [
+        'http://localhost:5000',
+        'http://localhost:3000',
+        'https://wing-production-232c.up.railway.app',
+        'https://amiable-essence-production.up.railway.app'
+    ];
 
 app.use(cors({
     origin: function(origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
+        // Allow requests with no origin (like mobile apps, curl requests, or same-origin)
         if (!origin) return callback(null, true);
         
         if (allowedOrigins.indexOf(origin) === -1) {
-            console.log('Origin blocked:', origin);
+            console.log('Request from origin:', origin);
             return callback(null, true); // Allow all origins in production
         }
         return callback(null, true);
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    credentials: true,
+    preflightContinue: true,
+    optionsSuccessStatus: 204
 }));
 
 // Essential middleware
@@ -58,46 +65,54 @@ app.use((req, res, next) => {
     next();
 });
 
-// Package configuration
-const PACKAGES = {
-    'basic1': { price: 500, dailyRate: 75 },
-    'basic2': { price: 1000, dailyRate: 150 },
-    'basic3': { price: 1500, dailyRate: 225 },
-    'basic4': { price: 2000, dailyRate: 300 }
-};
+// Health check endpoint - place this before API routes
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        env: process.env.NODE_ENV,
+        mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+    });
+});
 
 // API Routes - make sure these come before static file serving
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/earnings', earningRoutes);
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
 // Static file handling
 app.use(express.static(path.join(__dirname, '../../frontend/public')));
 
+// API 404 handler for /api routes
+app.all('/api/*', (req, res) => {
+    console.log('API 404:', req.method, req.path);
+    res.status(404).json({
+        success: false,
+        error: 'API endpoint not found',
+        path: req.path,
+        method: req.method
+    });
+});
+
 // Catch-all route for SPA - make sure this comes after API routes
 app.get('*', (req, res) => {
-    // Don't serve index.html for API routes
-    if (req.path.startsWith('/api/')) {
-        return res.status(404).json({
-            success: false,
-            error: 'API endpoint not found'
-        });
-    }
     res.sendFile(path.join(__dirname, '../../frontend/public/index.html'));
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error('Global error handler:', err);
+    console.error('Global error handler:', {
+        error: err.message,
+        stack: err.stack,
+        path: req.path,
+        method: req.method
+    });
+    
     res.status(err.status || 500).json({
         success: false,
         message: err.message || 'Internal server error',
-        path: req.path
+        path: req.path,
+        method: req.method
     });
 });
 
@@ -107,6 +122,7 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log('Environment:', process.env.NODE_ENV);
     console.log('MongoDB URI:', process.env.MONGODB_URI ? 'Set' : 'Not set');
+    console.log('Allowed Origins:', allowedOrigins);
     console.log('\nAvailable routes:');
     console.log('- /api/auth/*');
     console.log('- /api/admin/*');

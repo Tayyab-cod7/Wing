@@ -10,7 +10,9 @@ router.use((req, res, next) => {
         path: req.path,
         method: req.method,
         hasAuthHeader: !!req.headers.authorization,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        origin: req.headers.origin,
+        fullUrl: req.protocol + '://' + req.get('host') + req.originalUrl
     });
     next();
 });
@@ -20,7 +22,7 @@ router.use((req, res, next) => {
 // @access  Admin only
 router.get('/users', adminAuth, async (req, res) => {
     try {
-        console.log('Fetching users...');
+        console.log('Fetching users - Auth check passed');
         const users = await User.find()
             .select('email username phone referralCode balance activePackage packageAmount referredBy referralCount isAdmin active')
             .lean();
@@ -29,15 +31,29 @@ router.get('/users', adminAuth, async (req, res) => {
         
         res.status(200).json({
             success: true,
-            users
+            users,
+            count: users.length
         });
     } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error('Error fetching users:', {
+            error: error.message,
+            stack: error.stack
+        });
         res.status(500).json({
             success: false,
-            error: 'Server Error'
+            error: 'Server Error',
+            message: error.message
         });
     }
+});
+
+// Test route to verify admin API is working
+router.get('/test', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Admin API is working',
+        timestamp: new Date().toISOString()
+    });
 });
 
 // @route   DELETE /api/admin/users/delete-non-admin

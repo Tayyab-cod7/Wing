@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const earningRoutes = require('./routes/earningRoutes');
 const { protect } = require('./middleware/authMiddleware');
 const User = require('./models/User');
@@ -18,25 +19,25 @@ connectDB();
 
 // Configure CORS
 app.use(cors({
-    origin: '*', // Allow all origins
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow all common methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allow common headers
-    credentials: true // Allow credentials
+    origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
 
 // Essential middleware
 app.use(express.json());
 
-// Debug middleware to log all requests
+// Log all requests for debugging
 app.use((req, res, next) => {
     console.log('Request received:', {
         timestamp: new Date().toISOString(),
         method: req.method,
         path: req.path,
         originalUrl: req.originalUrl,
-        body: req.method === 'POST' ? req.body : undefined,
+        body: req.body,
         headers: {
-            authorization: req.headers.authorization ? 'Bearer [hidden]' : 'none',
+            authorization: req.headers.authorization ? 'present' : 'none',
             'content-type': req.headers['content-type'],
             origin: req.headers.origin
         }
@@ -57,6 +58,7 @@ console.log('Starting route registration...');
 
 // Register routes
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/earnings', earningRoutes);
 
 // Test route to verify API is working
@@ -82,9 +84,9 @@ app.get('*', (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Global error handler:', err);
-    res.status(500).json({
+    res.status(err.status || 500).json({
         success: false,
-        message: 'Internal server error'
+        message: err.message || 'Internal server error'
     });
 });
 
@@ -103,6 +105,7 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log('\nAvailable routes:');
     console.log('- /api/auth/*');
-    console.log('- /api/earnings/* (including /purchase)');
+    console.log('- /api/admin/*');
+    console.log('- /api/earnings/*');
     console.log('- /api/test (GET)');
 });

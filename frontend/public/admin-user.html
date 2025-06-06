@@ -740,19 +740,21 @@
         
         // Show Success Alert
         function showSuccessAlert(message) {
+            if (!alertSuccess) return; // Guard clause
             alertSuccess.textContent = message;
-            alertSuccess.style.display = 'block';
+            alertSuccess.style.display = 'flex';
             setTimeout(() => {
-                alertSuccess.style.display = 'none';
+                if (alertSuccess) alertSuccess.style.display = 'none';
             }, 3000);
         }
         
         // Show Error Alert
         function showErrorAlert(message) {
+            if (!alertDanger) return; // Guard clause
             alertDanger.textContent = message;
-            alertDanger.style.display = 'block';
+            alertDanger.style.display = 'flex';
             setTimeout(() => {
-                alertDanger.style.display = 'none';
+                if (alertDanger) alertDanger.style.display = 'none';
             }, 3000);
         }
         
@@ -761,6 +763,7 @@
             if (!checkAuth()) return;
             
             try {
+                if (!usersTableBody) return; // Guard clause
                 usersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading users...</td></tr>';
                 
                 const token = localStorage.getItem('token');
@@ -768,7 +771,7 @@
                     throw new Error('No authentication token found');
                 }
                 
-                const response = await fetch(`${API_URL}/api/admin/users`, {
+                const response = await fetch('/api/admin/users', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -798,7 +801,9 @@
                 }
             } catch (error) {
                 console.error('Error loading users:', error);
-                usersTableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Error: ${error.message}</td></tr>`;
+                if (usersTableBody) {
+                    usersTableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Error: ${error.message}</td></tr>`;
+                }
                 showErrorAlert(error.message);
             }
         }

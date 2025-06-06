@@ -4,10 +4,36 @@ const User = require('../models/User');
 const adminAuth = require('../middleware/adminAuth');
 const adminController = require('../controllers/adminController');
 
+// Log middleware for debugging
+router.use((req, res, next) => {
+    console.log('Admin route accessed:', {
+        path: req.path,
+        method: req.method,
+        hasAuthHeader: !!req.headers.authorization
+    });
+    next();
+});
+
 // @route   GET /api/admin/users
 // @desc    Get all users
 // @access  Admin only
-router.get('/users', adminAuth, adminController.getUsers);
+router.get('/users', adminAuth, async (req, res) => {
+    try {
+        const users = await User.find()
+            .select('email username phone referralCode balance activePackage packageAmount referredBy referralCount isAdmin active');
+        
+        res.status(200).json({
+            success: true,
+            users
+        });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Server Error'
+        });
+    }
+});
 
 // @route   DELETE /api/admin/users/delete-non-admin
 // @desc    Delete all non-admin users

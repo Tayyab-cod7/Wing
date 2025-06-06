@@ -841,8 +841,8 @@
             setElementText('referralCount', user.referralCount || '0');
             
             // Update VIP status and related info
-            const vipLevel = user.vipLevel || 0;
-            setElementText('vipLevel', `VIP ${vipLevel}`);
+            const vipLevel = user.level || 'None';
+            setElementText('vipLevel', vipLevel);
             
             // Update progress bars and other VIP-related elements
             updateVIPProgress(user);
@@ -878,8 +878,8 @@
 
         // Function to update VIP progress
         function updateVIPProgress(user) {
-            const vipLevel = user.vipLevel || 0;
-            const nextVipRequirements = getVIPRequirements(vipLevel + 1);
+            const vipLevel = user.level || 'None';
+            const nextVipRequirements = getVIPRequirements(vipLevel);
             
             // Update progress bars
             const referralProgress = document.getElementById('referralProgress');
@@ -903,13 +903,15 @@
         // Function to get VIP level requirements
         function getVIPRequirements(level) {
             const requirements = {
-                1: { referrals: 5, balance: 100 },
-                2: { referrals: 15, balance: 300 },
-                3: { referrals: 30, balance: 600 },
-                4: { referrals: 50, balance: 1000 },
-                5: { referrals: 100, balance: 2000 }
+                'None': { referrals: 5, balance: 100 },
+                'Basic Plane 01': { referrals: 15, balance: 300 },
+                'Basic Plane 02': { referrals: 30, balance: 600 },
+                'Basic Plane 03': { referrals: 50, balance: 1000 },
+                'Pro Plane 01': { referrals: 100, balance: 2000 },
+                'Pro Plane 02': { referrals: 150, balance: 3000 },
+                'Pro Plane 03': { referrals: 200, balance: 4000 }
             };
-            return requirements[level] || null;
+            return requirements[level] || requirements['None'];
         }
 
         // Function to handle API errors
@@ -938,7 +940,7 @@
                 // Clear any existing task timer state
                 localStorage.removeItem('taskResetEndTime');
                 
-                const response = await fetch(getApiUrl('/vip/upgrade'), {
+                const response = await fetch(getApiUrl('/purchase'), {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -946,14 +948,14 @@
                     },
                     credentials: 'include',
                     body: JSON.stringify({ 
-                        package: packageType,
-                        price: packagePrice 
+                        amount: packagePrice,
+                        packageId: packageType
                     })
                 });
 
                 const data = await response.json();
                 if (data.success) {
-                    alert('Successfully upgraded to ' + packageType + ' VIP!');
+                    alert('Successfully upgraded to ' + packageType + '!');
                     window.location.href = 'home.html';
                 } else {
                     alert(data.message || 'Failed to upgrade package');

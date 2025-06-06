@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const adminAuth = require('../middleware/adminAuth');
 const adminController = require('../controllers/adminController');
+const { authenticateToken, isAdmin } = require('../middleware/auth');
 
 // Log middleware for debugging
 router.use((req, res, next) => {
@@ -17,35 +18,13 @@ router.use((req, res, next) => {
     next();
 });
 
+// Protected admin routes - all routes require admin authentication
+router.use(adminAuth);
+
 // @route   GET /api/admin/users
 // @desc    Get all users
 // @access  Admin only
-router.get('/users', adminAuth, async (req, res) => {
-    try {
-        console.log('Fetching users - Auth check passed');
-        const users = await User.find()
-            .select('email username phone referralCode balance activePackage packageAmount referredBy referralCount isAdmin active')
-            .lean();
-        
-        console.log(`Found ${users.length} users`);
-        
-        res.status(200).json({
-            success: true,
-            users,
-            count: users.length
-        });
-    } catch (error) {
-        console.error('Error fetching users:', {
-            error: error.message,
-            stack: error.stack
-        });
-        res.status(500).json({
-            success: false,
-            error: 'Server Error',
-            message: error.message
-        });
-    }
-});
+router.get('/users', adminController.getUsers);
 
 // Test route to verify admin API is working
 router.get('/test', (req, res) => {
@@ -59,12 +38,12 @@ router.get('/test', (req, res) => {
 // @route   DELETE /api/admin/users/delete-non-admin
 // @desc    Delete all non-admin users
 // @access  Admin only
-router.delete('/users/delete-non-admin', adminAuth, adminController.deleteNonAdminUsers);
+router.post('/delete-non-admin', adminController.deleteNonAdminUsers);
 
 // @route   DELETE /api/admin/users/:userId
 // @desc    Delete a user
 // @access  Admin only
-router.delete('/users/:userId', adminAuth, adminController.deleteUser);
+router.delete('/users/:userId', adminController.deleteUser);
 
 // @route   PUT /api/admin/users/:userId/balance
 // @desc    Update user balance
@@ -89,5 +68,9 @@ router.get('/chats', adminAuth, async (req, res) => {
         });
     }
 });
+
+router.post('/reset-admin-referrals', adminController.resetAdminReferralData);
+router.post('/recalculate-referrals', adminController.recalculateReferralCounts);
+router.post('/update-admin-codes', adminController.updateAdminReferralCodes);
 
 module.exports = router;

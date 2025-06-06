@@ -21,14 +21,31 @@ const bonusRoutes = require('./src/routes/bonusRoutes');
 const vipRoutes = require('./src/routes/vipRoutes');
 const taskRoutes = require('./src/routes/taskRoutes');
 
+// Parse allowed origins from environment variable
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+console.log('Allowed Origins:', allowedOrigins);
+
 const app = express();
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Enable CORS
-app.use(cors());
+// Enable CORS with specific origins
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      console.log('Blocked origin:', origin);
+      return callback(null, false);
+    }
+    console.log('Allowed origin:', origin);
+    return callback(null, true);
+  },
+  credentials: true
+}));
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');

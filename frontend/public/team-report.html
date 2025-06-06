@@ -1,11 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F-EARN - Team Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Team Report - E-Tube</title>
+    <meta name="description" content="View your team performance and referral statistics on E-Tube. Track your team's growth and earnings in real-time.">
+    <meta name="keywords" content="E-Tube team report, team performance, referral statistics, team earnings, E-Tube referrals">
+    <meta name="author" content="E-Tube">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#6366f1">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://e-tube.com/team-report">
+    <meta property="og:title" content="Team Report - E-Tube">
+    <meta property="og:description" content="View your team performance and referral statistics on E-Tube. Track your team's growth and earnings in real-time.">
+    <meta property="og:image" content="images/Logo.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://e-tube.com/team-report">
+    <meta name="twitter:title" content="Team Report - E-Tube">
+    <meta name="twitter:description" content="View your team performance and referral statistics on E-Tube. Track your team's growth and earnings in real-time.">
+    <meta name="twitter:image" content="images/Logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css"> <!-- Using dashboard.css for consistent styling -->
+
     <style>
         body {
             background-color: #121212;
@@ -163,9 +193,69 @@
             color: #00ff88; /* Green color for active tab */
         }
 
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px;
+            }
 
+            .content-title {
+                font-size: 1.5rem;
+            }
+
+            .team-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .team-table th,
+            .team-table td {
+                padding: 10px 6px;
+                font-size: 0.85rem;
+            }
+
+            .stats-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .balance-section h4 {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px;
+            }
+
+            .content-title {
+                font-size: 1.3rem;
+            }
+
+            .content-header p {
+                font-size: 0.9rem;
+            }
+
+            .team-table th,
+            .team-table td {
+                padding: 8px 4px;
+                font-size: 0.8rem;
+            }
+
+            .balance-section h6 {
+                font-size: 0.9rem;
+            }
+
+            .balance-section h4 {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="content-header">
@@ -180,10 +270,10 @@
              <h4 id="totalReferralsCount">0</h4>
          </div>
 
-         <!-- Referral Earnings Section -->
+         <!-- Current Balance Section -->
          <div class="paper balance-section">
-              <h6>Referral Earnings</h6>
-             <h4 id="referralEarnings">Rs. 0.00</h4>
+              <h6>Current Balance</h6>
+             <h4 id="currentBalance">Rs. 0.00</h4>
          </div>
         </div>
 
@@ -197,9 +287,8 @@
                     <thead>
                         <tr>
                             <th>Username</th>
-                            <th>Email</th>
-                            <th>Package</th>
-                            <th>Active</th>
+                            <th>Package Price</th>
+                            <th>Commission (20%)</th>
                         </tr>
                     </thead>
                     <tbody id="team-table-body">
@@ -235,7 +324,7 @@
     </nav>
 
     <script>
-        const API_URL = ''; // Use relative path for deployment
+        const API_URL = window.location.origin; // Use the current origin for API calls
 
         async function loadTeamData() {
             const token = localStorage.getItem('token');
@@ -248,17 +337,16 @@
             const errorMessage = document.getElementById('error-message');
             const noDataMessage = document.getElementById('no-data-message');
             const teamTableContainer = document.getElementById('team-table-container');
-            const teamTableBody = document.getElementById('team-table-body');
-            const totalReferralsCountElement = document.getElementById('totalReferralsCount');
-            const referralEarningsElement = document.getElementById('referralEarnings');
-
-            loadingMessage.style.display = 'block';
-            errorMessage.style.display = 'none';
-            noDataMessage.style.display = 'none';
-            teamTableContainer.style.display = 'none';
-            teamTableBody.innerHTML = '';
+            const totalReferralsCount = document.getElementById('totalReferralsCount');
+            const currentBalance = document.getElementById('currentBalance');
 
             try {
+                loadingMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+                noDataMessage.style.display = 'none';
+                teamTableContainer.style.display = 'none';
+
+                // Fetch user data from the working endpoint
                 const response = await fetch(`${API_URL}/api/auth/me`, {
                     method: 'GET',
                     headers: {
@@ -267,57 +355,66 @@
                     }
                 });
 
-                const data = await response.json();
-
                 if (!response.ok) {
-                     if (response.status === 401) {
+                    if (response.status === 401) {
                         localStorage.clear();
                         window.location.href = 'index.html';
                         return;
                     }
-                    throw new Error(data.error || 'Failed to fetch team data');
+                    throw new Error('Failed to load team data');
                 }
 
-                if (data.success && data.data) {
-                    const user = data.data;
+                const data = await response.json();
 
-                    // Update Total Referrals and Referral Earnings
-                    totalReferralsCountElement.textContent = user.referralCount || 0;
-                    referralEarningsElement.textContent = `Rs. ${user.referralEarnings !== undefined ? user.referralEarnings.toFixed(2) : '0.00'}`;
-
-
-                    const referrals = user.referrals;
-
-                    if (referrals.length > 0) {
-                        referrals.forEach(referral => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${referral.username || 'N/A'}</td>
-                                <td>${referral.email || 'N/A'}</td>
-                                <td>${referral.activePackage || 'None'}</td>
-                                <td>${referral.active ? 'Yes' : 'No'}</td>
-                            `;
-                            teamTableBody.appendChild(row);
-                        });
-                        teamTableContainer.style.display = 'block';
-                    } else {
-                        noDataMessage.style.display = 'block';
-                    }
-                } else {
-                     // Handle cases where data or referrals are missing but success is true
-                     noDataMessage.style.display = 'block';
+                if (!data.success || !data.data) {
+                    throw new Error('Invalid response format');
                 }
 
+                const user = data.data;
+
+                // Update total referrals count
+                totalReferralsCount.textContent = user.referralCount || 0;
+
+                // Get referrals data
+                const referrals = user.referrals || [];
+
+                if (referrals.length === 0) {
+                    noDataMessage.style.display = 'block';
+                    return;
+                }
+
+                const tableBody = document.getElementById('team-table-body');
+                let totalCommission = 0;
+                tableBody.innerHTML = referrals.map(referral => {
+                    const packagePrice = referral.packageAmount || 0;
+                    const commission = +(packagePrice * 0.2).toFixed(2);
+                    totalCommission += commission;
+                    return `
+                        <tr>
+                            <td>${referral.username || 'N/A'}</td>
+                            <td>Rs. ${packagePrice.toFixed(2)}</td>
+                            <td>Rs. ${commission.toFixed(2)}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                // Add total commission to current balance
+                const userBalance = user.balance || 0;
+                currentBalance.textContent = `Rs. ${(userBalance + totalCommission).toFixed(2)}`;
+
+                teamTableContainer.style.display = 'block';
             } catch (error) {
                 console.error('Error loading team data:', error);
-                errorMessage.textContent = `Error: ${error.message}`;
+                errorMessage.textContent = error.message || 'Failed to load team data. Please try again later.';
                 errorMessage.style.display = 'block';
             } finally {
                 loadingMessage.style.display = 'none';
             }
         }
 
+        // Load team data when page loads
         document.addEventListener('DOMContentLoaded', loadTeamData);
     </script>
 </body>
+
 </html>

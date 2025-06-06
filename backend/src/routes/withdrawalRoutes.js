@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
+const adminAuth = require('../middleware/adminAuth');
 const Withdrawal = require('../models/Withdrawal');
 const User = require('../models/User');
 
@@ -29,13 +30,8 @@ router.get('/records', auth, async (req, res) => {
 });
 
 // Get all withdrawal requests (admin only)
-router.get('/admin/requests', auth, async (req, res) => {
+router.get('/admin/requests', adminAuth, async (req, res) => {
     try {
-        // Check if user is admin
-        if (!req.user.isAdmin) {
-            return res.status(403).json({ success: false, error: 'Access denied' });
-        }
-
         const withdrawals = await Withdrawal.find()
             .sort({ requestDate: -1 })
             .select('requestId amount paymentMethod status tid requestDate accountNumber userId')
@@ -60,13 +56,8 @@ router.get('/admin/requests', auth, async (req, res) => {
 });
 
 // Approve withdrawal request (admin only)
-router.post('/admin/approve', auth, async (req, res) => {
+router.post('/admin/approve', adminAuth, async (req, res) => {
     try {
-        // Check if user is admin
-        if (!req.user.isAdmin) {
-            return res.status(403).json({ success: false, error: 'Access denied' });
-        }
-
         const { requestId, tid } = req.body;
 
         if (!requestId || !tid) {
@@ -109,13 +100,8 @@ router.post('/admin/approve', auth, async (req, res) => {
 });
 
 // Reject withdrawal request (admin only)
-router.post('/admin/reject', auth, async (req, res) => {
+router.post('/admin/reject', adminAuth, async (req, res) => {
     try {
-        // Check if user is admin
-        if (!req.user.isAdmin) {
-            return res.status(403).json({ success: false, error: 'Access denied' });
-        }
-
         const { requestId } = req.body;
 
         if (!requestId) {
@@ -164,13 +150,8 @@ router.post('/admin/reject', auth, async (req, res) => {
 });
 
 // Delete withdrawal request (admin only)
-router.post('/admin/delete', auth, async (req, res) => {
+router.post('/admin/delete', adminAuth, async (req, res) => {
     try {
-        // Check if user is admin
-        if (!req.user.isAdmin) {
-            return res.status(403).json({ success: false, error: 'Access denied' });
-        }
-
         const { requestId } = req.body;
 
         if (!requestId) {
@@ -311,6 +292,52 @@ router.post('/request', auth, async (req, res) => {
             success: false, 
             error: 'Server error while processing withdrawal request',
             details: error.message
+        });
+    }
+});
+
+// Get withdrawal status and cooldown info
+router.get('/status', auth, async (req, res) => {
+    try {
+        // Find the user's most recent withdrawal
+        const latestWithdrawal = await Withdrawal.findOne(
+            { userId: req.user.id },
+            {},
+            { sort: { 'requestDate': -1 } }
+        );
+
+        if (!latestWithdrawal) {
+            return res.json({
+                success: true,
+                cooldownActive: false,
+                remainingTime: 0
+            });
+        }
+
+        // Calculate time since last withdrawal
+        const now = new Date();
+        const timeSinceLastWithdrawal = now - latestWithdrawal.requestDate;
+        const cooldownPeriod = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+        // Check if cooldown is still active
+        if (timeSinceLastWithdrawal < cooldownPeriod) {
+            return res.json({
+                success: true,
+                cooldownActive: true,
+                remainingTime: Math.ceil((cooldownPeriod - timeSinceLastWithdrawal) / 1000) // remaining time in seconds
+            });
+        }
+
+        return res.json({
+            success: true,
+            cooldownActive: false,
+            remainingTime: 0
+        });
+    } catch (error) {
+        console.error('Error checking withdrawal status:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Server error while checking withdrawal status'
         });
     }
 });

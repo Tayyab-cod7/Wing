@@ -3,9 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Tube - Tasks & Rewards</title>
+    <title>E-Tube - Earn Money Online</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Earn money online with E-Tube. Complete tasks, solve captchas, and earn rewards. Join our platform for the best earning opportunities.">
+    <meta name="keywords" content="E-tube earn, make money online, online tasks, captcha solving, earn rewards, online income, task completion">
+    <meta name="author" content="E-tube">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="E-Tube - Earn Money Online">
+    <meta property="og:description" content="Earn money online with E-Tube. Complete tasks, solve captchas, and earn rewards. Join our platform for the best earning opportunities.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/earn.html">
+    <meta property="og:image" content="/images/e-tube-og.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="E-Tube - Earn Money Online">
+    <meta name="twitter:description" content="Earn money online with E-Tube. Complete tasks, solve captchas, and earn rewards.">
+    <meta name="twitter:image" content="/images/e-tube-og.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:5000/earn.html">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+    <meta name="theme-color" content="#121212">
+    
+    <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
             --primary-color: #00ff88;
@@ -18,209 +48,61 @@
             --transition-speed: 0.3s;
         }
 
+        /* Hide scrollbar but keep functionality */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
         * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-    body {
+        body {
             background-color: var(--bg-color);
             color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             min-height: 100vh;
-        padding-bottom: 70px;
-    }
+            padding-bottom: calc(70px + env(safe-area-inset-bottom));
+            padding-top: env(safe-area-inset-top);
+            padding-right: env(safe-area-inset-right);
+            padding-left: env(safe-area-inset-left);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('images/Random8.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
 
         .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-        /* Task Categories */
-        .task-categories {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
+            max-width: min(800px, 95%);
+            margin: 0 auto;
+            padding: clamp(15px, 3vw, 20px);
         }
 
-        .category-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-        padding: 20px;
-        text-align: center;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-        }
-
-        .category-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary-color);
-        }
-
-        .category-card i {
-        font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .category-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-
-        .category-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Progress Section */
-        .progress-section {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-        padding: 20px;
-            margin-bottom: 25px;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        margin-bottom: 15px;
-    }
-
-        .progress-title {
-        font-size: 1.2rem;
-            color: var(--primary-color);
-        }
-
-        .progress-stats {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), #00cc66);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        /* Task List */
-        .task-list {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .task-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid var(--border-color);
-            transition: all var(--transition-speed);
-        }
-
-        .task-item:last-child {
-            border-bottom: none;
-        }
-
-        .task-item:hover {
-            background: rgba(255,255,255,0.02);
-        }
-
-        .task-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(0,255,136,0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-        }
-
-        .task-icon i {
-            color: var(--primary-color);
-        font-size: 1.2rem;
-        }
-
-        .task-content {
-            flex-grow: 1;
-        }
-
-        .task-title {
-            font-size: 1rem;
-            margin-bottom: 5px;
-        }
-
-        .task-description {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .task-reward {
-            color: var(--primary-color);
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-left: 15px;
-        }
-
-        .task-button {
-            background: var(--primary-color);
-            color: #000;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-        }
-
-        .task-button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-
-        .task-button:disabled {
-            background: #666;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Streak Section */
+        /* Balance Section */
         .balance-section {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
+            border-radius: 16px;
+            padding: clamp(15px, 4vw, 25px);
+            margin-bottom: clamp(15px, 4vw, 25px);
             text-align: center;
         }
 
         .balance-title {
             color: var(--primary-color);
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin-bottom: clamp(8px, 2vw, 10px);
         }
 
         .balance-amount {
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 5vw, 2rem);
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: clamp(8px, 2vw, 10px);
             color: var(--primary-color);
         }
 
@@ -237,197 +119,361 @@
             margin-bottom: 10px;
         }
 
+        /* Timer Section */
+        .timer-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: clamp(15px, 4vw, 25px);
+            margin-bottom: clamp(15px, 4vw, 25px);
+            text-align: center;
+        }
+
+        .timer-title {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+
+        .timer-display {
+            font-size: clamp(2rem, 6vw, 2.5rem);
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: clamp(8px, 2vw, 10px);
+        }
+
+        .timer-message {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Progress Bar Section */
+        .progress-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: clamp(15px, 4vw, 25px);
+            margin-bottom: clamp(15px, 4vw, 25px);
+        }
+
+        .progress-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Captcha Tasks Section */
+        .tasks-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: clamp(15px, 4vw, 25px);
+            margin-bottom: clamp(15px, 4vw, 25px);
+        }
+
+        .task-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: clamp(12px, 3vw, 15px);
+            margin-bottom: clamp(8px, 2vw, 10px);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-item.completed {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .task-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .task-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-icon {
+            color: var(--primary-color);
+        font-size: 1.2rem;
+        }
+
+        .task-info h3 {
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .task-info p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .task-button {
+            background: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .task-button:hover {
+            background: var(--primary-hover);
+        }
+
+        .task-button:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .no-package-message {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        /* Captcha Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: clamp(15px, 4vw, 25px);
+            width: min(90%, 400px);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .captcha-display {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 1.5rem;
+            font-family: monospace;
+            letter-spacing: 3px;
+        }
+
+        .captcha-input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .submit-button {
+            background: var(--primary-color);
+            color: var(--bg-color);
+        }
+
+        .cancel-button {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+        }
+
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(30, 30, 30, 0.95);
+            background: rgba(18, 18, 18, 0.95);
             backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-around;
-            padding: 12px;
-            box-shadow: 0 -2px 20px rgba(0,0,0,0.2);
+            padding: 10px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 1000;
-            border-top: 1px solid var(--border-color);
         }
 
         .nav-item {
-            color: var(--text-secondary);
+            color: #bdbdbd;
             text-decoration: none;
             display: flex;
             flex-direction: column;
             align-items: center;
             font-size: 0.8rem;
-            padding: 8px 16px;
-            border-radius: 12px;
-            transition: all var(--transition-speed);
+            transition: color 0.3s ease;
         }
 
         .nav-item i {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin-bottom: 4px;
-            transition: transform var(--transition-speed);
         }
 
         .nav-item:hover {
-            color: var(--primary-color);
-            background: rgba(0, 255, 136, 0.1);
-        }
-
-        .nav-item:hover i {
-            transform: translateY(-2px);
+            color: #fff;
         }
 
         .nav-item.active {
             color: var(--primary-color);
-            background: rgba(0, 255, 136, 0.1);
         }
 
-        .nav-item.active i {
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 600px) {
-            .task-categories {
-                grid-template-columns: 1fr;
-            }
-
-            .container {
-                padding: 15px;
-            }
-
+        @media (max-width: 480px) {
             .task-item {
                 flex-direction: column;
                 text-align: center;
             }
 
-            .task-icon {
-                margin: 0 auto 10px;
+            .task-left {
+                flex-direction: column;
+                gap: 5px;
             }
 
-            .task-reward {
-                margin: 10px 0;
+            .task-button {
+                width: 100%;
             }
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            z-index: 1000;
-            backdrop-filter: blur(8px);
+        /* Add this CSS for the loading state */
+        .submit-button:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            opacity: 0.7;
         }
 
-        .modal-content {
-            background-color: var(--card-bg);
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            width: 80%;
-            max-width: 400px;
-            position: relative;
-            z-index: 1001;
-            box-shadow: 0 0 20px rgba(0,255,136,0.2);
-        }
-
-        .modal-content h3 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        #captchaContent {
-            margin: 20px 0;
-            text-align: center;
-            font-size: 32px;
-            letter-spacing: 5px;
+        /* Add CSS for highlighted text */
+        .highlight {
             color: var(--primary-color);
             font-weight: bold;
-            text-shadow: 0 0 10px rgba(0,255,136,0.3);
-            background: rgba(0,0,0,0.2);
-            padding: 20px;
-            border-radius: 8px;
         }
-
-        #captchaInput {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 16px;
-            text-align: center;
+        .timer-display {
+            font-family: monospace;
             letter-spacing: 2px;
         }
 
-        #captchaInput:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 10px rgba(0,255,136,0.2);
-        }
-
-        .modal-content button {
-            width: 100%;
-            padding: 12px;
-            background: var(--primary-color);
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .modal-content button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .task-limit-message {
-            color: #ff5252;
+        /* Add earnings info styles */
+        .earnings-info {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
             text-align: center;
-            margin-top: 10px;
-            font-size: 0.9rem;
         }
 
-        .task-reset-time {
-            color: var(--text-secondary);
-        text-align: center;
-            margin-top: 5px;
-            font-size: 0.8rem;
-        }
-
-        .close {
-            position: absolute;
-            top: 18px;
-            right: 22px;
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #fff;
-            background: none;
-            border: none;
-            cursor: pointer;
-            z-index: 1100;
-            transition: color 0.2s, transform 0.2s;
-            text-shadow: 0 0 10px #00ff88, 0 0 2px #000;
-            line-height: 1;
-        }
-
-        .close:hover {
+        .earnings-title {
             color: var(--primary-color);
-            transform: scale(1.2) rotate(10deg);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .earnings-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .earnings-item {
+            background: rgba(255,255,255,0.03);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .earnings-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .earnings-value {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: bold;
     }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        @supports not (backdrop-filter: blur(10px)) {
+            .balance-section,
+            .timer-section,
+            .progress-section,
+            .tasks-section,
+            .modal-content,
+            .bottom-nav {
+                background: rgba(18, 18, 18, 0.95);
+            }
+        }
     </style>
 </head>
 <body>
@@ -439,30 +485,66 @@
             <div class="level-title">Current Level</div>
             <div class="level-amount" id="levelAmount">-</div>
         </div>
-        <div id="noPackageMsg" style="display:none; color:#ff5252; text-align:center; margin:20px 0;">
-            You need an active package to complete tasks.
+
+        <!-- Earnings Info Section -->
+        <div class="earnings-info" id="earningsInfo">
+            <div class="earnings-title">Daily Earnings Info</div>
+            <div class="earnings-details">
+                <div class="earnings-item">
+                    <div class="earnings-label">Per Task Earning</div>
+                    <div class="earnings-value" id="perTaskEarning">$0.00</div>
+                </div>
+                <div class="earnings-item">
+                    <div class="earnings-label">Daily Total</div>
+                    <div class="earnings-value" id="dailyTotal">$0.00</div>
+                </div>
+                <div class="earnings-item">
+                    <div class="earnings-label">Tasks Completed</div>
+                    <div class="earnings-value" id="tasksCompleted">0/5</div>
+                </div>
+                <div class="earnings-item">
+                    <div class="earnings-label">Remaining Earnings</div>
+                    <div class="earnings-value" id="remainingEarnings">$0.00</div>
+                </div>
+            </div>
         </div>
 
-        <!-- Task Reset Timer -->
-        <div id="taskResetTimer" style="display:none; text-align:center; font-size:1.2rem; font-weight:bold; margin-bottom:15px; color:var(--primary-color);"></div>
+        <!-- Timer Section -->
+        <div class="timer-section" id="timerSection">
+            <div class="timer-title">Tasks Reset Timer</div>
+            <div class="timer-display" id="timerDisplay">24:00:00</div>
+            <div class="timer-message">Tasks will be available again in <span class="highlight">24 hours</span></div>
+        </div>
 
-        <!-- Task List -->
-        <div class="task-list" id="taskList" style="display:none;">
-            <!-- Tasks will be rendered here by JavaScript -->
+        <!-- Progress Section -->
+        <div class="progress-section" id="progressSection" style="display: none;">
+            <div class="progress-title">Daily Task Progress</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="taskProgressBar"></div>
+            </div>
+            <div class="progress-text" id="taskProgressText">0/5 Tasks Completed</div>
+        </div>
+
+        <!-- No Package Message -->
+        <div class="no-package-message" id="noPackageMessage">
+            You need to purchase a package to access tasks.
+        </div>
+
+        <!-- Tasks Section -->
+        <div class="tasks-section" id="tasksSection">
+            <!-- Task items will be dynamically added here -->
+        </div>
         </div>
 
         <!-- Captcha Modal -->
-        <div id="captchaModal" class="modal" style="display: none;">
+    <div class="modal" id="captchaModal">
             <div class="modal-content">
-                <span class="close" tabindex="0" aria-label="Close">&times;</span>
-                <h3>Solve Captcha</h3>
-                <div id="captchaContent"></div>
-                <input type="text" id="captchaInput" placeholder="Enter the text" maxlength="6">
-                <button onclick="verifyCaptcha()">Submit</button>
-                <div class="task-limit-message" id="taskLimitMessage" style="display: none;">
-                    You've reached your daily task limit!
-                </div>
-                <div class="task-reset-time" id="taskResetTime"></div>
+            <h3 style="color: var(--text-primary); margin-bottom: 15px;">Verify Captcha</h3>
+            <div class="captcha-display" id="captchaDisplay"></div>
+            <input type="text" class="captcha-input" id="captchaInput" placeholder="Enter captcha text">
+            <div class="modal-buttons">
+                <button class="modal-button cancel-button" onclick="closeCaptchaModal()">Cancel</button>
+                <button class="modal-button submit-button" id="submitCaptchaButton" onclick="submitCaptcha()">Submit</button>
             </div>
         </div>
     </div>
@@ -477,7 +559,7 @@
             <i class="fas fa-tasks"></i>
             <span>Task</span>
         </a>
-        <a href="refferal.html" class="nav-item">
+        <a href="referral.html" class="nav-item">
             <i class="fas fa-users"></i>
             <span>Team</span>
         </a>
@@ -492,299 +574,483 @@
     </div>
 
     <script>
-        const API_URL = window.location.origin + '/api'; // Use the current origin for API calls
-
-        // Function to update the displayed task list based on completed tasks
-        function updateTaskList(completedTasks) {
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = ''; // Clear current tasks
-            const tasksToShow = 5 - completedTasks;
-
-            if (tasksToShow <= 0) {
-                taskList.style.display = 'none';
-                const noPackageMsg = document.getElementById('noPackageMsg');
-                noPackageMsg.textContent = 'You have completed all tasks for today!';
-                noPackageMsg.style.display = '';
-            } else {
-                // Render remaining tasks
-                for (let i = 1; i <= tasksToShow; i++) {
-                    taskList.innerHTML += `
-                        <div class="task-item" id="captcha${completedTasks + i}">
-                            <div class="task-icon">
-                                <i class="fas fa-puzzle-piece"></i>
-                            </div>
-                            <div class="task-content">
-                                <div class="task-title">Solve Captcha</div>
-                                <div class="task-description">Type the text shown in the image</div>
-                            </div>
-                            <div class="task-reward">+$0.13</div>
-                            <button class="task-button" onclick="showCaptcha('captcha${completedTasks + i}')">Solve</button>
-                        </div>
-                    `;
-                }
-                taskList.style.display = '';
-                document.getElementById('noPackageMsg').style.display = 'none';
-            }
-        }
-
-        // Load initial state: check package, level, and tasks
-        async function loadTaskState() {
-            try {
-                // Fetch user profile (contains activePackage and level)
-                const profileResponse = await fetch(`${API_URL}/users/profile`, {
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-                });
-                const profileData = await profileResponse.json();
-
-                // Fetch task progress (contains completedTasks)
-                const progressResponse = await fetch(`${API_URL}/tasks/progress`, {
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-                });
-                const progressData = await progressResponse.json();
-
-                const user = profileData.user;
-                const completedTasks = progressData.success ? progressData.completedTasks : 0;
-
-                // Update balance and level display
-                if (profileData.success && user) {
-                     document.getElementById('balanceAmount').textContent = `$${parseFloat(user.balance || 0).toFixed(2)}`;
-                     document.getElementById('levelAmount').textContent = user.level || '-';
-                }
-
-                const taskList = document.getElementById('taskList');
-                const noPackageMsg = document.getElementById('noPackageMsg');
-
-                const activePackage = user ? user.activePackage : null;
-                const level = user ? user.level : null;
-
-                // Determine if package is active based on activePackage OR level
-                const hasActivePackage = !!activePackage && !['none', 'null', ''].includes(String(activePackage).toLowerCase());
-                const levelIndicatesActive = !!level && !['none', 'null', '', 'None'].includes(String(level).toLowerCase());
-
-                const shouldShowTasks = hasActivePackage || levelIndicatesActive;
-
-                // Debug log
-                console.log('loadTaskState:', 'level:', level, 'activePackage:', activePackage, 'hasActivePackage:', hasActivePackage, 'levelIndicatesActive:', levelIndicatesActive, 'shouldShowTasks:', shouldShowTasks, 'completedTasks:', completedTasks);
-
-                const taskResetTimerDiv = document.getElementById('taskResetTimer');
-
-                if (shouldShowTasks) {
-                    // If package is active (based on our check), update task list based on completed tasks
-                    updateTaskList(completedTasks);
-                    taskResetTimerDiv.style.display = '';
-                    startTaskResetTimer(); // Start the timer
-                } else {
-                    // If no package is active, hide tasks and show message
-                    taskList.style.display = 'none';
-                    taskList.innerHTML = ''; // Ensure tasks are removed from DOM
-                    noPackageMsg.textContent = 'You need an active package to complete tasks.';
-                    noPackageMsg.style.display = '';
-                    taskResetTimerDiv.style.display = 'none';
-                    stopTaskResetTimer(); // Stop the timer
-                }
-
-            } catch (error) {
-                console.error('Error loading task state:', error);
-                // In case of error, hide tasks and show error message
-                document.getElementById('taskList').style.display = 'none';
-                document.getElementById('taskList').innerHTML = '';
-                const noPackageMsg = document.getElementById('noPackageMsg');
-                noPackageMsg.textContent = 'Failed to load tasks. Please try again.';
-                noPackageMsg.style.display = '';
-                document.getElementById('taskResetTimer').style.display = 'none';
-                stopTaskResetTimer();
-            }
-        }
-
-        let taskResetTimerInterval = null;
-
-        async function startTaskResetTimer() {
-            stopTaskResetTimer(); // Clear any existing timer
-            const timerDiv = document.getElementById('taskResetTimer');
-            if (!timerDiv) return;
-
-            try {
-                // Fetch initial time until next reset from backend
-                const response = await fetch(`${API_URL}/tasks/minute-reset-time`, {
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-                });
-                const data = await response.json();
-
-                if (!data.success || typeof data.timeUntilResetSeconds !== 'number') {
-                    console.error('Failed to get time until reset');
-                    timerDiv.textContent = 'Timer Sync Error';
-                return;
-            }
-            
-                let timeLeft = data.timeUntilResetSeconds;
-
-                function updateTimerDisplay() {
-                    const minutes = Math.floor(timeLeft / 60);
-                    const seconds = timeLeft % 60;
-                    timerDiv.textContent = `Tasks reset in: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-                    if (timeLeft <= 0) {
-                        // Timer reached zero - trigger backend reset and refresh tasks
-                        stopTaskResetTimer();
-                        // Call backend to reset tasks (assuming an endpoint for this or it resets based on time)
-                        // A simple approach: rely on the next loadTaskState or a dedicated reset endpoint.
-                        // Let's assume backend automatically handles minute resets and fetching progress reflects it.
-                        loadTaskState(); // Reload state to get new task count and restart timer
-                    }
-
-                    timeLeft--;
-                }
-
-                // Update immediately and then every second
-                updateTimerDisplay();
-                taskResetTimerInterval = setInterval(updateTimerDisplay, 1000);
-
-            } catch (error) {
-                console.error('Error starting task reset timer:', error);
-                timerDiv.textContent = 'Timer Load Error';
-            }
-        }
-
-        function stopTaskResetTimer() {
-            if (taskResetTimerInterval) {
-                clearInterval(taskResetTimerInterval);
-                taskResetTimerInterval = null;
-            }
-        }
-
-        // Show captcha modal
+        const API_URL = window.location.origin + '/api';
+        let currentCaptcha = '';
         let currentTaskId = null;
-        async function showCaptcha(taskId) {
-            currentTaskId = taskId;
+
+        // Add timer variables
+        let timerInterval = null;
+        let timeLeft = 86400; // 24 hours in seconds
+
+        // Function to format time display
+        function formatTimeDisplay(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Function to generate random captcha text
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+            let result = '';
+            for (let i = 0; i < 6; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Function to create task elements
+        function createTasks() {
+            const tasksSection = document.getElementById('tasksSection');
+            tasksSection.innerHTML = '';
+
+            for (let i = 1; i <= 5; i++) {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task-item';
+                taskElement.innerHTML = `
+                    <div class="task-left">
+                        <i class="fas fa-shield-alt task-icon"></i>
+                        <div class="task-info">
+                            <h3>Captcha Task ${i}</h3>
+                            <p>Solve the captcha to earn rewards</p>
+                            </div>
+                            </div>
+                    <button class="task-button" onclick="startCaptchaTask(${i})">Start Task</button>
+                `;
+                tasksSection.appendChild(taskElement);
+            }
+        }
+
+        // Function to update progress bar
+        function updateProgressBar(completedTasks) {
+            const progressBar = document.getElementById('taskProgressBar');
+            const progressText = document.getElementById('taskProgressText');
+            const percentage = (completedTasks / 5) * 100;
+            
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${completedTasks}/5 Tasks Completed`;
+        }
+
+        // Function to check completed tasks for today
+        async function checkCompletedTasks() {
             try {
-                // Check daily task limit (backend also enforces this)
-                const response = await fetch(`${API_URL}/tasks/check-limit`, {
-                headers: {
+                const response = await fetch(`${API_URL}/tasks/completed`, {
+                    headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
                 const data = await response.json();
+                
+                if (data.success) {
+                    const completedCount = data.completedTasks || 0;
+                    updateProgressBar(completedCount);
+                    updateEarningsInfo(data);
+                    
+                    // Hide completed tasks
+                    const taskElements = document.querySelectorAll('.task-item');
+                    data.completedTaskIds.forEach(taskId => {
+                        if (taskElements[taskId - 1]) {
+                            taskElements[taskId - 1].classList.add('completed');
+                            const button = taskElements[taskId - 1].querySelector('.task-button');
+                            if (button) {
+                                button.disabled = true;
+                            }
+                        }
+                    });
 
-                if (!data.canPerformTask) {
-                    document.getElementById('taskLimitMessage').style.display = 'block';
-                    document.getElementById('taskResetTime').textContent = `Tasks reset in: ${data.timeUntilReset}`;
+                    // If all tasks are completed, show timer
+                    if (completedCount >= 5) {
+                        startResetTimer();
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking completed tasks:', error);
+            }
+        }
+
+        // Function to clear all tasks and timer
+        function clearTasksAndTimer() {
+            // Clear timer if running
+            clearInterval(timerInterval);
+            localStorage.removeItem('taskResetEndTime');
+            
+            // Hide sections
+            const timerSection = document.getElementById('timerSection');
+            const tasksSection = document.getElementById('tasksSection');
+            const progressSection = document.getElementById('progressSection');
+            const noPackageMessage = document.getElementById('noPackageMessage');
+            
+            timerSection.style.display = 'none';
+            tasksSection.style.display = 'none';
+            progressSection.style.display = 'none';
+            noPackageMessage.style.display = 'block';
+            
+            // Reset progress
+            updateProgressBar(0);
+        }
+
+        // Function to check package status
+        async function checkPackageStatus() {
+            try {
+                console.log('Checking package status...'); // Debug log
+                console.log('Token:', localStorage.getItem('token')); // Debug log
+                
+                // First check direct package status
+                const packageResponse = await fetch(`${API_URL}/users/package-status`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                console.log('Package status response:', packageResponse.status); // Debug log
+                
+                const packageData = await packageResponse.json();
+                console.log('Package status data:', packageData); // Debug log
+
+                // If no active package, clear everything
+                if (!packageData.success || !packageData.hasActivePackage) {
+                    clearTasksAndTimer();
                     return;
                 }
 
-                const modal = document.getElementById('captchaModal');
-                const content = document.getElementById('captchaContent');
-                const captcha = generateCaptcha();
-                content.textContent = captcha;
-                modal.style.display = 'block';
-                document.getElementById('captchaInput').focus();
-                document.getElementById('taskLimitMessage').style.display = 'none'; // Hide limit message on new captcha
-                document.getElementById('taskResetTime').textContent = '';
+                // First check if timer is running
+                const endTime = localStorage.getItem('taskResetEndTime');
+                if (endTime && parseInt(endTime) > Date.now()) {
+                    // Timer is still running, show timer instead of tasks
+                    const timerSection = document.getElementById('timerSection');
+                    const tasksSection = document.getElementById('tasksSection');
+                    const progressSection = document.getElementById('progressSection');
+                    const noPackageMessage = document.getElementById('noPackageMessage');
+                    
+                    timerSection.style.display = 'block';
+                    tasksSection.style.display = 'none';
+                    progressSection.style.display = 'none';
+                    noPackageMessage.style.display = 'none';
+                    
+                    startTimerWithEndTime(parseInt(endTime));
+                    return; // Don't proceed with package check while timer is running
+                }
 
+                // Then get full profile
+                const response = await fetch(`${API_URL}/users/profile`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                console.log('Profile response status:', response.status); // Debug log
+                
+                const data = await response.json();
+                console.log('Profile data:', data); // Debug log
+                
+                const noPackageMessage = document.getElementById('noPackageMessage');
+                const tasksSection = document.getElementById('tasksSection');
+                const progressSection = document.getElementById('progressSection');
+                const timerSection = document.getElementById('timerSection');
+                
+                // Hide timer section if no timer is running
+                timerSection.style.display = 'none';
+                
+                if ((data.success && data.user && data.user.activePackage) || 
+                    (packageData.success && packageData.hasActivePackage)) {
+                    console.log('Active package found:', data.user?.activePackage || packageData.package?.id);
+                    
+                    noPackageMessage.style.display = 'none';
+                    tasksSection.style.display = 'block';
+                    progressSection.style.display = 'block';
+                    createTasks();
+                    checkCompletedTasks();
+                } else {
+                    clearTasksAndTimer();
+                }
             } catch (error) {
-                console.error('Error showing captcha:', error);
-                alert('Error loading task. Please try again.');
+                console.error('Error checking package status:', error);
+                clearTasksAndTimer();
             }
         }
 
-        // Generate random captcha text
-        function generateCaptcha() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
-            let captcha = '';
-            for (let i = 0; i < 6; i++) {
-                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return captcha;
-        }
-
-        // Verify captcha
-        async function verifyCaptcha() {
-            const input = document.getElementById('captchaInput');
-            const content = document.getElementById('captchaContent');
+        // Function to start captcha task
+        function startCaptchaTask(taskId) {
+            currentTaskId = taskId;
+            currentCaptcha = generateCaptcha();
+            
+            const captchaDisplay = document.getElementById('captchaDisplay');
+            const captchaInput = document.getElementById('captchaInput');
             const modal = document.getElementById('captchaModal');
-            const submitButton = modal.querySelector('button');
+            
+            captchaDisplay.textContent = currentCaptcha;
+            captchaInput.value = '';
+            modal.style.display = 'flex';
+        }
 
-            if (input.value.toLowerCase() === content.textContent.toLowerCase()) {
-                try {
-                    // Save task completion to database
+        // Function to close captcha modal
+        function closeCaptchaModal() {
+            const modal = document.getElementById('captchaModal');
+            const submitButton = document.getElementById('submitCaptchaButton');
+            
+            // Reset submit button state when closing modal
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit';
+            
+            modal.style.display = 'none';
+            currentTaskId = null;
+            currentCaptcha = '';
+        }
+
+        // Function to submit captcha
+        async function submitCaptcha() {
+            const submitButton = document.getElementById('submitCaptchaButton');
+            const input = document.getElementById('captchaInput').value;
+            
+            submitButton.disabled = true;
+            submitButton.textContent = 'Processing...';
+            
+            try {
+                if (input.toLowerCase() === currentCaptcha.toLowerCase()) {
                     const response = await fetch(`${API_URL}/tasks/complete`, {
-                    method: 'POST',
-                    headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        'Content-Type': 'application/json'
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
                         },
                         body: JSON.stringify({
+                            taskId: currentTaskId,
                             taskType: 'captcha',
-                            taskId: currentTaskId, // Pass task ID to backend
-                            captchaText: content.textContent
+                            captchaText: currentCaptcha
                         })
+                    });
+
+                const data = await response.json();
+                    if (data.success) {
+                        alert(`Task completed successfully! Earned $${data.earnAmount.toFixed(2)}`);
+                        updateBalanceDisplay();
+                        updateEarningsInfo({
+                            perTaskEarning: data.earnAmount,
+                            dailyEarningRate: data.dailyEarningRate,
+                            completedTasks: 5 - data.remainingTasks,
+                            remainingEarnings: data.dailyEarningRate - data.totalEarned
+                        });
+                        
+                        // Find and hide the completed task
+                        const taskElement = document.querySelector(`.task-item:nth-child(${currentTaskId})`);
+                        if (taskElement) {
+                            taskElement.classList.add('completed');
+                        }
+                        
+                        // Count completed tasks
+                        const completedTasks = document.querySelectorAll('.task-item.completed').length;
+                        updateProgressBar(completedTasks);
+                        
+                        // If all tasks are completed, start the timer
+                        if (completedTasks >= 5) {
+                            startResetTimer();
+                        }
+                        
+                        closeCaptchaModal();
+                    } else {
+                        alert(data.message || 'Failed to complete task');
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Submit';
+                    }
+                } else {
+                    alert('Incorrect captcha. Please try again.');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Submit';
+                }
+            } catch (error) {
+                console.error('Error completing task:', error);
+                alert('Error completing task');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit';
+            }
+        }
+
+        // Function to update balance display
+        async function updateBalanceDisplay() {
+            try {
+                const response = await fetch(`${API_URL}/users/profile`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const data = await response.json();
+                
+                if (data.success && data.user) {
+                    const balanceElem = document.getElementById('balanceAmount');
+                    if (balanceElem) {
+                        balanceElem.textContent = `$${parseFloat(data.user.balance || 0).toFixed(2)}`;
+                    }
+
+                    const levelElem = document.getElementById('levelAmount');
+                    if (levelElem) {
+                        levelElem.textContent = data.user.level || '-';
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating balance:', error);
+            }
+        }
+
+        // Function to start the timer
+        function startResetTimer() {
+            clearInterval(timerInterval); // Clear any existing interval
+            
+            const timerSection = document.getElementById('timerSection');
+            const tasksSection = document.getElementById('tasksSection');
+            const progressSection = document.getElementById('progressSection');
+            const noPackageMessage = document.getElementById('noPackageMessage');
+            
+            timerSection.style.display = 'block';
+            tasksSection.style.display = 'none';
+            progressSection.style.display = 'none';
+            noPackageMessage.style.display = 'none';
+            
+            // Store the end time in localStorage
+            const endTime = Date.now() + (86400 * 1000); // Current time + 24 hours
+            localStorage.setItem('taskResetEndTime', endTime.toString());
+            
+            startTimerWithEndTime(endTime);
+        }
+
+        // Function to start timer with a specific end time
+        function startTimerWithEndTime(endTime) {
+            clearInterval(timerInterval); // Clear any existing interval
+            
+            function updateTimer() {
+                const now = Date.now();
+                const remaining = Math.max(0, endTime - now);
+                
+                if (remaining === 0) {
+                    clearInterval(timerInterval);
+                    localStorage.removeItem('taskResetEndTime');
+                    resetTasks();
+                    return;
+                }
+                
+                timeLeft = Math.ceil(remaining / 1000);
+                updateTimerDisplay();
+            }
+            
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Function to check timer state on page load
+        function checkTimerState() {
+            const endTime = localStorage.getItem('taskResetEndTime');
+            if (endTime) {
+                const endTimeNum = parseInt(endTime);
+                if (endTimeNum > Date.now()) {
+                    // Timer is still running
+                    const timerSection = document.getElementById('timerSection');
+                    const tasksSection = document.getElementById('tasksSection');
+                    const progressSection = document.getElementById('progressSection');
+                    
+                    timerSection.style.display = 'block';
+                    tasksSection.style.display = 'none';
+                    progressSection.style.display = 'none';
+                    
+                    startTimerWithEndTime(endTimeNum);
+                } else {
+                    // Timer has expired
+                    localStorage.removeItem('taskResetEndTime');
+                    resetTasks();
+                }
+            }
+        }
+
+        // Function to update timer display
+        function updateTimerDisplay() {
+            document.getElementById('timerDisplay').textContent = formatTimeDisplay(timeLeft);
+        }
+
+        // Function to reset tasks
+        async function resetTasks() {
+            try {
+                const response = await fetch(`${API_URL}/tasks/reset`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
                 });
 
                 const data = await response.json();
-
                 if (data.success) {
-                        // Update balance on the page
-                        if (data.reward) {
-                            const balanceElem = document.getElementById('balanceAmount');
-                            let currentBalance = parseFloat(balanceElem.textContent.replace('$', '')) || 0;
-                            currentBalance += parseFloat(data.reward);
-                            balanceElem.textContent = `$${currentBalance.toFixed(2)}`;
-                        }
-                        // completeTask('captcha', submitButton); // Removed this - updateTaskList handles UI now
-                        modal.style.display = 'none';
-                        input.value = '';
-                        currentTaskId = null; // Reset task ID
-
-                        // Re-fetch progress and update task list
-                        await loadTaskState();
-
+                    const timerSection = document.getElementById('timerSection');
+                    const tasksSection = document.getElementById('tasksSection');
+                    const progressSection = document.getElementById('progressSection');
+                    
+                    timerSection.style.display = 'none';
+                    tasksSection.style.display = 'block';
+                    progressSection.style.display = 'block';
+                    
+                    // Clear the timer end time from localStorage
+                    localStorage.removeItem('taskResetEndTime');
+                    
+                    createTasks();
+                    updateProgressBar(0);
                 } else {
-                        alert(data.message || 'Error completing task');
+                    alert('Error resetting tasks. Please refresh the page.');
                 }
             } catch (error) {
-                    console.error('Error completing task:', error);
-                    alert('Error completing task. Please try again.');
-                }
-            } else {
-                alert('Incorrect! Try again.');
-                content.textContent = generateCaptcha(); // Generate new captcha on failure
-                input.value = '';
+                console.error('Error resetting tasks:', error);
+                alert('Error resetting tasks. Please refresh the page.');
             }
         }
 
-        // Close modal when clicking the X or Cancel button
-        document.querySelector('.close').onclick = function() {
-            document.getElementById('captchaModal').style.display = 'none';
-            document.getElementById('captchaInput').value = '';
-            document.getElementById('taskLimitMessage').style.display = 'none';
-            document.getElementById('taskResetTime').textContent = '';
-            currentTaskId = null; // Reset task ID
-        };
+        // Add function to update earnings display
+        function updateEarningsInfo(data) {
+            const earningsInfo = document.getElementById('earningsInfo');
+            const perTaskEarning = document.getElementById('perTaskEarning');
+            const dailyTotal = document.getElementById('dailyTotal');
+            const tasksCompleted = document.getElementById('tasksCompleted');
+            const remainingEarnings = document.getElementById('remainingEarnings');
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('captchaModal');
-            if (event.target === modal) {
-                 document.getElementById('captchaModal').style.display = 'none';
-                 document.getElementById('captchaInput').value = '';
-                 document.getElementById('taskLimitMessage').style.display = 'none';
-                 document.getElementById('taskResetTime').textContent = '';
-                 currentTaskId = null; // Reset task ID
+            if (data.perTaskEarning !== undefined) {
+                perTaskEarning.textContent = `$${data.perTaskEarning.toFixed(2)}`;
+                dailyTotal.textContent = `$${data.dailyEarningRate.toFixed(2)}`;
+                tasksCompleted.textContent = `${data.completedTasks}/5`;
+                remainingEarnings.textContent = `$${data.remainingEarnings.toFixed(2)}`;
+                earningsInfo.style.display = 'block';
+            } else {
+                earningsInfo.style.display = 'none';
             }
-        };
+        }
 
-        // Handle keyboard events for captcha input (Enter key)
-        document.getElementById('captchaInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                verifyCaptcha();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            // First check if we have an active package
+            const packageResponse = await fetch(`${API_URL}/users/package-status`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            });
+            const packageData = await packageResponse.json();
+
+            if (!packageData.success || !packageData.hasActivePackage) {
+                clearTasksAndTimer();
+                updateBalanceDisplay();
+                return;
             }
-        });
 
-        // Initialize and periodically update task state
-        document.addEventListener('DOMContentLoaded', () => {
-             loadTaskState(); // Load state on page load
-             setInterval(loadTaskState, 30000); // Periodically check for updates (every 30 seconds)
+            // If we have an active package, proceed with normal initialization
+            const endTime = localStorage.getItem('taskResetEndTime');
+            if (endTime && parseInt(endTime) > Date.now()) {
+                // Timer is still running
+                const timerSection = document.getElementById('timerSection');
+                const tasksSection = document.getElementById('tasksSection');
+                const progressSection = document.getElementById('progressSection');
+                const noPackageMessage = document.getElementById('noPackageMessage');
+                
+                timerSection.style.display = 'block';
+                tasksSection.style.display = 'none';
+                progressSection.style.display = 'none';
+                noPackageMessage.style.display = 'none';
+                
+                startTimerWithEndTime(parseInt(endTime));
+            }
+            
+            // Then proceed with other initializations
+            updateBalanceDisplay();
+            checkPackageStatus();
+            
+            // Update balance and check package status every 30 seconds
+            setInterval(() => {
+                updateBalanceDisplay();
+                checkPackageStatus();
+            }, 30000);
         });
-
     </script>
 </body>
 </html>

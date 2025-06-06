@@ -56,6 +56,46 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
+// Update user balance
+exports.updateUserBalance = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { balance } = req.body;
+
+        // Validate balance
+        if (typeof balance !== 'number' || balance < 0) {
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid balance amount'
+            });
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: 'User not found'
+            });
+        }
+
+        // Update user balance
+        user.balance = balance;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'User balance updated successfully',
+            balance: user.balance
+        });
+    } catch (error) {
+        console.error('Error updating user balance:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Server Error'
+        });
+    }
+};
+
 // Admin middleware
 exports.isAdmin = async (req, res, next) => {
     try {

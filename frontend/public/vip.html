@@ -3,9 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Tube - VIP Packages</title>
+    <title>E-Tube - VIP Membership Benefits</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Unlock exclusive benefits with E-Tube VIP membership. Get higher rewards, special bonuses, and premium features. Choose from Bronze, Silver, and Gold packages.">
+    <meta name="keywords" content="E-tube VIP, membership benefits, premium features, exclusive rewards, VIP packages, Bronze VIP, Silver VIP, Gold VIP">
+    <meta name="author" content="E-tube">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="E-Tube - VIP Membership Benefits">
+    <meta property="og:description" content="Unlock exclusive benefits with E-Tube VIP membership. Get higher rewards, special bonuses, and premium features.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/vip.html">
+    <meta property="og:image" content="/images/e-tube-vip-og.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="E-Tube - VIP Membership Benefits">
+    <meta name="twitter:description" content="Unlock exclusive benefits with E-Tube VIP membership. Get higher rewards and premium features.">
+    <meta name="twitter:image" content="/images/e-tube-vip-og.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:5000/vip.html">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+    <meta name="theme-color" content="#121212">
+    
+    <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         /* Hide scrollbar for Chrome, Safari and Opera */
         ::-webkit-scrollbar {
@@ -46,9 +76,13 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             min-height: 100vh;
-            padding-bottom: 70px;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) calc(env(safe-area-inset-bottom) + 70px) env(safe-area-inset-left);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url('images/Random7.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             position: relative;
         }
 
@@ -57,6 +91,8 @@
             max-width: min(800px, 95%);
             margin: auto;
             animation: fadeIn 0.5s ease-in-out;
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes fadeIn {
@@ -66,8 +102,12 @@
 
         .header {
             text-align: center;
-            padding: 20px 0;
-            margin-bottom: 20px;
+            padding: clamp(24px, 5vw, 32px);
+            margin-bottom: clamp(20px, 4vw, 32px);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header h1 {
@@ -84,6 +124,11 @@
         .balance-section {
             text-align: center;
             margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: clamp(20px, 4vw, 32px);
         }
 
         .balance-section h6 {
@@ -100,11 +145,12 @@
         }
 
         .vip-benefits {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
-            padding: 20px;
+            padding: clamp(20px, 4vw, 32px);
             margin-bottom: 20px;
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .benefits-title {
@@ -140,30 +186,44 @@
         }
 
         .package-card {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
-            padding: 20px;
+            padding: clamp(20px, 4vw, 32px);
             text-align: center;
             border: 1px solid var(--border-color);
-            transition: transform var(--transition-speed);
+            transition: all var(--transition-speed);
             position: relative;
             overflow: hidden;
         }
 
+        .package-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0.5;
+        }
+
+        .package-card.bronze::before {
+            background: linear-gradient(90deg, transparent, var(--vip-bronze), transparent);
+        }
+
+        .package-card.silver::before {
+            background: linear-gradient(90deg, transparent, var(--vip-silver), transparent);
+        }
+
+        .package-card.gold::before {
+            background: linear-gradient(90deg, transparent, var(--vip-gold), transparent);
+        }
+
         .package-card:hover {
             transform: translateY(-5px);
-        }
-
-        .package-card.bronze {
-            border-color: var(--vip-bronze);
-        }
-
-        .package-card.silver {
-            border-color: var(--vip-silver);
-        }
-
-        .package-card.gold {
-            border-color: var(--vip-gold);
+            border-color: currentColor;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
         .package-icon {
@@ -213,9 +273,18 @@
         }
 
         .package-features li {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             color: var(--text-secondary);
             font-size: 0.9rem;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            transition: all var(--transition-speed);
+        }
+
+        .package-features li:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
         }
 
         .upgrade-btn {
@@ -228,11 +297,34 @@
             cursor: pointer;
             transition: all var(--transition-speed);
             width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upgrade-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .upgrade-btn:hover::before {
+            left: 100%;
         }
 
         .upgrade-btn:hover {
             background: var(--primary-hover);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
         }
 
         .upgrade-btn:disabled {
@@ -307,17 +399,27 @@
             transform: translateY(-2px);
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
             .packages-grid {
                 grid-template-columns: 1fr;
             }
+        }
 
-            .container {
-                padding: 12px;
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
             }
+        }
 
+        @supports not (backdrop-filter: blur(10px)) {
+            .header,
+            .balance-section,
+            .vip-benefits,
             .package-card {
-                padding: 15px;
+                background: rgba(0, 0, 0, 0.8);
             }
         }
 
@@ -616,7 +718,7 @@
             <i class="fas fa-clipboard"></i>
             <span>Task</span>
         </a>
-        <a class="nav-item" href="refferal.html">
+        <a class="nav-item" href="referral.html">
             <i class="fas fa-users"></i>
             <span>Team</span>
         </a>
@@ -837,11 +939,7 @@
             }, 1000);
         }
 
-        async function upgradePackage(packageType, packagePrice) { // Now also receives price
-             // You need to determine the packageType from the clicked button/card.
-             // This function likely needs to be triggered by an event listener on the upgrade buttons,
-             // and the package identifier should be passed based on which button was clicked.
-             // For example, add an onclick attribute or event listener to each button.
+        async function upgradePackage(packageType, packagePrice) {
              console.log('Attempting to upgrade to package:', packageType);
 
             const token = localStorage.getItem('token');
@@ -851,13 +949,16 @@
             }
 
             try {
+                // Clear any existing task timer state
+                localStorage.removeItem('taskResetEndTime');
+                
                 const response = await fetch(`${API_URL}/api/vip/upgrade`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ package: packageType }) // Ensure backend expects 'package' field
+                    body: JSON.stringify({ package: packageType })
                 });
 
                 const data = await response.json();

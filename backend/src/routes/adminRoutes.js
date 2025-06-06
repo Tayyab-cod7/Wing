@@ -14,6 +14,11 @@ router.get('/users', adminAuth, adminController.getUsers);
 // @access  Admin only
 router.delete('/users/:userId', adminAuth, adminController.deleteUser);
 
+// @route   PUT /api/admin/users/:userId/balance
+// @desc    Update user balance
+// @access  Admin only
+router.put('/users/:userId/balance', adminAuth, adminController.updateUserBalance);
+
 // @route   GET /api/admin/chats
 // @desc    Get all chats
 // @access  Admin only

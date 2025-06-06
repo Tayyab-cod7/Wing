@@ -2,471 +2,521 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoo System - Withdrawal Records | Track Your Withdrawal History</title>
-    <meta name="description" content="View and track your Wing System withdrawal history. Access detailed records of all your withdrawal requests, including status, amounts, and transaction details.">
-    <meta name="keywords" content="wing system withdrawal records, withdrawal history, transaction history, withdrawal status, online investment pakistan, withdrawal tracking">
-    <meta name="author" content="Wing System">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Withdrawal Record - E-Tube</title>
+    <meta name="description" content="Track your withdrawal history and transaction status on E-Tube. View all your withdrawal records in one place.">
+    <meta name="keywords" content="E-Tube withdrawal record, withdrawal history, transaction history, online withdrawal, E-Tube transactions">
+    <meta name="author" content="E-Tube">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Wing System - Withdrawal Records | Transaction History">
-    <meta property="og:description" content="Track your withdrawal history with Wing System. View detailed records of all your withdrawal requests and their current status.">
+    <meta name="theme-color" content="#6366f1">
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:5000/withdrawal-record.html">
-    <meta property="og:image" content="/images/wing-system-withdrawal-og.jpg">
+    <meta property="og:url" content="https://e-tube.com/withdrawal-record">
+    <meta property="og:title" content="Withdrawal Record - E-Tube">
+    <meta property="og:description" content="Track your withdrawal history and transaction status on E-Tube. View all your withdrawal records in one place.">
+    <meta property="og:image" content="images/Logo.png">
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Wing System - Withdrawal Records | Transaction History">
-    <meta name="twitter:description" content="Track your withdrawal history with Wing System. View detailed records of all your withdrawal requests and their current status.">
-    <meta name="twitter:image" content="/images/wing-system-withdrawal-og.jpg">
-    <link rel="canonical" href="http://localhost:5000/withdrawal-record.html">
-    <meta name="theme-color" content="#2196F3">
+    <meta name="twitter:url" content="https://e-tube.com/withdrawal-record">
+    <meta name="twitter:title" content="Withdrawal Record - E-Tube">
+    <meta name="twitter:description" content="Track your withdrawal history and transaction status on E-Tube. View all your withdrawal records in one place.">
+    <meta name="twitter:image" content="images/Logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="withdrawal-record.css">
+
     <style>
-        * {
+        body {
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
         }
-
-        body {
-            background-color: #f4f4f4;
+        .records-container {
+            width: 100vw;
+            margin: 0;
+            padding: 0;
         }
-
-        .header {
-            background-color: #8BC34A;
-            color: white;
-            padding: 15px;
+        .record-card {
+            background: #f7fafc;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+            margin: 0 6rem 2rem 6rem;
+            overflow: hidden;
+            padding: 0 0 2rem 0;
+            width: calc(100vw - 12rem);
+        }
+        .record-card:last-child {
+            margin-bottom: 10rem;
+        }
+        .record-header {
+            background: #e3f6e8;
+            color: #222;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 16px 24px 16px 24px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
+        }
+        .record-header .request-id {
+            color: #388e3c;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+        .record-header .status-badge {
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 6px 18px;
+            background: #fffbe6;
+            color: #ff9800;
+            display: inline-block;
+        }
+        .record-header .status-badge.approved {
+            background: #e8f5e9;
+            color: #43a047;
+        }
+        .record-header .status-badge.rejected {
+            background: #fce4ec;
+            color: #d81b60;
+        }
+        .record-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f7fafc;
+        }
+        .record-table tr {
+            border-bottom: 1px solid #e0e7ef;
+        }
+        .record-table td {
+            padding: 14px 18px;
+            color: #222;
+            font-size: 1rem;
+            text-align: right;
+        }
+        .record-table td.label {
+            color: #6b7280;
+            font-weight: 500;
+            width: 180px;
+            text-align: right;
+        }
+        .record-table td.value.amount {
+            color: #388e3c;
+            font-weight: bold;
+        }
+        .record-table td.value.status {
+            font-weight: bold;
+        }
+        .record-table td.value.status.pending {
+            color: #FF9800;
+            background: #23272f;
+            border-radius: 12px;
+            padding: 6px 18px;
+            display: inline-block;
+        }
+        .record-table td.value.status.approved {
+            color: #00ff88;
+            background: #23272f;
+            border-radius: 12px;
+            padding: 6px 18px;
+            display: inline-block;
+        }
+        .record-table td.value.status.rejected {
+            color: #d81b60;
+            background: #23272f;
+            border-radius: 12px;
+            padding: 6px 18px;
+            display: inline-block;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 1024px) {
+            .record-card {
+                margin: 2rem 2rem 1.5rem 2rem;
+                width: calc(100vw - 4rem);
+            }
+            .record-card:last-child {
+                margin-bottom: 7rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .records-container { padding: 0; }
+            .record-card {
+                margin: 1rem 0.5rem 1.2rem 0.5rem;
+                width: calc(100vw - 1rem);
+                border-radius: 1rem;
+                padding: 0 0 1.2rem 0;
+            }
+            .record-card:last-child {
+                margin-bottom: 6rem;
+            }
+            .record-header {
+                font-size: 1rem;
+                padding: 10px 8px 10px 8px;
+            }
+            .record-header .request-id {
+                font-size: 1rem;
+            }
+            .record-header .status-badge {
+                font-size: 0.95rem;
+                padding: 5px 12px;
+            }
+            .record-table td, .record-header { font-size: 0.95rem; padding: 8px 4px; }
+            .record-table td.label { width: 90px; }
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar { display: none; }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Receipt Modal Styles */
+        .receipt-modal {
+            display: none;
             position: fixed;
-            top: 0;
+            z-index: 2000;
             left: 0;
-            right: 0;
-            z-index: 100;
-        }
-
-        .back-button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            padding: 5px 10px;
-            display: flex;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease-out;
         }
 
-        .header-title {
-            flex-grow: 1;
+        .receipt-container {
+            background: linear-gradient(145deg, #1a1c20 0%, #222529 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .receipt-header {
             text-align: center;
-            margin-right: 40px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px dashed rgba(255,255,255,0.1);
         }
 
-        .content {
-            margin-top: 60px;
-            padding: 15px;
-            padding-bottom: 70px;
+        .receipt-header h3 {
+            color: #00ff88;
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: 700;
         }
 
-        .withdrawal-item {
-            background: white;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .receipt-header p {
+            color: rgba(255,255,255,0.7);
+            margin: 0.5rem 0 0 0;
+            font-size: 0.9rem;
         }
 
-        .order-number {
-            background-color: #8BC34A;
-            color: white;
-            padding: 10px;
-            border-radius: 4px;
-            margin: -15px -15px 15px -15px;
+        .receipt-details {
+            margin: 1.5rem 0;
         }
 
-        .detail-row {
+        .receipt-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .detail-row:last-child {
+        .receipt-row:last-child {
             border-bottom: none;
         }
 
-        .label {
-            color: #666;
+        .receipt-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            }
+
+        .receipt-value {
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            }
+
+        .receipt-total {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px dashed rgba(255,255,255,0.1);
+            }
+
+        .receipt-total .receipt-row {
+            border: none;
+            margin: 0;
+            padding: 0;
         }
 
-        .value {
-            font-weight: bold;
-        }
+        .receipt-total .receipt-value {
+            color: #00ff88;
+            font-size: 1.2rem;
+            font-weight: 700;
+            }
 
-        .value.amount {
-            color: #E53935;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: capitalize;
-        }
-
-        .status.pending {
-            background-color: #FFF3E0;
-            color: #FF9800;
-        }
-
-        .status.approved {
-            background-color: #E8F5E9;
-            color: #4CAF50;
-        }
-
-        .status.rejected {
-            background-color: #fce4ec;
-            color: #d81b60;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-        }
-
-        .nav-item {
-            text-decoration: none;
-            color: #666;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 12px;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .nav-item.active {
-            color: #8BC34A;
-        }
-
-        .no-records {
+        .receipt-footer {
             text-align: center;
-            padding: 30px;
-            color: #666;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-        }
-
-        .nav-item {
-            text-decoration: none;
-            color: #666;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 12px;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .nav-item.active {
-            color: #8BC34A;
-        }
-
-        @media screen and (max-width: 768px) {
-            .header {
-                padding: 12px;
+            margin-top: 1.5rem;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
             }
 
-            .header-title {
-                font-size: 1.2rem;
+        .close-receipt {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: rgba(255,255,255,0.6);
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-receipt:hover {
+            color: #fff;
             }
 
-            .content {
-                margin-top: 55px;
-                padding: 10px;
-                padding-bottom: 70px;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
             }
 
-            .withdrawal-item {
-                padding: 12px;
-                margin-bottom: 12px;
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
             }
-
-            .order-number {
-                padding: 8px;
-                margin: -12px -12px 12px -12px;
-                font-size: 0.9rem;
-            }
-
-            .detail-row {
-                padding: 4px 0;
+            to {
+                transform: translateY(0);
+                opacity: 1;
             }
         }
 
-        /* Mobile Responsiveness Enhancements */
-        @media (max-width: 768px) {
-            .withdrawal-container {
-                padding: 15px;
+        /* Success Icon Animation */
+        .success-checkmark {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem auto;
+            position: relative;
             }
 
-            .withdrawal-card {
-                padding: 15px;
+        .success-checkmark .check-icon {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            border-radius: 50%;
+            box-sizing: content-box;
+            border: 4px solid #00ff88;
             }
 
-            .withdrawal-title {
-                font-size: 1.5rem;
+        .success-checkmark .check-icon::before {
+            top: 3px;
+            left: -2px;
+            width: 30px;
+            transform-origin: 100% 50%;
+            border-radius: 100px 0 0 100px;
             }
 
-            .withdrawal-table {
-                font-size: 0.9rem;
+        .success-checkmark .check-icon::after {
+            top: 0;
+            left: 30px;
+            width: 60px;
+            transform-origin: 0 50%;
+            border-radius: 0 100px 100px 0;
+            animation: rotate-circle 4.25s ease-in;
             }
 
-            .withdrawal-table th,
-            .withdrawal-table td {
-                padding: 8px;
+        .success-checkmark .check-icon::before, .success-checkmark .check-icon::after {
+            content: '';
+            height: 100px;
+            position: absolute;
+            background: transparent;
+            transform: rotate(-45deg);
             }
 
-            .withdrawal-table th {
-                font-size: 0.85rem;
+        .success-checkmark .check-icon .icon-line {
+            height: 5px;
+            background-color: #00ff88;
+            display: block;
+            border-radius: 2px;
+            position: absolute;
+            z-index: 10;
             }
 
-            .status-badge {
-                padding: 4px 8px;
-                font-size: 0.8rem;
+        .success-checkmark .check-icon .icon-line.line-tip {
+            top: 46px;
+            left: 14px;
+            width: 25px;
+            transform: rotate(45deg);
+            animation: icon-line-tip 0.75s;
             }
 
-            .action-btn {
-                padding: 6px 12px;
-                font-size: 0.85rem;
+        .success-checkmark .check-icon .icon-line.line-long {
+            top: 38px;
+            right: 8px;
+            width: 47px;
+            transform: rotate(-45deg);
+            animation: icon-line-long 0.75s;
+            }
+
+        @keyframes icon-line-tip {
+            0% {
+                width: 0;
+                left: 1px;
+                top: 19px;
+            }
+            54% {
+                width: 0;
+                left: 1px;
+                top: 19px;
+            }
+            70% {
+                width: 50px;
+                left: -8px;
+                top: 37px;
+            }
+            84% {
+                width: 17px;
+                left: 21px;
+                top: 48px;
+            }
+            100% {
+                width: 25px;
+                left: 14px;
+                top: 46px;
             }
         }
 
-        @media (max-width: 480px) {
-            .withdrawal-container {
-                padding: 10px;
+        @keyframes icon-line-long {
+            0% {
+                width: 0;
+                right: 46px;
+                top: 54px;
             }
-
-            .withdrawal-card {
-                padding: 10px;
+            65% {
+                width: 0;
+                right: 46px;
+                top: 54px;
             }
-
-            .withdrawal-title {
-                font-size: 1.3rem;
+            84% {
+                width: 55px;
+                right: 0px;
+                top: 35px;
             }
-
-            .withdrawal-table {
-                font-size: 0.85rem;
-            }
-
-            .withdrawal-table th,
-            .withdrawal-table td {
-                padding: 6px;
-            }
-
-            .withdrawal-table th {
-                font-size: 0.8rem;
-            }
-
-            .status-badge {
-                padding: 3px 6px;
-                font-size: 0.75rem;
-            }
-
-            .action-btn {
-                padding: 4px 8px;
-                font-size: 0.8rem;
-            }
-
-            .withdrawal-table td:nth-child(3),
-            .withdrawal-table th:nth-child(3) {
-                display: none;
-            }
-        }
-
-        /* Print styles */
-        @media print {
-            .bottom-nav {
-                display: none !important;
-            }
-
-            .withdrawal-card {
-                box-shadow: none;
-                border: 1px solid #ccc;
-            }
-
-            .withdrawal-table {
-                border-collapse: collapse;
-            }
-
-            .withdrawal-table th,
-            .withdrawal-table td {
-                border: 1px solid #ccc;
+            100% {
+                width: 47px;
+                right: 8px;
+                top: 38px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <button class="back-button" onclick="window.history.back()">←Back</button>
-        <h1 class="header-title">Withdrawal Record</h1>
+    <div class="records-container">
+        <h2 style="text-align:center; color:#00ff88; font-size:2rem; font-weight:700; margin:2rem 0 2rem 0; letter-spacing:1px;">Withdrawal Record</h2>
+        <div id="recordsList"></div>
     </div>
 
-    <div class="content" id="recordsContainer">
-        <!-- Records will be dynamically inserted here -->
-    </div>
-
-       <!-- Bottom Navigation -->
-       <nav class="bottom-nav">
-        <a class="nav-item" href="dashboard.html">
-            <i class="fas fa-home"></i>
+    <nav style="position:fixed;left:0;right:0;bottom:0;height:60px;background:#18191c;display:flex;justify-content:space-around;align-items:center;z-index:1000;border-top:1px solid #23272f;width:100%;">
+        <a href="home.html" style="text-decoration:none;flex:1;display:flex;flex-direction:column;align-items:center;color:#888;font-size:13px;transition:color 0.2s;">
+            <i class="fa fa-home" style="font-size:22px;"></i>
             <span>Home</span>
         </a>
-        <a class="nav-item" href="earn.html">
-            <i class="fas fa-clipboard"></i>
+        <a href="earn.html" style="text-decoration:none;flex:1;display:flex;flex-direction:column;align-items:center;color:#888;font-size:13px;transition:color 0.2s;">
+            <i class="fa fa-briefcase" style="font-size:22px;"></i>
             <span>Task</span>
         </a>
-        <a class="nav-item" href="refferal.html">
-            <i class="fas fa-users"></i>
+        <a href="referral.html" style="text-decoration:none;flex:1;display:flex;flex-direction:column;align-items:center;color:#888;font-size:13px;transition:color 0.2s;">
+            <i class="fa fa-users" style="font-size:22px;"></i>
             <span>Team</span>
         </a>
-        <a class="nav-item" href="home.html">
-            <i class="fas fa-gem"></i>
+        <a href="vip.html" style="text-decoration:none;flex:1;display:flex;flex-direction:column;align-items:center;color:#888;font-size:13px;transition:color 0.2s;">
+            <i class="fa fa-gem" style="font-size:22px;"></i>
             <span>VIP</span>
         </a>
-        <a class="nav-item active" href="me.html">
-            <i class="fas fa-user"></i>
+        <a href="me.html" style="text-decoration:none;flex:1;display:flex;flex-direction:column;align-items:center;color:#888;font-size:13px;transition:color 0.2s;">
+            <i class="fa fa-user" style="font-size:22px;"></i>
             <span>Me</span>
         </a>
     </nav>
-
-    <!-- Structured Data for Withdrawal Records Page -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "Wing System Withdrawal Records",
-        "description": "Track and view your withdrawal history with Wing System",
-        "mainEntity": {
-            "@type": "Table",
-            "name": "Withdrawal History",
-            "description": "Detailed records of all withdrawal requests and their status",
-            "about": {
-                "@type": "Thing",
-                "name": "Withdrawal Transactions",
-                "description": "History of withdrawal requests and their processing status"
-            }
-        }
+    <style>
+    nav a:hover {
+        color: #00ff88 !important;
     }
-    </script>
+    </style>
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [{
-            "@type": "Question",
-            "name": "How can I track my withdrawal requests?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "You can track your withdrawal requests through the withdrawal records page, which shows all your withdrawal history including request ID, amount, status, and processing details."
-            }
-        },{
-            "@type": "Question",
-            "name": "What do the different withdrawal statuses mean?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Withdrawal statuses include: Pending (under review), Approved (processed), and Rejected (declined). Each status indicates the current state of your withdrawal request."
-            }
-        },{
-            "@type": "Question",
-            "name": "How long does withdrawal processing take?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Withdrawal processing typically takes 24-48 hours after approval. The exact time may vary depending on the payment method and verification requirements."
-            }
-        },{
-            "@type": "Question",
-            "name": "Can I cancel a withdrawal request?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Withdrawal requests can only be cancelled if they are in 'Pending' status. Once approved or rejected, the request cannot be cancelled."
-            }
-        }]
-    }
-    </script>
+    <!-- Withdrawal Receipt Modal -->
+    <div id="receiptModal" class="receipt-modal">
+        <div class="receipt-container">
+            <button class="close-receipt" onclick="closeReceiptModal()">&times;</button>
+            <div class="receipt-header">
+                <div class="success-checkmark">
+                    <div class="check-icon">
+                        <span class="icon-line line-tip"></span>
+                        <span class="icon-line line-long"></span>
+                    </div>
+                </div>
+                <h3>Withdrawal Successful</h3>
+                <p>Your withdrawal request has been submitted</p>
+            </div>
+            <div class="receipt-details">
+                <div class="receipt-row">
+                    <span class="receipt-label">Wallet Address</span>
+                    <span class="receipt-value" id="receiptWallet"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Payment Method</span>
+                    <span class="receipt-value" id="receiptPaymentMethod"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Withdrawal Amount</span>
+                    <span class="receipt-value" id="receiptAmount"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Service Fee (25%)</span>
+                    <span class="receipt-value" id="receiptFee"></span>
+                </div>
+            </div>
+            <div class="receipt-total">
+                <div class="receipt-row">
+                    <span class="receipt-label">You Will Receive</span>
+                    <span class="receipt-value" id="receiptFinalAmount"></span>
+                </div>
+            </div>
+            <div class="receipt-footer">
+                Transaction ID: <span id="receiptTransactionId"></span>
+            </div>
+        </div>
+    </div>
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [{
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "http://localhost:5000/"
-        },{
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Dashboard",
-            "item": "http://localhost:5000/dashboard"
-        },{
-            "@type": "ListItem",
-            "position": 3,
-            "name": "Withdrawal Records",
-            "item": "http://localhost:5000/withdrawal-record.html"
-        }]
-    }
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             fetchWithdrawalRecords();
         });
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) return 'N/A';
-            
-            const options = { 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            };
-            return date.toLocaleString('en-US', options);
-        }
 
         async function fetchWithdrawalRecords() {
             try {
@@ -476,11 +526,10 @@
                     return;
                 }
 
-                const response = await fetch('/api/withdrawal/records', {
-                    method: 'GET',
+                const API_URL = window.location.origin;
+                const response = await fetch(`${API_URL}/api/withdraw/records`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
+                        'Authorization': `Bearer ${token}`
                     }
                 });
 
@@ -490,48 +539,87 @@
                         window.location.href = 'login.html';
                         return;
                     }
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error('Failed to load records');
                 }
 
                 const data = await response.json();
-                const container = document.getElementById('recordsContainer');
+                const container = document.getElementById('recordsList');
                 
                 if (!Array.isArray(data) || data.length === 0) {
-                    container.innerHTML = '<div class="no-records">No withdrawal records found</div>';
+                    container.innerHTML = '<p style="color:#bdbdbd;">No withdrawal records found.</p>';
                     return;
                 }
 
-                container.innerHTML = data.map(record => `
-                    <div class="withdrawal-item">
-                        <div class="order-number">Request ID: ${record.requestId}</div>
-                        <div class="detail-row">
-                            <span class="label">Amount</span>
-                            <span class="value amount">Rs. ${record.amount}</span>
+                // Sort records by date, most recent first
+                const sorted = [...data].sort((a, b) => new Date(b.requestDate) - new Date(a.requestDate));
+
+                container.innerHTML = sorted.map(record => {
+                    let statusClass = 'pending';
+                    if (record.status === 'approved') statusClass = 'approved';
+                    if (record.status === 'rejected') statusClass = 'rejected';
+
+                    return `
+                        <div class="record-card">
+                            <div class="record-header">
+                                <span class="request-id">Request ID: ${record.requestId}</span>
+                                <span class="status-badge ${statusClass}">${record.status}</span>
+                            </div>
+                            <table class="record-table">
+                                <tr>
+                                    <td class="label">Amount</td>
+                                    <td class="value amount">Rs. ${record.amount}</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Payment Method</td>
+                                    <td class="value">${record.paymentMethod}</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">TID</td>
+                                    <td class="value">${record.status === 'pending' ? record.accountNumber : (record.tid || 'N/A')}</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Date</td>
+                                    <td class="value">${new Date(record.requestDate).toLocaleString()}</td>
+                                </tr>
+                            </table>
                         </div>
-                        <div class="detail-row">
-                            <span class="label">Payment Method</span>
-                            <span class="value">${record.paymentMethod}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">Status</span>
-                            <span class="status ${record.status.toLowerCase()}">${record.status}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">TID</span>
-                            <span class="value">${record.status === 'pending' ? record.accountNumber : record.tid}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">Date</span>
-                            <span class="value">${formatDate(record.requestDate)}</span>
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             } catch (error) {
                 console.error('Error fetching withdrawal records:', error);
-                document.getElementById('recordsContainer').innerHTML = 
-                    '<div class="no-records">Error loading withdrawal records. Please try again later.</div>';
+                document.getElementById('recordsList').innerHTML = 
+                    '<p style="color:#ff4d4f;">Error loading records.</p>';
             }
         }
+
+        function showWithdrawalReceipt(data) {
+            // Calculate amounts
+            const withdrawalAmount = parseFloat(data.amount);
+            const serviceFee = withdrawalAmount * 0.25;
+            const finalAmount = withdrawalAmount - serviceFee;
+
+            // Update receipt values
+            document.getElementById('receiptWallet').textContent = data.accountNumber;
+            document.getElementById('receiptPaymentMethod').textContent = data.paymentMethod;
+            document.getElementById('receiptAmount').textContent = `Rs. ${withdrawalAmount.toFixed(2)}`;
+            document.getElementById('receiptFee').textContent = `Rs. ${serviceFee.toFixed(2)}`;
+            document.getElementById('receiptFinalAmount').textContent = `Rs. ${finalAmount.toFixed(2)}`;
+            document.getElementById('receiptTransactionId').textContent = data.requestId;
+
+            // Show modal
+            document.getElementById('receiptModal').style.display = 'flex';
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('receiptModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('receiptModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeReceiptModal();
+            }
+        });
     </script>
 </body>
 </html> 

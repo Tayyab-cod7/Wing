@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Platform Rules & Guidelines - E-Tube</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Official rules and guidelines for E-Tube platform. Learn about our policies, user conduct, earnings, withdrawals, and referral program regulations.">
+    <meta name="keywords" content="E-Tube rules, platform guidelines, user policies, earning rules, withdrawal policy, referral guidelines">
+    <meta name="author" content="E-Tube">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Platform Rules & Guidelines - E-Tube">
+    <meta property="og:description" content="Official rules and guidelines for E-Tube platform. Learn about our policies, user conduct, earnings, withdrawals, and referral program regulations.">
+    <meta property="og:image" content="images/Logo.png">
+    <meta property="og:url" content="https://e-tube.com/rules">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Platform Rules & Guidelines - E-Tube">
+    <meta name="twitter:description" content="Official rules and guidelines for E-Tube platform. Learn about our policies and regulations.">
+    <meta name="twitter:image" content="images/Logo.png">
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #00ff88;
+            --primary-hover: #00cc66;
+            --secondary-color: #2196F3;
+            --bg-color: #121212;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #fff;
+            --text-secondary: #bdbdbd;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --warning-color: #ff9800;
+            --danger-color: #ff4444;
+            --success-color: #00C851;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) calc(env(safe-area-inset-bottom) + 70px) env(safe-area-inset-left);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url('images/Random3.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: clamp(16px, 4vw, 24px);
+        }
+
+        .header {
+            text-align: center;
+            padding: clamp(24px, 5vw, 48px) 0;
+            margin-bottom: clamp(24px, 5vw, 32px);
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .rules-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: clamp(20px, 4vw, 32px);
+            margin-bottom: 24px;
+        }
+
+        .rules-section h2 {
+            color: var(--primary-color);
+            font-size: clamp(1.3rem, 3vw, 1.5rem);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rules-section h2 i {
+            font-size: 1.2em;
+        }
+
+        .rules-list {
+            list-style: none;
+        }
+
+        .rule-item {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .rule-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .rule-item h3 {
+            color: var(--text-primary);
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .rule-item p {
+            color: var(--text-secondary);
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .warning {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .warning i {
+            color: var(--warning-color);
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .rules-section {
+                padding: 20px;
+            }
+
+            .rule-item {
+                padding-left: 1.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        @supports not (backdrop-filter: blur(10px)) {
+            .rules-section {
+                background: rgba(0, 0, 0, 0.8);
+            }
+        }
+
+        /* Bottom Navigation Styles */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 12px max(env(safe-area-inset-bottom), 8px);
+            z-index: 1000;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            min-width: 64px;
+        }
+
+        .nav-item i {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .nav-item span {
+            white-space: nowrap;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--primary-color);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .nav-item:hover i,
+        .nav-item.active i {
+            transform: translateY(-2px);
+            color: var(--primary-color);
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 20px;
+            height: 2px;
+            background: var(--primary-color);
+            transition: transform var(--transition-speed) ease;
+            border-radius: 4px;
+        }
+
+        .nav-item:hover::after,
+        .nav-item.active::after {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        @media (max-width: 380px) {
+            .nav-item {
+                padding: 8px 12px;
+                min-width: 56px;
+            }
+
+            .nav-item span {
+                font-size: 0.7rem;
+            }
+
+            .nav-item i {
+                font-size: 1.2rem;
+            }
+        }
+
+        @supports not (backdrop-filter: blur(10px)) {
+            .bottom-nav {
+                background: rgba(18, 18, 18, 0.98);
+            }
+        }
+
+        @media (hover: hover) {
+            .nav-item:hover {
+                transform: translateY(-2px);
+            }
+        }
+
+        @media (display-mode: standalone) {
+            .bottom-nav {
+                padding-bottom: max(env(safe-area-inset-bottom), 16px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Platform Rules & Guidelines</h1>
+            <p>Please read and follow these important rules to ensure a safe and fair experience for all users.</p>
+        </header>
+
+        <section class="rules-section">
+            <h2><i class="fas fa-user-shield"></i> Account Rules</h2>
+            <ul class="rules-list">
+                <li class="rule-item">
+                    <h3>One Account Per User</h3>
+                    <p>Users are strictly limited to one account per person. Multiple accounts or sharing accounts is prohibited.</p>
+                    <div class="warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Violation will result in account termination and forfeiture of earnings.
+                    </div>
+                </li>
+                <li class="rule-item">
+                    <h3>Account Security</h3>
+                    <p>Users must maintain secure passwords and never share their login credentials. Enable two-factor authentication for added security.</p>
+                </li>
+                <li class="rule-item">
+                    <h3>Accurate Information</h3>
+                    <p>All account information must be accurate and up-to-date, including contact details and payment information.</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="rules-section">
+            <h2><i class="fas fa-hand-holding-usd"></i> Financial Rules</h2>
+            <ul class="rules-list">
+                <li class="rule-item">
+                    <h3>Withdrawal Limits</h3>
+                    <p>Minimum withdrawal amount is $5 USDT. Maximum withdrawal per transaction is $50 USDT. 24-hour cooldown period between withdrawals.</p>
+                </li>
+                <li class="rule-item">
+                    <h3>Payment Methods</h3>
+                    <p>All transactions must be conducted through Binance USDT. No other payment methods are currently accepted.</p>
+                </li>
+                <li class="rule-item">
+                    <h3>Processing Time</h3>
+                    <p>Withdrawals are processed within 24 hours. Recharge confirmations may take up to 24 hours to reflect in your account.</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="rules-section">
+            <h2><i class="fas fa-users"></i> Referral Program Rules</h2>
+            <ul class="rules-list">
+                <li class="rule-item">
+                    <h3>Referral Requirements</h3>
+                    <p>Only active users can participate in the referral program. Referred users must be genuine and unique individuals.</p>
+                </li>
+                <li class="rule-item">
+                    <h3>Commission Structure</h3>
+                    <p>Earn commission from your referrals' activities. Commission rates vary based on your membership level and referral tier.</p>
+                </li>
+                <li class="rule-item">
+                    <h3>Prohibited Practices</h3>
+                    <p>Self-referrals, fake accounts, or any form of referral manipulation will result in immediate account termination.</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="rules-section">
+            <h2><i class="fas fa-shield-alt"></i> Content & Behavior Rules</h2>
+            <ul class="rules-list">
+                <li class="rule-item">
+                    <h3>Respectful Conduct</h3>
+                    <p>Users must maintain respectful behavior towards other members. Harassment, abuse, or discrimination will not be tolerated.</p>
+                </li>
+                <li class="rule-item">
+                    <h3>Content Guidelines</h3>
+                    <p>All user-generated content must comply with our community guidelines. No illegal, harmful, or inappropriate content.</p>
+                </li>
+                <li class="rule-item">
+                    <h3>Privacy Respect</h3>
+                    <p>Respect the privacy of other users. Do not share personal information or attempt to bypass platform security measures.</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="rules-section">
+            <h2><i class="fas fa-gavel"></i> Enforcement & Penalties</h2>
+            <ul class="rules-list">
+                <li class="rule-item">
+                    <h3>Rule Violations</h3>
+                    <p>Violations may result in warnings, temporary suspension, or permanent account termination based on severity.</p>
+                </li>
+                <li class="rule-item">
+                    <h3>Appeals Process</h3>
+                    <p>Users can appeal enforcement actions through our support system within 7 days of the action.</p>
+                </li>
+                <li class="rule-item">
+                    <h3>Updates to Rules</h3>
+                    <p>E-Tube reserves the right to modify these rules at any time. Users will be notified of significant changes.</p>
+                </li>
+            </ul>
+        </section>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="recharge.html" class="nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>Recharge</span>
+        </a>
+        <a href="withdraw.html" class="nav-item">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Withdraw</span>
+        </a>
+        <a href="referral.html" class="nav-item">
+            <i class="fas fa-users"></i>
+            <span>Team</span>
+        </a>
+        <a href="rules.html" class="nav-item active">
+            <i class="fas fa-scroll"></i>
+            <span>Rules</span>
+        </a>
+    </nav>
+</body>
+</html> 

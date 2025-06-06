@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wing System - Admin Functions</title>
+    <meta name="description" content="Admin dashboard for managing Wing System functions. Access system-wide controls and administrative tools.">
+    <meta name="keywords" content="wing system admin, admin functions, system controls, admin dashboard">
+    <meta name="author" content="Wing System">
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:title" content="Wing System - Admin Functions">
+    <meta property="og:description" content="Admin dashboard for managing Wing System functions and system-wide controls.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/admin-functions.html">
+    <meta property="og:image" content="/images/wing-system-admin-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wing System - Admin Functions">
+    <meta name="twitter:description" content="Admin dashboard for managing Wing System functions and system-wide controls.">
+    <meta name="twitter:image" content="/images/wing-system-admin-og.jpg">
+    <link rel="canonical" href="http://localhost:5000/admin-functions.html">
+    <meta name="theme-color" content="#4361ee">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #3f37c9;
+            --danger-color: #ef476f;
+            --danger-hover: #d64062;
+            --success-color: #06d6a0;
+            --warning-color: #ffd166;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --border-color: rgba(255,255,255,0.1);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.15);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --transition: all 0.3s ease;
+            --font-main: 'Inter', sans-serif;
+            --bg-color: #121212;
+            --card-bg: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: #bdbdbd;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            padding: 15px 0;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .content-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-title i {
+            color: var(--primary-color);
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeIn 0.3s;
+            border-left: 4px solid;
+            background: var(--card-bg);
+        }
+
+        .alert-success {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .alert-danger {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-container {
+                flex-direction: row;
+                align-items: center;
+                padding: 10px 15px;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .navbar-nav {
+                margin-top: 0;
+                flex-direction: row;
+                width: auto;
+                gap: 5px;
+                flex-wrap: wrap;
+                margin-left: -5px;
+            }
+            
+            .nav-item {
+                width: auto;
+            }
+            
+            .nav-link {
+                padding: 8px 12px;
+                font-size: 14px;
+                white-space: nowrap;
+            }
+
+            .nav-link i {
+                margin-right: 5px;
+                width: auto;
+                font-size: 14px;
+            }
+
+            .content-title {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-container {
+                padding: 8px 12px;
+                gap: 10px;
+            }
+
+            .navbar-brand {
+                font-size: 18px;
+            }
+
+            .navbar-brand i {
+                font-size: 20px;
+                margin-right: 8px;
+            }
+
+            .navbar-nav {
+                gap: 3px;
+            }
+
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 13px;
+            }
+
+            .nav-link i {
+                font-size: 13px;
+                margin-right: 4px;
+            }
+
+            .content-title {
+                font-size: 18px;
+            }
+        }
+
+        /* Table Styles */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            color: var(--text-primary);
+        }
+
+        .admin-table th {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .admin-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .admin-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .balance {
+            font-family: monospace;
+            font-weight: 500;
+            color: var(--success-color);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .page-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .page-btn:hover, .page-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                padding: 10px;
+            }
+
+            .admin-table th, .admin-table td {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            position: relative;
+            background: var(--card-bg);
+            margin: 15% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-edit {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .btn-edit:hover {
+            background: var(--primary-hover);
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                margin: 20% auto;
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-brand"><i class="fas fa-feather-alt"></i> Wing Admin</a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="admin-user.html" class="nav-link"><i class="fas fa-users"></i> Users</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recharge-request.html" class="nav-link"><i class="fas fa-money-bill-wave"></i> Recharge Request</a>
+                </li>
+                <li class="nav-item">
+                    <a href="withdraw-request.html" class="nav-link"><i class="fas fa-wallet"></i> Withdraw Request</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact-request.html" class="nav-link"><i class="fas fa-envelope"></i> Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-functions.html" class="nav-link active"><i class="fas fa-cogs"></i> Admin Functions</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Alerts -->
+        <div id="alert-success" class="alert alert-success"></div>
+        <div id="alert-danger" class="alert alert-danger"></div>
+
+        <!-- Admin Functions Section -->
+        <section id="admin-functions-section" class="content-section active">
+            <div class="content-header">
+                <h1 class="content-title"><i class="fas fa-users"></i> User Balances</h1>
+            </div>
+
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Balance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                    </tbody>
+                </table>
+                <div class="pagination" id="pagination">
+                    <button class="page-btn active">1</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal for editing balance -->
+    <div id="editBalanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit User Balance</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="editUsername" class="form-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Current Balance (USDT)</label>
+                    <input type="text" id="editCurrentBalance" class="form-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">New Balance (USDT)</label>
+                    <input type="number" id="editNewBalance" class="form-input" step="0.01" min="0">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="saveBalance()">Save Changes</button>
+                <button class="btn btn-danger" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const logoutLink = document.getElementById('logout-link');
+        const alertSuccess = document.getElementById('alert-success');
+        const alertDanger = document.getElementById('alert-danger');
+
+        let currentEditingUserId = null;
+
+        // Function to format currency to USDT
+        function formatUSDT(amount) {
+            const value = parseFloat(amount || 0);
+            return `${value.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })} USDT`;
+        }
+
+        // Function to create user row
+        function createUserRow(user) {
+            return `
+                <tr>
+                    <td>${user.username || 'Unknown'}</td>
+                    <td class="balance">${formatUSDT(user.balance)}</td>
+                    <td>
+                        <button class="btn-edit" onclick="openEditModal('${user._id}', '${user.username}', ${user.balance})">
+                            <i class="fas fa-edit"></i> Edit Balance
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Function to fetch users from database
+        async function fetchUsers() {
+            try {
+                const response = await fetch('/api/admin/users', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch users');
+                }
+
+                const data = await response.json();
+                return data.users || [];
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                showErrorAlert('Failed to fetch user data');
+                return [];
+            }
+        }
+
+        // Show success alert
+        function showSuccessAlert(message) {
+            alertSuccess.textContent = message;
+            alertSuccess.style.display = 'block';
+            setTimeout(() => {
+                alertSuccess.style.display = 'none';
+            }, 3000);
+        }
+
+        // Show error alert
+        function showErrorAlert(message) {
+            alertDanger.textContent = message;
+            alertDanger.style.display = 'block';
+            setTimeout(() => {
+                alertDanger.style.display = 'none';
+            }, 3000);
+        }
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+            if (!token || !user || !user.isAdmin) {
+                showErrorAlert('Admin authentication required');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+                return false;
+            }
+            return true;
+        }
+
+        // Function to populate user table
+        async function populateUserTable() {
+            const tableBody = document.getElementById('userTableBody');
+            
+            // Show loading state
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="2" style="text-align: center; padding: 20px;">
+                        <i class="fas fa-spinner fa-spin"></i> Loading users...
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const users = await fetchUsers();
+                if (!users || users.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="2" style="text-align: center; padding: 20px;">
+                                No users found
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                tableBody.innerHTML = users.map(user => createUserRow(user)).join('');
+            } catch (error) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="2" style="text-align: center; padding: 20px; color: var(--danger-color);">
+                            <i class="fas fa-exclamation-circle"></i> Error loading users
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Function to start real-time updates
+        function startRealTimeUpdates() {
+            // Update every 30 seconds
+            setInterval(populateUserTable, 30000);
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check authentication on page load
+            if (checkAuth()) {
+                // Initial population of table
+                await populateUserTable();
+                // Start real-time updates
+                startRealTimeUpdates();
+            }
+
+            // Logout handler
+            logoutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+        });
+
+        // Function to open edit modal
+        function openEditModal(userId, username, balance) {
+            currentEditingUserId = userId;
+            document.getElementById('editUsername').value = username;
+            document.getElementById('editCurrentBalance').value = formatUSDT(balance);
+            document.getElementById('editNewBalance').value = balance;
+            document.getElementById('editBalanceModal').style.display = 'block';
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById('editBalanceModal').style.display = 'none';
+            currentEditingUserId = null;
+        }
+
+        // Function to save balance
+        async function saveBalance() {
+            if (!currentEditingUserId) return;
+
+            const newBalance = parseFloat(document.getElementById('editNewBalance').value);
+            if (isNaN(newBalance) || newBalance < 0) {
+                showErrorAlert('Please enter a valid balance amount');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/users/${currentEditingUserId}/balance`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ balance: newBalance })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update balance');
+                }
+
+                showSuccessAlert('Balance updated successfully');
+                closeModal();
+                populateUserTable(); // Refresh the table
+            } catch (error) {
+                console.error('Error updating balance:', error);
+                showErrorAlert('Failed to update balance');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('editBalanceModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html> 

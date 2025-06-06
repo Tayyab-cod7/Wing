@@ -2,15 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Recharge - E-TuBE</title>
-    <meta name="description" content="Recharge your E-TuBE account securely using USDT (crypto). Fast, safe, and easy.">
-    <meta name="theme-color" content="#6366f1">
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Recharge Your Account - E-Tube</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Recharge your E-Tube account securely using Binance USDT. Fast and reliable payment processing within 24 hours.">
+    <meta name="keywords" content="E-Tube, account recharge, Binance USDT, crypto payment, secure payment">
+    <meta name="author" content="E-Tube">
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Recharge Your Account - E-Tube">
+    <meta property="og:description" content="Recharge your E-Tube account securely using Binance USDT. Fast and reliable payment processing within 24 hours.">
+    <meta property="og:image" content="images/Logo.png">
+    <meta property="og:url" content="https://e-tube.com/recharge">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Recharge Your Account - E-Tube">
+    <meta name="twitter:description" content="Recharge your E-Tube account securely using Binance USDT. Fast and reliable payment processing within 24 hours.">
+    <meta name="twitter:image" content="images/Logo.png">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
@@ -19,59 +38,189 @@
             --text-primary: #ffffff;
             --text-secondary: #bdbdbd;
             --accent-color: #00ff88;
+            --binance-color: #F0B90B;
+            --bg-color: var(--card-bg);
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
         body {
-            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            background-color: var(--bg-color);
             color: var(--text-primary);
-            line-height: 1.6;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            min-height: 100vh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('images/Random1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
         }
+
         .recharge-container {
-            max-width: 500px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 800px;
             margin: 2rem auto;
-            padding: 2rem;
-            padding-bottom: 80px;
+            padding: 1.5rem;
         }
+
+        .binance-logo-container {
+            width: min(400px, 90vw);
+            height: min(200px, 45vw);
+            margin: 1rem auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: clamp(1rem, 3vw, 1.5rem);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .binance-logo-container:hover {
+            transform: scale(1.02);
+        }
+
+        .binance-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
         .recharge-hero {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
             width: 100%;
             position: relative;
-            border-radius: 0;
             text-align: center;
-            padding: 3rem 1.5rem 2rem 1.5rem;
-            background: var(--card-bg);
-            margin-bottom: 2rem;
+            padding: clamp(1rem, 5vw, 2rem);
+            margin-bottom: 1.5rem;
             overflow: hidden;
             animation: fadeIn 1s ease-out;
         }
-        .recharge-hero::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: var(--primary-gradient);
-            opacity: 0.1;
-            z-index: -1;
-        }
+
         .recharge-title {
-            font-size: 2.2rem;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             background: var(--secondary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: slideUp 1s ease-out;
         }
+
         .recharge-subtitle {
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
             color: var(--text-secondary);
-            max-width: 400px;
-            margin: 0 auto;
-            animation: slideUp 1s ease-out 0.2s backwards;
+            margin-bottom: 1rem;
         }
+
+        .binance-info {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: clamp(1rem, 4vw, 2rem);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .binance-text h3 {
+            color: var(--binance-color);
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .binance-text p {
+            color: var(--text-secondary);
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .processing-time {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: clamp(0.8rem, 2vw, 1.2rem);
+            background: rgba(240, 185, 11, 0.1);
+            border-radius: 8px;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            color: var(--binance-color);
+            transition: transform 0.3s ease;
+        }
+
+        .processing-time:hover {
+            transform: translateY(-2px);
+        }
+
+        .processing-time i {
+            color: var(--binance-color);
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        @media (max-width: 768px) {
+            .recharge-container {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 14px;
+            }
+            
+            .binance-info {
+                padding: 1rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .binance-logo-container:hover {
+                transform: none;
+            }
+            
+            .processing-time:hover {
+                transform: none;
+            }
+        }
+
+        @supports (backdrop-filter: blur(10px)) {
+            .binance-info,
+            .recharge-hero {
+                backdrop-filter: blur(10px);
+            }
+        }
+
+        @supports not (backdrop-filter: blur(10px)) {
+            .recharge-hero,
+            .binance-info {
+                background: rgba(0, 0, 0, 0.8);
+            }
+        }
+
         .section {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
             transition: transform 0.3s, box-shadow 0.3s;
             animation: fadeIn 1s ease-out;
         }
@@ -261,6 +410,26 @@
 </head>
 <body>
         <div class="recharge-container">
+        <div class="binance-logo-container">
+            <img src="images/Binance.jpg" alt="Binance Logo" class="binance-logo">
+        </div>
+
+        <div class="recharge-hero">
+            <h1 class="recharge-title">Recharge Your Account</h1>
+            <p class="recharge-subtitle">Add funds to your account securely using Binance USDT</p>
+        </div>
+
+        <div class="binance-info">
+            <div class="binance-text">
+                <h3>Binance USDT Only</h3>
+                <p>We currently accept recharges only through Binance USDT. Please ensure you're sending from a Binance wallet for successful processing.</p>
+                <div class="processing-time">
+                    <i class="fas fa-clock"></i>
+                    <span>Processing Time: Within 24 hours</span>
+                </div>
+            </div>
+        </div>
+
         <section class="section">
             <div class="section-title"><i class="fas fa-coins"></i> Recharge Form</div>
             <form class="recharge-form" autocomplete="off" onsubmit="return validateRechargeForm(event)">
@@ -274,16 +443,17 @@
             </form>
             <div class="success-message" id="successMsg">Recharge request submitted! Our team will verify and credit your account soon.</div>
         </section>
+    </div>
     <nav class="bottom-nav">
-            <a href="index.html" class="nav-item">
+            <a href="home.html" class="nav-item">
             <i class="fas fa-home"></i>
             <span>Home</span>
         </a>
-            <a href="task.html" class="nav-item">
+            <a href="earn.html" class="nav-item">
             <i class="fas fa-clipboard"></i>
             <span>Task</span>
         </a>
-            <a href="team.html" class="nav-item">
+            <a href="referral.html" class="nav-item">
             <i class="fas fa-users"></i>
             <span>Team</span>
         </a>
@@ -296,7 +466,6 @@
             <span>Me</span>
         </a>
     </nav>
-    </div>
     <script>
         function copyUSDTAddress() {
             const address = document.getElementById('usdtAddress').innerText;

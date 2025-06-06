@@ -1,21 +1,59 @@
+// Function to show login form
+function showLoginForm() {
+    document.getElementById('signup-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+}
+
 // Handle signup form submission
 document.getElementById('signupForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     try {
+        const username = document.getElementById('signupUsername').value;
         const phone = document.getElementById('signupPhone').value;
         const password = document.getElementById('signupPassword').value;
-        const referredBy = document.getElementById('referralCode').value;
+        const referralCode = document.getElementById('referralCode').value;
+
+        // Basic validation
+        if (!username || !phone || !password || !referralCode) {
+            showError('All fields are required');
+            return;
+        }
+
+        // Phone validation
+        if (!/^[0-9]{7,15}$/.test(phone)) {
+            showError('Phone number must be between 7 and 15 digits');
+            return;
+        }
+
+        // Username validation
+        if (!/^[a-zA-Z][a-zA-Z0-9]{5,7}$/.test(username)) {
+            showError('Username must start with a letter, be 6-8 characters long');
+            return;
+        }
+
+        // Password validation
+        if (!/^[A-Za-z0-9]{6,8}$/.test(password)) {
+            showError('Password must be 6-8 characters, letters and numbers only');
+            return;
+        }
+
+        // Referral code validation
+        if (!/^[0-9]{6}$/.test(referralCode)) {
+            showError('Referral code must be exactly 6 digits');
+            return;
+        }
 
         const registrationData = {
+            username,
             phone,
             password,
-            referredBy  // Changed from referralCode to referredBy
+            referralCode
         };
 
         console.log('Sending registration data:', registrationData);
 
-        const response = await fetch(`${API_URL}/api/auth/register`, {
+        const response = await fetch('http://localhost:5000/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -24,15 +62,33 @@ document.getElementById('signupForm').addEventListener('submit', async function(
         });
 
         const data = await response.json();
+        console.log('Registration response:', data);
+
+        if (!response.ok) {
+            // If we have a specific error message from the server, use it
+            if (data && data.error) {
+                showError(data.error);
+            } else {
+                showError('Registration failed. Please try again.');
+            }
+            return;
+        }
 
         if (data.success) {
             showSuccess('Registration successful! Please login.');
+            // Store the phone number for login convenience
+            localStorage.setItem('lastRegisteredPhone', phone);
             // Clear the form
             this.reset();
             // Switch to login form
             showLoginForm();
+            // Pre-fill the phone number in login form
+            const loginPhone = document.getElementById('loginPhone');
+            if (loginPhone) {
+                loginPhone.value = phone;
+            }
         } else {
-            showError(data.message || 'Registration failed');
+            showError(data.error || 'Registration failed');
         }
     } catch (error) {
         console.error('Registration error:', error);

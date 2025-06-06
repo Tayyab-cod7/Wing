@@ -1,140 +1,209 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
-const Task = require('../models/Task');
+const { protect } = require('../middleware/authMiddleware');
 const User = require('../models/User');
+const Task = require('../models/Task');
 
-// Get task progress
-router.get('/progress', auth, async (req, res) => {
+// In-memory lock to prevent concurrent submissions
+const submissionLocks = new Map();
+
+// Function to acquire lock
+const acquireLock = (userId, taskId) => {
+    const lockKey = `${userId}-${taskId}`;
+    if (submissionLocks.has(lockKey)) {
+        return false;
+    }
+    submissionLocks.set(lockKey, true);
+    return true;
+};
+
+// Function to release lock
+const releaseLock = (userId, taskId) => {
+    const lockKey = `${userId}-${taskId}`;
+    submissionLocks.delete(lockKey);
+};
+
+// Function to get daily earning rate based on package
+function getDailyEarningRate(packageName) {
+    const rates = {
+        'Basic Plane 01': 0.66,
+        'Basic Plane 02': 1.2,
+        'Basic Plane 03': 2.5,
+        'Pro Plane 01': 6,
+        'Pro Plane 02': 10,
+        'Pro Plane 03': 20,
+        'Premium Plane 01': 50,
+        'Premium Plane 02': 200
+    };
+    return rates[packageName] || 0;
+}
+
+// Get completed tasks for today
+router.get('/completed', protect, async (req, res) => {
     try {
-        const now = new Date();
-        // Calculate the start of the current minute
-        const startOfMinute = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), 0, 0);
-
-        const completedTasks = await Task.countDocuments({
+        // Get tasks completed in the last 24 hours
+        const twentyFourHoursAgo = new Date(Date.now() - (24 * 60 * 60 * 1000));
+        const tasks = await Task.find({
             userId: req.user.id,
-            completedAt: { $gte: startOfMinute }
+            completedAt: {
+                $gte: twentyFourHoursAgo
+            }
         });
+
+        // Get user's package info
+        const user = await User.findById(req.user.id);
+        const dailyRate = getDailyEarningRate(user.activePackage);
+        const perTaskEarning = dailyRate / 5; // Divide daily rate by 5 tasks
 
         res.json({
             success: true,
-            completedTasks
+            completedTasks: tasks.length,
+            completedTaskIds: tasks.map(task => task.taskId),
+            nextResetTime: tasks.length > 0 ? 
+                new Date(tasks[0].completedAt.getTime() + (24 * 60 * 60 * 1000)).getTime() 
+                : null,
+            dailyEarningRate: dailyRate,
+            perTaskEarning: perTaskEarning,
+            remainingEarnings: dailyRate - (tasks.length * perTaskEarning)
         });
     } catch (error) {
-        console.error('Error fetching task progress:', error);
-        res.status(500).json({ success: false, message: 'Server error' });
+        console.error('Error getting completed tasks:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error getting completed tasks'
+        });
     }
 });
 
-// Check task limit
-router.get('/check-limit', auth, async (req, res) => {
+// Complete a task
+router.post('/complete', protect, async (req, res) => {
+    const userId = req.user.id;
+    const { taskId, taskType, captchaText } = req.body;
+
     try {
-        const now = new Date();
-        // Calculate the start of the current minute
-        const startOfMinute = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), 0, 0);
-
-        const completedTasks = await Task.countDocuments({
-            userId: req.user.id,
-            completedAt: { $gte: startOfMinute }
-        });
-
-        const canPerformTask = completedTasks < 5;
-
-        // The frontend will handle the minute timer display based on the minute-reset-time endpoint.
-        // This endpoint just needs to say if they can perform a task in the current minute.
-        res.json({
-            canPerformTask
-        });
-    } catch (error) {
-        console.error('Error checking task limit:', error);
-        res.status(500).json({ success: false, message: 'Server error' });
-    }
-});
-
-// Complete task
-router.post('/complete', auth, async (req, res) => {
-    try {
-        const { taskType, captchaText } = req.body;
-
-        // Check if user has reached daily limit -> now minute limit
-        const now = new Date();
-        // Calculate the start of the current minute
-        const startOfMinute = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), 0, 0);
-
-        const completedTasks = await Task.countDocuments({
-            userId: req.user.id,
-            completedAt: { $gte: startOfMinute }
-        });
-
-        if (completedTasks >= 5) {
+        // Validate input
+        if (!taskId || !taskType || !captchaText) {
             return res.status(400).json({
                 success: false,
-                message: 'Minute task limit reached'
+                message: 'Please provide all required fields'
             });
         }
 
-        // Create new task completion record
-        const task = new Task({
-            userId: req.user.id,
+        // Try to acquire lock
+        if (!acquireLock(userId, taskId)) {
+            return res.status(429).json({
+                success: false,
+                message: 'Task submission in progress, please wait'
+            });
+        }
+
+        // Check if user has an active package
+        const user = await User.findById(userId);
+        if (!user.activePackage) {
+            releaseLock(userId, taskId);
+            return res.status(400).json({
+                success: false,
+                message: 'You need an active package to complete tasks'
+            });
+        }
+
+        // Get earning rate based on package
+        const dailyRate = getDailyEarningRate(user.activePackage);
+        const perTaskEarning = dailyRate / 5; // Divide daily rate by 5 tasks
+
+        // Check if task was already completed in the last 24 hours
+        const twentyFourHoursAgo = new Date(Date.now() - (24 * 60 * 60 * 1000));
+        const existingTask = await Task.findOne({
+            userId: userId,
+            taskId: taskId,
+            completedAt: {
+                $gte: twentyFourHoursAgo
+            }
+        });
+
+        if (existingTask) {
+            releaseLock(userId, taskId);
+            return res.status(400).json({
+                success: false,
+                message: 'Task already completed within the last 24 hours'
+            });
+        }
+
+        // Check if user has completed all tasks for today
+        const completedTasksCount = await Task.countDocuments({
+            userId: userId,
+            completedAt: {
+                $gte: twentyFourHoursAgo
+            }
+        });
+
+        if (completedTasksCount >= 5) {
+            releaseLock(userId, taskId);
+            return res.status(400).json({
+                success: false,
+                message: 'Maximum tasks completed for today'
+            });
+        }
+
+        // Create task record
+        const task = await Task.create({
+            userId: userId,
+            taskId,
             taskType,
             captchaText,
-            completedAt: new Date()
+            completedAt: new Date(),
+            earnAmount: perTaskEarning
         });
 
-        await task.save();
+        // Update user balance
+        user.balance += perTaskEarning;
+        await user.save();
 
-        // Update user's balance based on task type
-        const rewardAmount = getTaskReward(taskType);
-        await User.findByIdAndUpdate(req.user.id, {
-            $inc: { balance: rewardAmount }
-        });
+        // Release lock before sending response
+        releaseLock(userId, taskId);
 
         res.json({
             success: true,
             message: 'Task completed successfully',
-            reward: rewardAmount
+            earnAmount: perTaskEarning,
+            totalEarned: (completedTasksCount + 1) * perTaskEarning,
+            remainingTasks: 5 - (completedTasksCount + 1),
+            dailyEarningRate: dailyRate,
+            nextResetTime: new Date(task.completedAt.getTime() + (24 * 60 * 60 * 1000)).getTime()
         });
+
     } catch (error) {
+        // Make sure to release lock on error
+        releaseLock(userId, taskId);
         console.error('Error completing task:', error);
-        res.status(500).json({ success: false, message: 'Server error' });
+        res.status(500).json({
+            success: false,
+            message: 'Error completing task'
+        });
     }
 });
 
-// Helper function to format time until reset
-function formatTimeUntilReset(ms) {
-    const hours = Math.floor(ms / (1000 * 60 * 60));
-    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-    return `${hours}h ${minutes}m`;
-}
-
-// Helper function to get task reward
-function getTaskReward(taskType) {
-    const rewards = {
-        'captcha': 0.132, // Basic Plane 01 reward per task (0.66 / 5)
-        'textCaptcha': 0.132,
-        'imageCaptcha': 0.132,
-        'sliderPuzzle': 0.132,
-        'checkboxChallenge': 0.132
-    };
-    // You might want to make this dynamic based on user's plan
-    // For now, hardcoding to 0.132 for all tasks/plans as per request.
-    return rewards[taskType] || 0;
-}
-
-// GET time until next minute reset
-router.get('/minute-reset-time', async (req, res) => {
+// Reset completed tasks
+router.post('/reset', protect, async (req, res) => {
     try {
-        const now = new Date();
-        const seconds = now.getSeconds();
-        const timeUntilResetSeconds = 60 - seconds;
+        // Delete all tasks completed today for this user
+        await Task.deleteMany({
+            userId: req.user.id,
+            completedAt: {
+                $gte: new Date(new Date().setHours(0, 0, 0, 0))
+            }
+        });
 
         res.json({
             success: true,
-            timeUntilResetSeconds: timeUntilResetSeconds
+            message: 'Tasks reset successfully'
         });
     } catch (error) {
-        console.error('Error getting minute reset time:', error);
-        res.status(500).json({ success: false, message: 'Server error' });
+        console.error('Error resetting tasks:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error resetting tasks'
+        });
     }
 });
 

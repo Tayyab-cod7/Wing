@@ -5,26 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>F-EARN - Earn Money Online | Sign Up or Login</title>
+    <title>E-Tube - Your Ultimate Online Earning Platform</title>
     <meta name="description"
-        content="Join F-EARN to earn money online. Simple registration, secure payments, and daily earnings. Start your earning journey today with our trusted platform.">
+        content="E-Tube is your trusted platform for online earning opportunities. Sign up now to start earning through various tasks, referrals, and more. Safe, secure, and reliable.">
     <meta name="keywords"
-        content="f-earn, earn money online, online earnings, payment platform, daily earnings, secure payments">
-    <meta name="author" content="F-EARN">
+        content="E-Tube, online earning, make money online, work from home, online income, referral program, digital earnings">
+    <meta name="author" content="E-Tube">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#6366f1">
-    <meta property="og:title" content="F-EARN - Earn Money Online">
+    <meta property="og:title" content="E-Tube - Your Ultimate Online Earning Platform">
     <meta property="og:description"
-        content="Join F-EARN to earn money online. Simple registration, secure payments, and daily earnings.">
+        content="Join E-Tube to start earning money online through various tasks and opportunities. Safe, secure, and reliable platform.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:5000/index.html">
-    <meta property="og:image" content="/images/f-earn-og.jpg">
+    <meta property="og:url" content="https://e-tube.com">
+    <meta property="og:image" content="images/Logo.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="F-EARN - Earn Money Online">
+    <meta name="twitter:title" content="E-Tube - Your Ultimate Online Earning Platform">
     <meta name="twitter:description"
-        content="Join F-EARN to earn money online. Simple registration, secure payments, and daily earnings.">
-    <meta name="twitter:image" content="/images/f-earn-og.jpg">
-    <link rel="canonical" href="http://localhost:5000/index.html">
+        content="Join E-Tube to start earning money online through various tasks and opportunities. Safe, secure, and reliable platform.">
+    <meta name="twitter:image" content="images/Logo.png">
+    <link rel="canonical" href="https://e-tube.com">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,185 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="apple-touch-icon" href="images/Logo.png">
+    
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00ff88 0%, #2196F3 100%);
+            --glow-color: rgba(0, 255, 136, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('images/Random3.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            padding: clamp(1rem, 5vw, 2rem);
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: clamp(1.5rem, 4vw, 2rem);
+            padding: 0.5rem;
+            width: min(280px, 90%);
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+
+        .logo-container img {
+            width: 180px;
+            height: 60px;
+            object-fit: contain;
+            margin: 0 auto;
+            filter: drop-shadow(0 0 8px var(--glow-color));
+        }
+
+        .forms-container {
+            max-width: 460px;
+            width: min(95%, 460px);
+            background: rgba(18, 18, 18, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            margin: 0 auto;
+            position: relative;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-section {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        h1, h2 {
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            margin-bottom: 0.3rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: clamp(0.85rem, 2vw, 0.9rem);
+            color: #bdbdbd;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #00ff88;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+        }
+
+        .input-hint {
+            font-size: 0.75rem;
+            color: #bdbdbd;
+            margin-top: 0.25rem;
+            margin-left: 0.25rem;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #00ff88 0%, #2196F3 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
+
+        p {
+            text-align: center;
+            margin-top: 1rem;
+            color: #bdbdbd;
+            font-size: 0.9rem;
+        }
+
+        p a {
+            color: #00ff88;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        .terms-group {
+            margin: 1rem 0;
+        }
+
+        .terms-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            color: #bdbdbd;
+            font-size: 0.85rem;
+        }
+
+        .terms-label input[type="checkbox"] {
+            width: auto;
+            margin-top: 0.2rem;
+        }
+
         .error-message,
         .success-message {
             position: fixed;
@@ -133,38 +311,138 @@
             }
         }
 
-        button[type="submit"] {
-            position: relative;
-            min-width: 120px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Mobile Optimizations */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .logo-container {
+                width: 85%;
+                padding: 0.5rem;
+            }
+
+            .logo-container img {
+                width: 140px;
+                height: 50px;
+            }
+
+            .forms-container {
+                padding: 16px;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .terms-group {
+                margin: 1rem 0;
         }
 
-        @supports (-webkit-touch-callout: none) {
+        button[type="submit"] {
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* Tablet Optimizations */
+        @media (min-width: 481px) and (max-width: 768px) {
             .container {
-                margin-bottom: env(safe-area-inset-bottom, 1rem);
+                padding: 1.5rem;
+            }
+
+            .logo-container {
+                width: 300px;
+            }
+        }
+
+        /* Landscape Mode Optimizations */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .container {
+                padding: 1rem 2rem;
+            }
+
+            .logo-container {
+                margin-bottom: 1rem;
+            }
+
+            .forms-container {
+                margin: 0.5rem auto;
+            }
+
+            .form-group {
+                margin-bottom: 0.8rem;
+            }
+        }
+
+        /* High-DPI Screen Optimizations */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .logo-container img {
+                image-rendering: -webkit-optimize-contrast;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            .forms-container {
+                background: rgba(18, 18, 18, 0.9);
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: none;
+            }
+
+            .forms-container {
+                box-shadow: none;
+                border: 1px solid #ddd;
             }
         }
     </style>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "E-Tube",
+        "description": "Online earning platform offering secure payments and daily earnings opportunities",
+        "url": "https://e-tube.com",
+        "applicationCategory": "MoneyManagementApplication",
+        "operatingSystem": "All",
+        "offers": {
+            "@type": "Offer",
+            "description": "Join E-Tube to start earning money online"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "E-Tube"
+        }
+    }
+    </script>
 </head>
 
 <body>
     <main class="container" role="main">
         <div id="errorMessage" class="error-message" role="alert" aria-live="polite"></div>
         <div id="successMessage" class="success-message" role="alert" aria-live="polite"></div>
+        <div class="logo-container">
+            <img src="images/Logo.png" alt="E-Tube Logo" width="180" height="auto">
+        </div>
         <div class="forms-container">
             <!-- Login Form -->
             <section class="form-section" id="login-form" style="display: none;">
-                <h2>Welcome Back to F-EARN</h2>
-                <p class="subtitle">Access your earning dashboard securely</p>
+                <h2>Welcome Back</h2>
+                <p class="subtitle">Login with your phone number</p>
                 <form id="loginForm" novalidate aria-label="Login form">
                     <div class="form-group">
-                        <label for="loginEmail" class="visually-hidden">Gmail Address</label>
-                        <input type="email" id="loginEmail" name="email" placeholder="Enter your Gmail address"
-                            autocomplete="email" aria-required="true" required>
-                        <small class="input-hint" id="loginEmailHint">Enter your Gmail address (example@gmail.com)</small>
+                        <label for="loginPhone" class="visually-hidden">Phone Number</label>
+                        <input type="tel" id="loginPhone" name="phone" placeholder="Enter your phone number"
+                            pattern="[0-9]{7,15}" minlength="7" maxlength="15" inputmode="numeric"
+                            autocomplete="tel" aria-required="true" required
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        <small class="input-hint" id="loginPhoneHint">Enter your phone number (7-15 digits)</small>
                     </div>
                     <div class="form-group password-field">
                         <label for="loginPassword" class="visually-hidden">Password</label>
@@ -174,14 +452,14 @@
                         <span class="toggle-password" data-target-input="loginPassword"><i class="fas fa-eye"></i></span>
                         <small class="input-hint" id="loginPasswordHint">6-8 characters, letters and numbers only</small>
                     </div>
-                    <button type="submit">Login to Account</button>
+                    <button type="submit">Login</button>
                 </form>
                 <p>Don't have an account? <a href="#" id="showSignup" role="button">Sign up</a></p>
             </section>
 
             <!-- Signup Form -->
             <section class="form-section" id="signup-form">
-                <h1>Sign Up for F-EARN</h1>
+                <h1>Sign Up for E-Tube</h1>
                 <p class="subtitle">Start earning money online - create your account today</p>
                 <form id="signupForm" novalidate aria-label="Sign up form">
                     <div class="form-group">
@@ -190,9 +468,9 @@
                         <small class="input-hint" id="usernameHint">Must start with a letter, 6-8 characters, letters and numbers only</small>
                     </div>
                     <div class="form-group">
-                        <label for="signupEmail" class="visually-hidden">Gmail Address</label>
-                        <input type="email" id="signupEmail" name="email" placeholder="Gmail Address *" pattern="[a-zA-Z0-9._%+\-]+@gmail\.com$" autocomplete="email" aria-required="true" required>
-                        <small class="input-hint" id="emailHint">Must be a valid Gmail address (example@gmail.com)</small>
+                        <label for="signupPhone" class="visually-hidden">Phone Number</label>
+                        <input type="tel" id="signupPhone" name="phone" placeholder="Phone Number *" pattern="[0-9]{7,15}" minlength="7" maxlength="15" inputmode="numeric" autocomplete="tel" aria-required="true" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        <small class="input-hint" id="phoneHint">Enter 7-15 digit phone number (numbers only)</small>
                     </div>
                     <div class="form-group password-field">
                         <label for="signupPassword" class="visually-hidden">Password</label>
@@ -208,32 +486,15 @@
                     <div class="form-group terms-group">
                         <label class="terms-label">
                             <input type="checkbox" id="termsAccepted" aria-required="true" required>
-                            <span>I accept the <a href="#" target="_blank">Terms of Service and Privacy Policy</a></span>
+                            <span>I accept the <a href="terms.html" target="_blank">Terms of Service and Privacy Policy</a></span>
                         </label>
                     </div>
-                    <button type="submit" id="create-account-btn" disabled>Create Account</button>
+                    <button type="submit" id="create-account-btn">Create Account</button>
                 </form>
                 <p>Already have an account? <a href="#" id="showLogin" role="button">Login</a></p>
             </section>
         </div>
     </main>
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "F-EARN",
-        "description": "Online earning platform offering secure payments and daily earnings opportunities",
-        "url": "http://localhost:5000",
-        "applicationCategory": "MoneyManagementApplication",
-        "operatingSystem": "All",
-        "offers": {
-            "@type": "Offer",
-            "description": "Join F-EARN to start earning money online"
-        }
-    }
-    </script>
 
     <script>
         // Wait for DOM to be fully loaded
@@ -265,53 +526,68 @@
                 loginForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
                     
-                    const email = document.getElementById('loginEmail').value;
+                    const phone = document.getElementById('loginPhone').value;
                     const password = document.getElementById('loginPassword').value;
 
-                    if (!email) {
-                        showError('Please enter your Gmail address');
+                    // Basic validation
+                    if (!phone || !password) {
+                        showError('Please enter both phone number and password');
                         return;
                     }
 
-                    if (!email.endsWith('@gmail.com')) {
-                        showError('Please enter a valid Gmail address');
+                    // Phone validation
+                    if (!/^[0-9]{7,15}$/.test(phone)) {
+                        showError('Phone number must be between 7 and 15 digits');
                         return;
                     }
 
-                    if (!password) {
-                        showError('Please enter your password');
+                    // Password validation
+                    if (!/^[A-Za-z0-9]{6,8}$/.test(password)) {
+                        showError('Password must be 6-8 characters, letters and numbers only');
                         return;
                     }
+
+                    const loginData = {
+                        phone: phone,
+                        password: password
+                    };
+
+                    console.log('Attempting login with:', { phone, password: '****' });
 
                     try {
-                        const response = await fetch('/api/auth/login', {
+                        const response = await fetch('http://localhost:5000/api/auth/login', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify({ 
-                                email: email,
-                                password: password 
-                            })
+                            body: JSON.stringify(loginData)
                         });
 
                         const data = await response.json();
+                        console.log('Server response:', data);
 
                         if (response.ok) {
+                            // Store user data and token
                             localStorage.setItem('token', data.token);
                             localStorage.setItem('user', JSON.stringify(data.user));
                             
-                            // Check if user is admin
-                            if (data.user.email === 'admin@gmail.com') {
+                            showSuccess('Login successful! Redirecting...');
+                            
+                            // Redirect based on user type
+                            setTimeout(() => {
+                                if (data.user.isAdmin) {
                                 window.location.href = 'admin-user.html';
                             } else {
                                 window.location.href = 'home.html';
                             }
+                            }, 1000);
                         } else {
-                            showError(data.message || 'Login failed. Please check your Gmail and password.');
+                            showError(data.message || 'Invalid phone number or password');
+                            console.error('Login failed:', data);
                         }
                     } catch (error) {
-                        showError('An error occurred. Please try again.');
+                        console.error('Login error:', error);
+                        showError('Connection error. Please check your internet connection and try again.');
                     }
                 });
             }
@@ -320,66 +596,7 @@
             if (signupForm) {
                 signupForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
-                    
-                    const username = document.getElementById('signupUsername').value;
-                    const email = document.getElementById('signupEmail').value;
-                    const password = document.getElementById('signupPassword').value;
-                    const referralCode = document.getElementById('referralCode').value;
-
-                    if (!email) {
-                        showError('Please enter your Gmail address');
-                        return;
-                    }
-
-                    if (!email.endsWith('@gmail.com')) {
-                        showError('Please enter a valid Gmail address');
-                        return;
-                    }
-
-                    try {
-                        const response = await fetch('/api/auth/register', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ username, email, password, referralCode })
-                        });
-
-                        const data = await response.json();
-
-                        if (response.ok) {
-                            showSuccess('Registration successful! Please login.');
-                            document.getElementById('signupForm').reset();
-                            // Save token and user data to localStorage after successful registration
-                            localStorage.setItem('token', data.token);
-                            localStorage.setItem('user', JSON.stringify(data.user));
-                            // Redirect to home.html after successful registration
-                            window.location.href = 'home.html';
-                        } else {
-                            const errorData = data; // data already contains the parsed JSON
-                            let errorMessage = 'Registration failed. Please try again.';
-
-                            // Check for specific backend error messages
-                            if (errorData && errorData.error) {
-                                if (errorData.error === 'Email already registered') {
-                                    errorMessage = 'This email is already registered.';
-                                } else if (errorData.error === 'Username already taken') {
-                                    errorMessage = 'This username is already taken.';
-                                } else if (errorData.error === 'Invalid referral code') {
-                                    errorMessage = 'The referral code you entered does not exist.';
-                                } else {
-                                    errorMessage = errorData.error; // Use other specific errors from backend
-                                }
-                            } else if (errorData && errorData.message) {
-                                errorMessage = errorData.message; // Use message if error is not available
-                            }
-                            
-                            showError(errorMessage);
-                        }
-                    } catch (error) {
-                        console.error('Signup fetch error:', error);
-                        showError('An error occurred. Please try again.');
-                    }
+                    // The form submission is handled in main.js
                 });
             }
 
@@ -471,6 +688,7 @@
             }, 5000);
         }
     </script>
+    <script src="main.js"></script>
 </body>
 
 </html>

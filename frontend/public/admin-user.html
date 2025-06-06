@@ -950,6 +950,9 @@
                     <a href="contact-request.html" class="nav-link" data-section="contact"><i class="fas fa-envelope"></i> Contact</a>
                 </li>
                 <li class="nav-item">
+                    <a href="admin-functions.html" class="nav-link"><i class="fas fa-cogs"></i> Admin Functions</a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </li>
             </ul>
@@ -1256,7 +1259,7 @@
             if (!checkAuth()) return;
             
             try {
-                usersTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Loading users...</td></tr>';
+                usersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading users...</td></tr>';
                 
                 const token = localStorage.getItem('token');
                 if (!token) {
@@ -1306,7 +1309,7 @@
                 }
             } catch (error) {
                 console.error('Error loading users:', error);
-                usersTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">Error: ${error.message}</td></tr>`;
+                usersTableBody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Error: ${error.message}</td></tr>`;
                 showErrorAlert(error.message);
             }
         }
@@ -1314,7 +1317,7 @@
         // Render Users
         function renderUsers() {
             if (filteredUsers.length === 0) {
-                usersTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No users found</td></tr>';
+                usersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No users found</td></tr>';
                 return;
             }
             
@@ -1347,7 +1350,7 @@
                     <td>${user.referralCode || 'N/A'}</td>
                     <td>${user.referredBy || 'N/A'}</td>
                     <td>${user.referralCount !== undefined ? user.referralCount : '0'}</td>
-                    <td>${user.active ? 'Active' : 'Inactive'}</td>
+                    <td>${user.active ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>'}</td>
                     <td>${deleteButton}</td>
                 `;
                 
@@ -1369,63 +1372,60 @@
         
         // Render Pagination
         function renderPagination() {
-            const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+            const totalPages = Math.ceil(totalUsers / usersPerPage);
+            let paginationHTML = '';
             
-            usersPagination.innerHTML = '';
-            
-            if (totalPages <= 1) {
-                return;
-            }
-            
-            // Previous button
-            const prevButton = document.createElement('div');
-            prevButton.classList.add('pagination-item');
-            prevButton.innerHTML = '&laquo;';
-            prevButton.addEventListener('click', () => {
                 if (currentPage > 1) {
-                    currentPage--;
-                    renderUsers();
-                    renderPagination();
+                paginationHTML += `<button class="btn btn-secondary btn-sm" data-page="${currentPage - 1}">Previous</button>`;
                 }
-            });
-            usersPagination.appendChild(prevButton);
             
-            // Page numbers
             for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('div');
-                pageButton.classList.add('pagination-item');
-                if (i === currentPage) {
-                    pageButton.classList.add('active');
-                }
-                pageButton.textContent = i;
-                pageButton.addEventListener('click', () => {
-                    currentPage = i;
-                    renderUsers();
-                    renderPagination();
-                });
-                usersPagination.appendChild(pageButton);
+                paginationHTML += `<button class="btn btn-secondary btn-sm" data-page="${i}">${i}</button>`;
             }
             
-            // Next button
-            const nextButton = document.createElement('div');
-            nextButton.classList.add('pagination-item');
-            nextButton.innerHTML = '&raquo;';
-            nextButton.addEventListener('click', () => {
                 if (currentPage < totalPages) {
-                    currentPage++;
-                    renderUsers();
-                    renderPagination();
+                paginationHTML += `<button class="btn btn-secondary btn-sm" data-page="${currentPage + 1}">Next</button>`;
                 }
+                
+            usersPagination.innerHTML = paginationHTML;
+                    
+            // Add event listeners to pagination buttons
+            document.querySelectorAll('.btn-secondary').forEach(button => {
+                button.addEventListener('click', function() {
+                    const page = this.getAttribute('data-page');
+                    currentPage = parseInt(page);
+                    loadUsers();
+                });
             });
-            usersPagination.appendChild(nextButton);
         }
         
+        // Event listeners
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                const section = this.getAttribute('data-section');
+                contentSections.forEach(section => section.style.display = 'none');
+                document.getElementById(`${section}-section`).style.display = 'block';
+                });
+            });
+            
+        logoutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+
         // Delete User
         async function deleteUser(userId) {
             if (!checkAuth()) return;
             
             try {
                 const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('No authentication token found');
+                }
+                
                 const response = await fetch(`${API_URL}/api/admin/users/${userId}`, {
                     method: 'DELETE',
                     headers: {
@@ -1434,31 +1434,20 @@
                     }
                 });
                 
-                const data = await response.json();
-                
                 if (!response.ok) {
-                    if (response.status === 403) {
-                        showErrorAlert('Admin user cannot be deleted');
-                    } else {
-                        throw new Error(data.error || 'Failed to delete user');
-                    }
-                    return;
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || 'Failed to delete user');
                 }
                 
+                const data = await response.json();
                 if (data.success) {
                     showSuccessAlert('User deleted successfully');
-                    
-                    // Remove user from arrays
+                    // Remove user from local arrays
                     allUsers = allUsers.filter(user => user._id !== userId);
                     filteredUsers = filteredUsers.filter(user => user._id !== userId);
                     totalUsers = filteredUsers.length;
                     
-                    // Adjust current page if needed
-                    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-                    if (currentPage > totalPages && totalPages > 0) {
-                        currentPage = totalPages;
-                    }
-                    
+                    // Re-render the table
                     renderUsers();
                     renderPagination();
                 } else {
@@ -1469,163 +1458,80 @@
                 showErrorAlert(error.message);
             }
         }
-        
-        // Search Users
-        function searchUsers(query) {
-            query = query.toLowerCase().trim();
+
+        // Delete All Non-Admin Users
+        async function deleteAllNonAdminUsers() {
+            if (!checkAuth()) return;
             
-            if (query === '') {
-                filteredUsers = [...allUsers];
-            } else {
-                filteredUsers = allUsers.filter(user => {
-                    // Check if query is numeric (phone number search)
-                    if (/^\d+$/.test(query)) {
-                        // Only match from the start of the phone number
-                        return user.phone.startsWith(query);
-                    } else {
-                        // For non-numeric queries, search in referral code and referred by
-                        return user.referralCode.toLowerCase().includes(query) ||
-                               (user.referredBy && user.referredBy.toLowerCase().includes(query));
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('No authentication token found');
+                }
+                
+                const response = await fetch(`${API_URL}/api/admin/users/delete-non-admin`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
                     }
                 });
-            }
-            
-            currentPage = 1;
-            totalUsers = filteredUsers.length;
-            
-            renderUsers();
-            renderPagination();
-        }
-        
-        // Toggle Sections
-        function toggleSection(sectionId) {
-            contentSections.forEach(section => {
-                section.style.display = 'none';
-                section.classList.remove('active');
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            const activeSection = document.getElementById(`${sectionId}-section`);
-            const activeLink = document.querySelector(`.nav-link[data-section="${sectionId}"]`);
-            
-            if (activeSection) {
-                activeSection.style.display = 'block';
-                activeSection.classList.add('active');
-            }
-            
-            if (activeLink) {
-                activeLink.classList.add('active');
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || 'Failed to delete non-admin users');
+                }
+                
+                const data = await response.json();
+                if (data.success) {
+                    showSuccessAlert('All non-admin users deleted successfully');
+                    // Reload users to get updated list
+                    loadUsers();
+                } else {
+                    throw new Error(data.message || 'Failed to delete non-admin users');
+                }
+            } catch (error) {
+                console.error('Error deleting non-admin users:', error);
+                showErrorAlert(error.message);
             }
         }
-        
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Check if we have a valid token and user
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            
-            console.log('Token from localStorage:', token ? 'exists' : 'missing');
-            console.log('User from localStorage:', user ? JSON.stringify(user) : 'missing');
-            
-            if (!token || !user || !user.isAdmin) {
-                console.log('No valid admin session found, redirecting to login page...');
-                showErrorAlert('Admin authentication required. Redirecting to login page...');
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 2000);
-                return;
-            }
-            
-            // Now proceed with loading data
-            console.log('Valid admin session found, loading data...');
-            
-            // Load initial data
-            loadUsers();
-            
-            // Navigation links (only for section toggles, not direct links)
-            document.querySelectorAll('.nav-link[data-section]').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const sectionId = this.getAttribute('data-section');
-                    toggleSection(sectionId);
-                });
-            });
-            
-            // Refresh users button
-            refreshUsersBtn.addEventListener('click', loadUsers);
-            
-            // Search input
-            userSearch.addEventListener('input', function() {
-                searchUsers(this.value);
-            });
-            
-            // Modal close button
-            modalClose.addEventListener('click', () => {
-                deleteUserModal.style.display = 'none';
-            });
-            
-            // Cancel delete button
-            cancelDeleteBtn.addEventListener('click', () => {
-                deleteUserModal.style.display = 'none';
-            });
-            
-            // Confirm delete button
-            confirmDeleteBtn.addEventListener('click', () => {
-                if (currentUserId) {
-                    deleteUser(currentUserId);
-                    deleteUserModal.style.display = 'none';
-                    currentUserId = null;
-                }
-            });
-            
-            // Close modal when clicking outside
-            window.addEventListener('click', (e) => {
-                if (e.target === deleteUserModal) {
-                    deleteUserModal.style.display = 'none';
-                }
-            });
-            
-            // Logout link
-            logoutLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                window.location.href = 'index.html';
-            });
 
-            // Delete all non-admin users button
-            deleteAllNonAdminBtn.addEventListener('click', async () => {
-                const confirmed = confirm('Are you sure you want to delete ALL non-admin users? This action cannot be undone.');
-                if (!confirmed) {
-                    return;
-                }
-
-                showSuccessAlert('Deleting non-admin users...');
-
-                // Filter out admin users
-                const nonAdminUsers = allUsers.filter(user => !user.isAdmin);
-
-                // Iterate and delete each non-admin user
-                for (const user of nonAdminUsers) {
-                    console.log(`Attempting to delete user: ${user.phone}`);
-                    // Using the existing deleteUser function
-                    await deleteUser(user._id);
-                }
-
-                // Reload users after attempting to delete all
-                loadUsers();
-            });
+        // Delete user modal event listeners
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteUserModal.style.display = 'none';
+            currentUserId = null;
         });
 
-        // Fetch users data when the page loads
-        loadUsers();
+        modalClose.addEventListener('click', () => {
+            deleteUserModal.style.display = 'none';
+            currentUserId = null;
+        });
 
-        // Periodically fetch users data to update the table (e.g., every 10 seconds)
-        const refreshInterval = 10000; // 10 seconds
-        setInterval(loadUsers, refreshInterval);
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (currentUserId) {
+                await deleteUser(currentUserId);
+                deleteUserModal.style.display = 'none';
+                currentUserId = null;
+            }
+        });
+
+        // Close modal when clicking outside
+        deleteUserModal.addEventListener('click', (e) => {
+            if (e.target === deleteUserModal) {
+                deleteUserModal.style.display = 'none';
+                currentUserId = null;
+            }
+        });
+
+        deleteAllNonAdminBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to delete all non-admin users? This action cannot be undone.')) {
+                deleteAllNonAdminUsers();
+            }
+        });
+
+        // Initial load
+        loadUsers();
     </script>
 </body>
 </html>

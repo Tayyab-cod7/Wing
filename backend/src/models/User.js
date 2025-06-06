@@ -8,18 +8,6 @@ function generateReferralCode() {
 }
 
 const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: [true, 'Please add an email address'],
-    unique: true,
-    trim: true,
-    match: [/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Please add a valid Gmail address']
-  },
-  password: {
-    type: String,
-    required: [true, 'Please add a password'],
-    select: false
-  },
   username: {
     type: String,
     required: [true, 'Please add a username'],
@@ -28,6 +16,18 @@ const userSchema = new mongoose.Schema({
     minlength: [6, 'Username must be at least 6 characters'],
     maxlength: [8, 'Username cannot be more than 8 characters'],
     match: [/^[a-zA-Z][a-zA-Z0-9]*$/, 'Username must start with a letter and contain only letters and numbers']
+  },
+  phone: {
+    type: String,
+    required: [true, 'Please add a phone number'],
+    unique: true,
+    trim: true,
+    match: [/^[0-9]{7,15}$/, 'Phone number must be between 7 and 15 digits']
+  },
+  password: {
+    type: String,
+    required: [true, 'Please add a password'],
+    select: false
   },
   isAdmin: {
     type: Boolean,
@@ -125,7 +125,6 @@ const userSchema = new mongoose.Schema({
 });
 
 // Create indexes
-userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ username: 1 }, { unique: true });
 userSchema.index({ referralCode: 1 }, { unique: true });
 

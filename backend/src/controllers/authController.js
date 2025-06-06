@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 // Validation functions
-const validatePhoneNumber = (phone) => /^[0-9]{11}$/.test(phone);
+const validatePhoneNumber = (phone) => /^[0-9]{7,15}$/.test(phone);
 const validatePassword = (password) => /^[A-Za-z0-9]{6,8}$/.test(password);
 const validateReferralCode = (code) => /^[0-9]{6}$/.test(code);
 
@@ -42,10 +42,12 @@ const generateUniqueReferralCode = async () => {
 // @access  Public
 const register = async (req, res) => {
   try {
-    const { username, email, password, referralCode } = req.body;
+    const { username, password, referralCode, phone } = req.body;
+
+    console.log('Registration attempt:', { username, phone, referralCode });
 
     // Validate input
-    if (!username || !email || !password || !referralCode) {
+    if (!username || !password || !referralCode || !phone) {
       return res.status(400).json({
         success: false,
         error: 'Please provide all required fields'
@@ -60,11 +62,11 @@ const register = async (req, res) => {
       });
     }
 
-    // Email validation
-    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+    // Phone validation
+    if (!/^[0-9]{7,15}$/.test(phone)) {
       return res.status(400).json({
         success: false,
-        error: 'Please provide a valid Gmail address'
+        error: 'Phone number must be between 7 and 15 digits'
       });
     }
 
@@ -84,40 +86,36 @@ const register = async (req, res) => {
       });
     }
 
-    // Check if trying to register with admin email
-    if (email === process.env.ADMIN_EMAIL) {
-      return res.status(403).json({
-        success: false,
-        error: 'This email is reserved and cannot be used for registration'
-      });
-    }
-
     // Check if user already exists
     const existingUser = await User.findOne({
       $or: [
-        { email: email },
-        { username: username }
+        { username: username },
+        { phone: phone }
       ]
     });
     
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        error: existingUser.email === email ? 'Email already registered' : 'Username already taken'
+        error: existingUser.username === username ? 'Username already taken' : 'Phone number already registered'
       });
     }
 
-    // Validate referral code and update referrer's count
-    let referringUser = null;
-    if (referralCode) {
-      referringUser = await User.findOne({ referralCode });
+    // Special handling for admin referral code
+    if (referralCode === process.env.ADMIN_REFERRAL) {
+      console.log('Using admin referral code');
+    } else {
+      // Validate referral code and update referrer's count
+      const referringUser = await User.findOne({ referralCode });
       if (!referringUser) {
+        console.log('Invalid referral code:', referralCode);
         return res.status(400).json({
           success: false,
           error: 'Invalid referral code'
         });
       }
-      // Increment referral count for the referring user regardless of whether it's admin's code
+      console.log('Found referring user:', referringUser.username);
+      // Increment referral count for the referring user
       await User.findByIdAndUpdate(referringUser._id, {
         $inc: { referralCount: 1 }
       });
@@ -126,23 +124,27 @@ const register = async (req, res) => {
     // Generate unique referral code for new user
     let newReferralCode;
     try {
-        newReferralCode = await generateUniqueReferralCode();
+      newReferralCode = await generateUniqueReferralCode();
+      console.log('Generated new referral code:', newReferralCode);
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            error: error.message
-        });
+      console.error('Error generating referral code:', error);
+      return res.status(500).json({
+        success: false,
+        error: error.message
+      });
     }
 
     // Create user with the generated referral code and referredBy
     const user = await User.create({
       username,
-      email,
       password,
+      phone,
       referralCode: newReferralCode,
-      referredBy: referralCode, // Save the referral code of the person who referred
-      active: false // Set default active status to false
+      referredBy: referralCode,
+      active: false
     });
+
+    console.log('User created successfully:', { id: user._id, username: user.username });
 
     sendTokenResponse(user, 201, res);
   } catch (err) {
@@ -159,82 +161,103 @@ const register = async (req, res) => {
 // @access  Public
 const login = async (req, res) => {
     try {
-        console.log('Login function called with body:', JSON.stringify(req.body));
-        const { email, password } = req.body;
+        const { phone, password } = req.body;
+        console.log('Login attempt with:', { phone, password: '****' });
 
         // Validate input
-        if (!email || !password) {
-            console.log('Missing email or password');
-            return res.status(400).json({ success: false, message: 'Please provide email and password' });
+        if (!phone || !password) {
+            console.log('Missing required fields');
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Please provide both phone number and password' 
+            });
         }
 
-        console.log('Looking for user with email:', email);
-        // Check if user exists
-        const user = await User.findOne({ email }).select('+password');
-        if (!user) {
-            console.log('User not found');
-            return res.status(401).json({ success: false, message: 'Invalid credentials' });
+        // Phone validation
+        if (!/^[0-9]{7,15}$/.test(phone)) {
+            console.log('Invalid phone format:', phone);
+            return res.status(400).json({
+                success: false,
+                message: 'Phone number must be between 7 and 15 digits'
+            });
         }
 
-        console.log('User found:', { id: user._id, isAdmin: user.isAdmin });
+        // Find user by phone number
+        console.log('Searching for user with phone:', phone);
+        const user = await User.findOne({ phone }).select('+password');
         
-        // Check if password matches
-        console.log('Comparing passwords...');
-        try {
-            const isMatch = await bcrypt.compare(password, user.password);
-            console.log('Password match result:', isMatch);
-            
-            if (!isMatch) {
-                console.log('Password does not match');
-                return res.status(401).json({ success: false, message: 'Invalid credentials' });
-            }
-        } catch (bcryptError) {
-            console.error('bcrypt error:', bcryptError);
-            throw new Error('Password comparison failed: ' + bcryptError.message);
+        if (!user) {
+            console.log('No user found with phone:', phone);
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Invalid phone number or password' 
+            });
+        }
+
+        console.log('User found:', { 
+            id: user._id, 
+            username: user.username, 
+            phone: user.phone,
+            hasPassword: !!user.password 
+        });
+
+        // Check password
+        console.log('Checking password...');
+        const isMatch = await user.matchPassword(password);
+        console.log('Password match result:', isMatch);
+
+        if (!isMatch) {
+            console.log('Password does not match for user:', user._id);
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Invalid phone number or password' 
+            });
         }
 
         // Generate JWT token
-        console.log('Generating JWT token...');
-        try {
-            const token = jwt.sign(
-                { id: user._id, isAdmin: user.isAdmin },
-                process.env.JWT_SECRET,
-                { expiresIn: '30d' }
-            );
-            console.log('Token generated successfully');
-            
-            // Return token and user data (excluding password)
-            const userData = {
-                _id: user._id,
-                email: user.email,
-                username: user.username,
-                balance: user.balance,
-                referralCode: user.referralCode,
-                isAdmin: user.isAdmin
-            };
+        console.log('Generating token for user:', user._id);
+        const token = jwt.sign(
+            { id: user._id, isAdmin: user.isAdmin },
+            process.env.JWT_SECRET,
+            { expiresIn: '30d' }
+        );
 
-            // Fetch leader information if referredBy exists
-            if (user.referredBy) {
-                const leader = await User.findOne({ referralCode: user.referredBy });
-                if (leader) {
-                    userData.leaderUsername = leader.username;
-                    userData.leaderReferralCode = leader.referralCode; // Although redundant, explicitly adding
-                }
-            }
+        // Return user data (excluding password)
+        const userData = {
+            _id: user._id,
+            username: user.username,
+            phone: user.phone,
+            isAdmin: user.isAdmin,
+            balance: user.balance,
+            referralCode: user.referralCode,
+            referredBy: user.referredBy,
+            referralCount: user.referralCount,
+            programEarnings: user.programEarnings,
+            referralEarnings: user.referralEarnings,
+            totalEarnings: user.totalEarnings,
+            activePackage: user.activePackage,
+            packageAmount: user.packageAmount,
+            packagePurchaseDate: user.packagePurchaseDate,
+            dailyEarningRate: user.dailyEarningRate,
+            packageValidity: user.packageValidity,
+            packageStartDate: user.packageStartDate,
+            packageEndDate: user.packageEndDate,
+            level: user.level
+        };
 
-            console.log('Sending successful response');
-            return res.status(200).json({
-                success: true,
-                token,
-                user: userData
-            });
-        } catch (jwtError) {
-            console.error('JWT error:', jwtError);
-            throw new Error('Token generation failed: ' + jwtError.message);
-        }
+        console.log('Login successful for user:', user._id);
+
+        res.status(200).json({
+            success: true,
+            token,
+            user: userData
+        });
     } catch (error) {
         console.error('Login error:', error);
-        res.status(500).json({ success: false, message: 'Server error' });
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error during login' 
+        });
     }
 };
 
@@ -257,8 +280,9 @@ const getMe = async (req, res) => {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Get user with all necessary fields
-      const user = await User.findById(decoded.id).select('+referredBy');
+      // Get user with all necessary fields including package information
+      const user = await User.findById(decoded.id)
+        .select('+referredBy +activePackage +packageAmount +packageStartDate +packageEndDate');
 
       if (!user) {
         return res.status(404).json({
@@ -286,13 +310,15 @@ const getMe = async (req, res) => {
 
       let leaderUsername = null;
       let leaderReferralCode = null;
+      let leaderPhone = null;
 
       // Fetch leader information if referredBy exists
       if (user.referredBy) {
-          const leader = await User.findOne({ referralCode: user.referredBy }).select('username referralCode');
+          const leader = await User.findOne({ referralCode: user.referredBy }).select('username referralCode phone');
           if (leader) {
               leaderUsername = leader.username;
               leaderReferralCode = leader.referralCode;
+              leaderPhone = leader.phone;
           }
       }
 
@@ -301,6 +327,7 @@ const getMe = async (req, res) => {
         data: {
           email: user.email,
           username: user.username,
+          phone: user.phone,
           balance: user.balance,
           createdAt: user.createdAt,
           referralCode: user.referralCode,
@@ -310,7 +337,12 @@ const getMe = async (req, res) => {
           isAdmin: user.isAdmin,
           leaderUsername: leaderUsername,
           leaderReferralCode: leaderReferralCode,
-          level: user.level || 'None'
+          leaderPhone: leaderPhone,
+          level: user.level || 'None',
+          activePackage: user.activePackage,
+          packageAmount: user.packageAmount,
+          packageStartDate: user.packageStartDate,
+          packageEndDate: user.packageEndDate
         }
       });
     } catch (err) {

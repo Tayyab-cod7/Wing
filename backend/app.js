@@ -2,4 +2,4 @@
 const withdrawalRoutes = require('./routes/withdrawalRoutes');
 
 // Use routes
-app.use('/api', withdrawalRoutes); 
+app.use('/api/withdraw', withdrawalRoutes); 

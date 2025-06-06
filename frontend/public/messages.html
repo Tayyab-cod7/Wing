@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Tube - Messages & Notifications</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="View your E-Tube messages and notifications. Stay updated with important announcements, updates, and communications from the E-Tube platform.">
+    <meta name="keywords" content="E-tube messages, notifications, updates, announcements, inbox, platform communications">
+    <meta name="author" content="E-tube">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="E-Tube - Messages & Notifications">
+    <meta property="og:description" content="View your E-Tube messages and notifications. Stay updated with important announcements and platform communications.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:5000/messages.html">
+    <meta property="og:image" content="/images/e-tube-messages-og.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="E-Tube - Messages & Notifications">
+    <meta name="twitter:description" content="View your E-Tube messages and notifications. Stay updated with platform communications.">
+    <meta name="twitter:image" content="/images/e-tube-messages-og.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:5000/messages.html">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+    <meta name="theme-color" content="#121212">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        * {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url('images/Random10.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding-bottom: calc(70px + env(safe-area-inset-bottom));
+            padding-top: env(safe-area-inset-top);
+            padding-right: env(safe-area-inset-right);
+            padding-left: env(safe-area-inset-left);
+        }
+
+        .messages-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .header .back-button {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .header .back-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .message-item:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .message-item.unread {
+            border-left: 4px solid #00ff88;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .message-title {
+            font-weight: 600;
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .message-time {
+            color: #bdbdbd;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            margin-left: 15px;
+        }
+
+        .message-content {
+            color: #e0e0e0;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .message-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message-category {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #bdbdbd;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .message-action-btn {
+            background: none;
+            border: none;
+            color: #bdbdbd;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .message-action-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .no-messages {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: #bdbdbd;
+        }
+
+        .no-messages i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #4caf50;
+        }
+
+        @media (max-width: 768px) {
+            .messages-container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .message-item {
+                padding: 15px;
+            }
+
+            .message-title {
+                font-size: 1rem;
+            }
+
+            .message-content {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Update bottom navigation styles to match other pages */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: #bdbdbd;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+        }
+
+        .nav-item.active {
+            color: #00ff88;
+        }
+
+        /* Add support for browsers without backdrop-filter */
+        @supports not (backdrop-filter: blur(10px)) {
+            .header,
+            .message-item,
+            .no-messages,
+            .bottom-nav {
+                background: rgba(18, 18, 18, 0.95);
+            }
+        }
+
+        /* Add reduced motion preference support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="messages-container">
+        <div class="header">
+            <button class="back-button" onclick="window.location.href='me.html'">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+            </button>
+            <h1>Messages</h1>
+            <div style="width: 80px;"></div> <!-- Spacer for centering -->
+        </div>
+
+        <div class="message-list" id="messageList">
+            <!-- Messages will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a class="nav-item" href="home.html">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a class="nav-item" href="earn.html">
+            <i class="fas fa-clipboard"></i>
+            <span>Task</span>
+        </a>
+        <a class="nav-item" href="referral.html">
+            <i class="fas fa-users"></i>
+            <span>Team</span>
+        </a>
+        <a class="nav-item" href="vip.html">
+            <i class="fas fa-gem"></i>
+            <span>VIP</span>
+        </a>
+        <a class="nav-item" href="me.html">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        const API_URL = ''; // Use relative path for deployment
+        let messages = [];
+
+        // Function to format relative time
+        function formatRelativeTime(timestamp) {
+            const now = new Date();
+            const messageTime = new Date(timestamp);
+            const diffInSeconds = Math.floor((now - messageTime) / 1000);
+
+            if (diffInSeconds < 60) return 'Just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+            if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+            return messageTime.toLocaleDateString();
+        }
+
+        // Function to update message list
+        function updateMessageList() {
+            const messageList = document.getElementById('messageList');
+            
+            if (messages.length === 0) {
+                messageList.innerHTML = `
+                    <div class="no-messages">
+                        <i class="fas fa-envelope-open"></i>
+                        <h3>No Messages</h3>
+                        <p>You don't have any messages yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            messageList.innerHTML = messages.map((message, index) => `
+                <div class="message-item ${message.isUnread ? 'unread' : ''}" onclick="markAsRead(${index})">
+                    <div class="message-header">
+                        <div>
+                            <div class="message-title">${message.title}</div>
+                            <div class="message-time">${message.time}</div>
+                        </div>
+                    </div>
+                    <div class="message-content">${message.content}</div>
+                    <div class="message-footer">
+                        <span class="message-category">${message.category || 'General'}</span>
+                        <div class="message-actions">
+                            <button class="message-action-btn" onclick="event.stopPropagation(); deleteMessage(${index})">
+                                <i class="fas fa-trash"></i>
+                                <span>Delete</span>
+                            </button>
+                            ${message.isUnread ? `
+                                <button class="message-action-btn" onclick="event.stopPropagation(); markAsRead(${index})">
+                                    <i class="fas fa-check"></i>
+                                    <span>Mark as read</span>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Function to mark a message as read
+        function markAsRead(index) {
+            if (messages[index].isUnread) {
+                messages[index].isUnread = false;
+                updateMessageList();
+                // Here you would typically make an API call to update the message status
+            }
+        }
+
+        // Function to delete a message
+        function deleteMessage(index) {
+            messages.splice(index, 1);
+            updateMessageList();
+            // Here you would typically make an API call to delete the message
+        }
+
+        // Load messages when page loads
+        window.addEventListener('load', () => {
+            // Single default welcome message
+            messages = [
+                {
+                    title: 'Welcome to E-Tube!',
+                    content: 'Thank you for creating your account at E-Tube. We\'re excited to have you join our community! Start earning today by completing tasks and growing your team.',
+                    time: 'Just now',
+                    isUnread: true,
+                    category: 'Welcome'
+                }
+            ];
+            updateMessageList();
+        });
+    </script>
+</body>
+</html> 

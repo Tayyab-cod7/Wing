@@ -646,20 +646,17 @@
                 </div>
                 <div class="card-body">
                     <div class="table-container">
-                        <table id="users-table">
+                        <table id="usersTable" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Gmail</th>
-                                    <th>Username</th>
+                                    <th>Balance</th>
                                     <th>Referral Code</th>
-                                    <th>Referred By</th>
-                                    <th>Total Referrals</th>
-                                    <th>Active</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="users-table-body">
-                                <!-- User data will be loaded here -->
+                            <tbody>
+                                <!-- User data will be inserted here -->
                             </tbody>
                         </table>
                     </div>
@@ -767,26 +764,17 @@
 
         // Display functions
         function displayUsers(users) {
-            const tableBody = document.querySelector('#users-table tbody');
+            const tableBody = document.querySelector('#usersTable tbody');
             tableBody.innerHTML = '';
 
             users.forEach(user => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${user.username || 'N/A'}</td>
-                    <td>${user.email || 'N/A'}</td>
-                    <td>${user.phone || 'N/A'}</td>
-                    <td>${user.referralCode || 'N/A'}</td>
                     <td>${user.balance || 0}</td>
-                    <td>${user.activePackage || 'None'}</td>
-                    <td>${user.packageAmount || 0}</td>
-                    <td>${user.referredBy || 'None'}</td>
-                    <td>${user.referralCount || 0}</td>
-                    <td>${user.isAdmin ? 'Yes' : 'No'}</td>
+                    <td>${user.referralCode || 'N/A'}</td>
                     <td>${user.active ? 'Yes' : 'No'}</td>
                     <td>
                         <button onclick="deleteUser('${user._id}')" class="btn btn-danger btn-sm">Delete</button>
-                        <button onclick="updateBalance('${user._id}')" class="btn btn-primary btn-sm">Update Balance</button>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -822,39 +810,6 @@
                 }
             } catch (error) {
                 handleApiError(error, 'Failed to delete user. Please try again.');
-            }
-        }
-
-        async function updateBalance(userId) {
-            const newBalance = prompt('Enter new balance:');
-            if (newBalance === null || newBalance === '') {
-                return;
-            }
-
-            try {
-                const token = getToken();
-                const response = await fetch(getFullUrl(`/api/admin/users/${userId}/balance`), {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ balance: parseFloat(newBalance) })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to update balance');
-                }
-
-                const data = await response.json();
-                if (data.success) {
-                    alert('Balance updated successfully');
-                    loadUsers();
-                } else {
-                    throw new Error(data.message || 'Failed to update balance');
-                }
-            } catch (error) {
-                handleApiError(error, 'Failed to update balance. Please try again.');
             }
         }
 

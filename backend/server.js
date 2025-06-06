@@ -51,33 +51,40 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/earnings', earningRoutes);
-app.use('/api/withdraw', withdrawalRoutes);
+app.use('/api/withdrawals', withdrawalRoutes);
 app.use('/api/recharge', rechargeRoutes);
 app.use('/api/packages', packages);
-app.use('/api/referrals', referralRoutes);
+app.use('/api/referral', referralRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/contact', contactRoutes);
-app.use('/api/activities', activityRoutes);
+app.use('/api/activity', activityRoutes);
 app.use('/api/bonus', bonusRoutes);
 app.use('/api/vip', vipRoutes);
 app.use('/api/tasks', taskRoutes);
 
-// Serve index.html for all other routes
+// Serve index.html for all other routes (SPA support)
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-  res.status(500).json({
-    success: false,
-        error: 'Something went wrong!'
-  });
+    console.error('Error details:', {
+        message: err.message,
+        stack: err.stack,
+        path: req.path,
+        method: req.method
+    });
+    res.status(500).json({
+        success: false,
+        message: process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message,
+        path: req.path,
+        method: req.method
+    });
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.error('MongoDB connection error:', err));
 

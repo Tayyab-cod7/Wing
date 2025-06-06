@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Configuration
     const BASE_URL = window.location.hostname.includes('localhost')
         ? 'http://localhost:5000'
-        : `https://${window.location.hostname}`;
+        : 'https://wing-production-232c.up.railway.app';
 
     // Utility function to get full API URL
     function getApiUrl(endpoint) {

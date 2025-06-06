@@ -9,7 +9,8 @@ router.use((req, res, next) => {
     console.log('Admin route accessed:', {
         path: req.path,
         method: req.method,
-        hasAuthHeader: !!req.headers.authorization
+        hasAuthHeader: !!req.headers.authorization,
+        timestamp: new Date().toISOString()
     });
     next();
 });
@@ -19,8 +20,12 @@ router.use((req, res, next) => {
 // @access  Admin only
 router.get('/users', adminAuth, async (req, res) => {
     try {
+        console.log('Fetching users...');
         const users = await User.find()
-            .select('email username phone referralCode balance activePackage packageAmount referredBy referralCount isAdmin active');
+            .select('email username phone referralCode balance activePackage packageAmount referredBy referralCount isAdmin active')
+            .lean();
+        
+        console.log(`Found ${users.length} users`);
         
         res.status(200).json({
             success: true,

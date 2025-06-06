@@ -763,7 +763,7 @@
             if (!checkAuth()) return;
             
             try {
-                if (!usersTableBody) return; // Guard clause
+                if (!usersTableBody) return;
                 usersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading users...</td></tr>';
                 
                 const token = localStorage.getItem('token');
@@ -771,7 +771,13 @@
                     throw new Error('No authentication token found');
                 }
                 
-                const response = await fetch('/api/admin/users', {
+                // Get the base URL from the current window location
+                const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? ''  // Use relative path for local development
+                    : window.location.origin; // Use full origin for production
+                
+                console.log('Making request to:', `${baseUrl}/api/admin/users`);
+                const response = await fetch(`${baseUrl}/api/admin/users`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -780,7 +786,14 @@
                 });
                 
                 if (!response.ok) {
+                    console.error('Response not OK:', {
+                        status: response.status,
+                        statusText: response.statusText
+                    });
+                    
                     const errorData = await response.json().catch(() => ({}));
+                    console.error('Error data:', errorData);
+                    
                     if (response.status === 401) {
                         localStorage.removeItem('token');
                         localStorage.removeItem('user');

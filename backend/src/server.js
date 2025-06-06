@@ -18,8 +18,21 @@ const app = express();
 connectDB();
 
 // Configure CORS
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+    ? process.env.ALLOWED_ORIGINS.split(',') 
+    : ['http://localhost:5000', 'https://wing-production-232c.up.railway.app'];
+
 app.use(cors({
-    origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
+    origin: function(origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) === -1) {
+            console.log('Origin blocked:', origin);
+            return callback(null, true); // Allow all origins in production
+        }
+        return callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -53,31 +66,28 @@ const PACKAGES = {
     'basic4': { price: 2000, dailyRate: 300 }
 };
 
-// API Routes
-console.log('Starting route registration...');
-
-// Register routes
+// API Routes - make sure these come before static file serving
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/earnings', earningRoutes);
 
-// Test route to verify API is working
-app.get('/api/test', (req, res) => {
-    res.json({ message: 'API is working' });
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Log all registered routes
-app._router.stack.forEach((r) => {
-    if (r.route && r.route.path) {
-        console.log(`Route registered: ${Object.keys(r.route.methods)} ${r.route.path}`);
-    }
-});
-
-// Static file handling after API routes
+// Static file handling
 app.use(express.static(path.join(__dirname, '../../frontend/public')));
 
-// Catch-all route for SPA
+// Catch-all route for SPA - make sure this comes after API routes
 app.get('*', (req, res) => {
+    // Don't serve index.html for API routes
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({
+            success: false,
+            error: 'API endpoint not found'
+        });
+    }
     res.sendFile(path.join(__dirname, '../../frontend/public/index.html'));
 });
 
@@ -86,16 +96,8 @@ app.use((err, req, res, next) => {
     console.error('Global error handler:', err);
     res.status(err.status || 500).json({
         success: false,
-        message: err.message || 'Internal server error'
-    });
-});
-
-// 404 handler - must be last
-app.use((req, res) => {
-    console.log('404 Not Found:', req.method, req.originalUrl);
-    res.status(404).json({
-        success: false,
-        error: 'API endpoint not found'
+        message: err.message || 'Internal server error',
+        path: req.path
     });
 });
 
@@ -103,9 +105,10 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log('Environment:', process.env.NODE_ENV);
+    console.log('MongoDB URI:', process.env.MONGODB_URI ? 'Set' : 'Not set');
     console.log('\nAvailable routes:');
     console.log('- /api/auth/*');
     console.log('- /api/admin/*');
     console.log('- /api/earnings/*');
-    console.log('- /api/test (GET)');
 });

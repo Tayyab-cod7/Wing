@@ -762,7 +762,9 @@
                 }
 
                 const data = await response.json();
-                if (!data.success) {
+                console.log('User data response:', data); // Debug log
+
+                if (!data.success || !data.user) {
                     throw new Error(data.message || 'Failed to load user data');
                 }
 
@@ -775,14 +777,28 @@
             }
         }
 
+        // Function to safely get element and set text content
+        function setElementText(elementId, text) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = text;
+            }
+        }
+
         // Function to display user data
         function displayUserData(user) {
-            document.getElementById('username').textContent = user.username;
-            document.getElementById('phone').textContent = user.phone;
-            document.getElementById('referralCode').textContent = user.referralCode;
-            document.getElementById('referredBy').textContent = user.referredBy || 'None';
-            document.getElementById('referralCount').textContent = user.referralCount || '0';
-            document.getElementById('balance').textContent = `$${user.balance || '0'}`;
+            if (!user) {
+                console.error('No user data provided to displayUserData');
+                return;
+            }
+
+            // Safely set text content for each element
+            setElementText('username', user.username || 'N/A');
+            setElementText('phone', user.phone || 'N/A');
+            setElementText('referralCode', user.referralCode || 'N/A');
+            setElementText('referredBy', user.referredBy || 'None');
+            setElementText('referralCount', user.referralCount || '0');
+            setElementText('balance', `$${user.balance || '0'}`);
             
             const statusBadge = document.getElementById('statusBadge');
             if (statusBadge) {

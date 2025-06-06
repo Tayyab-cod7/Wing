@@ -66,6 +66,10 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
+app.get('/api', (req, res) => {
+  res.json({ success: true, message: 'API root' });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);

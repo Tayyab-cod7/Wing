@@ -1,3 +1,13 @@
+// Configuration
+const BASE_URL = window.location.hostname.includes('localhost')
+    ? 'http://localhost:5000'
+    : `https://${window.location.hostname}`;
+
+// Utility function to get full API URL
+function getApiUrl(endpoint) {
+    return `${BASE_URL}/api${endpoint}`;
+}
+
 // Function to show login form
 function showLoginForm() {
     document.getElementById('signup-form').style.display = 'none';
@@ -53,12 +63,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
 
         console.log('Sending registration data:', registrationData);
 
-        // Get the current hostname and port
-        const currentHost = window.location.hostname;
-        const currentPort = '5000'; // Keep the backend port
-        const API_URL = `http://${currentHost}:${currentPort}`;
-
-        const response = await fetch(`${API_URL}/api/auth/register`, {
+        const response = await fetch(getApiUrl('/auth/register'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -134,12 +139,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 
         console.log('Attempting login with:', { phone, password: '****' });
 
-        // Get the current hostname and port
-        const currentHost = window.location.hostname;
-        const currentPort = '5000'; // Keep the backend port
-        const API_URL = `http://${currentHost}:${currentPort}`;
-
-        const response = await fetch(`${API_URL}/api/auth/login`, {
+        const response = await fetch(getApiUrl('/auth/login'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

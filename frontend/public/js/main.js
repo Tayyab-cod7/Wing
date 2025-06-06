@@ -21,8 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // API Base URL
-    const API_URL = 'http://localhost:5000';
+    // Configuration
+    const BASE_URL = window.location.hostname.includes('localhost')
+        ? 'http://localhost:5000'
+        : `https://${window.location.hostname}`;
+
+    // Utility function to get full API URL
+    function getApiUrl(endpoint) {
+        return `${BASE_URL}/api${endpoint}`;
+    }
 
     // Input validation functions
     const validatePhoneNumber = (phone) => {
@@ -195,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             console.log('Sending registration data:', formData);
-            const response = await fetch(`${API_URL}/api/auth/register`, {
+            const response = await fetch(getApiUrl('/auth/register'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -262,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 try {
                     // Admin login through API
-                    const response = await fetch(`${API_URL}/api/auth/login`, {
+                    const response = await fetch(getApiUrl('/auth/login'), {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -303,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Regular user login
-            const response = await fetch(`${API_URL}/api/auth/login`, {
+            const response = await fetch(getApiUrl('/auth/login'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

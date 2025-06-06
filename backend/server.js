@@ -65,6 +65,11 @@ app.get('/', (req, res) => {
   });
 });
 
+// API root route
+app.get('/api', (req, res) => {
+  res.json({ success: true, message: 'API root' });
+});
+
 // API Routes
 app.get('/api', (req, res) => {
   res.json({ success: true, message: 'API root' });

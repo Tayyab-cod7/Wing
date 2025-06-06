@@ -51,6 +51,11 @@ console.log('Starting route registration...');
 app.use('/api/auth', authRoutes);
 app.use('/api/earnings', earningRoutes);
 
+// API root route
+app.get('/api', (req, res) => {
+  res.json({ success: true, message: 'API root' });
+});
+
 // Test route to verify API is working
 app.get('/api/test', (req, res) => {
     res.json({ message: 'API is working' });

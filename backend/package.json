@@ -2,10 +2,10 @@
   "name": "wing-system",
   "version": "1.0.0",
   "description": "Wing System - A comprehensive authentication and management system",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon src/server.js"
   },
   "keywords": [],
   "author": "",

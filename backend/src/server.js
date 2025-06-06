@@ -72,11 +72,11 @@ app._router.stack.forEach((r) => {
 });
 
 // Static file handling after API routes
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../../frontend/public')));
 
 // Catch-all route for SPA
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/basic.html'));
+    res.sendFile(path.join(__dirname, '../../frontend/public/index.html'));
 });
 
 // Error handling middleware

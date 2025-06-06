@@ -9,14 +9,13 @@ COPY nginx.conf /etc/nginx/nginx.conf.template
 # Copy the built files
 COPY public /app/public
 
-# Make sure nginx can access the files
-RUN chown -R nginx:nginx /app && chmod -R 755 /app
+# Copy start script
+COPY start.sh /start.sh
 
-# Create start script
-RUN echo '#!/bin/bash\n\
-PORT="${PORT:-80}"\n\
-envsubst \'${PORT}\' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf\n\
-nginx -g "daemon off;"' > /start.sh && chmod +x /start.sh
+# Make sure nginx can access the files and make start script executable
+RUN chown -R nginx:nginx /app && \
+    chmod -R 755 /app && \
+    chmod +x /start.sh
 
 # Expose the port nginx is running on
 EXPOSE 80

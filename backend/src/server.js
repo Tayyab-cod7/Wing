@@ -17,59 +17,32 @@ const app = express();
 // Connect to database
 connectDB();
 
-// Configure CORS
-const allowedOrigins = process.env.ALLOWED_ORIGINS 
-    ? process.env.ALLOWED_ORIGINS.split(',') 
-    : [
-        'http://localhost:5000',
+// CORS configuration
+const corsOptions = {
+    origin: [
+        'https://amiable-essence-production.up.railway.app',
+        'https://wing-production-232c.up.railway.app',
         'http://localhost:3000',
-        'https://wing-production-232c.up.railway.app'
-    ];
-
-// Force HTTPS in production
-app.use((req, res, next) => {
-    if (process.env.NODE_ENV === 'production' && !req.secure && req.get('x-forwarded-proto') !== 'https') {
-        return res.redirect('https://' + req.get('host') + req.url);
-    }
-    next();
-});
-
-app.use(cors({
-    origin: function(origin, callback) {
-        // Allow requests with no origin (like mobile apps, curl requests, or same-origin)
-        if (!origin) return callback(null, true);
-        
-        console.log('Request from origin:', origin);
-        // In production, allow all origins
-        if (process.env.NODE_ENV === 'production') {
-            return callback(null, true);
-        }
-        
-        // In development, check against allowedOrigins
-        if (allowedOrigins.indexOf(origin) === -1) {
-            return callback(new Error('Not allowed by CORS'));
-        }
-        return callback(null, true);
-    },
+        'http://localhost:5000'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-    preflightContinue: true,
-    optionsSuccessStatus: 204
-}));
+    optionsSuccessStatus: 200
+};
+
+// Apply CORS with configuration
+app.use(cors(corsOptions));
 
 // Security headers
 app.use((req, res, next) => {
-    // Force HTTPS
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-    // Prevent clickjacking
-    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-    // XSS protection
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    // Prevent MIME type sniffing
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    // Referrer policy
-    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
     next();
 });
 
@@ -162,7 +135,7 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log('Environment:', process.env.NODE_ENV);
     console.log('MongoDB URI:', process.env.MONGODB_URI ? 'Set' : 'Not set');
-    console.log('Allowed Origins:', allowedOrigins);
+    console.log('Allowed Origins:', corsOptions.origin);
     console.log('\nAvailable routes:');
     console.log('- /api/auth/*');
     console.log('- /api/admin/*');

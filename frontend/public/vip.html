@@ -751,294 +751,159 @@
     </div>
 
     <script>
-        const API_URL = window.location.origin; // Use the origin of the frontend
+        // Configuration
+        const BASE_URL = window.location.hostname.includes('localhost')
+            ? 'http://localhost:5000'
+            : 'https://wing-production-232c.up.railway.app';
 
+        // Utility function to get full API URL
+        function getApiUrl(endpoint) {
+            return `${BASE_URL}/api${endpoint}`;
+        }
+
+        // Function to format currency
+        function formatCurrency(amount) {
+            return `$${parseFloat(amount || 0).toFixed(2)}`;
+        }
+
+        // Function to load user data and VIP status
         async function loadUserDataAndVIPStatus() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'index.html';
-                return;
-            }
-
             try {
-                const response = await fetch(`${API_URL}/api/auth/me`, {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                // Force HTTPS in production
+                if (window.location.hostname !== 'localhost' && window.location.protocol !== 'https:') {
+                    window.location.href = window.location.href.replace('http:', 'https:');
+                    return;
+                }
+
+                const response = await fetch(getApiUrl('/auth/me'), {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json'
+                        'Content-Type': 'application/json'
                     }
                 });
 
                 if (!response.ok) {
                     if (response.status === 401) {
-                        localStorage.clear();
-                        window.location.href = 'index.html';
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        window.location.href = '/login.html';
                         return;
                     }
                     throw new Error('Failed to load user data and VIP status');
                 }
 
-                const data = await response.json();
+                const responseData = await response.json();
+                console.log('User data response:', responseData);
 
-                // Log the data to the console for debugging
-                console.log('API Response Data:', data);
-
-                if (data.success && data.data) {
-                    // Update balance display
-                    const balanceElement = document.getElementById('currentBalance');
-                    if (balanceElement && typeof data.data.balance === 'number') {
-                        balanceElement.textContent = `$ ${data.data.balance.toFixed(2)}`;
-                    } else if (balanceElement) {
-                        balanceElement.textContent = '$ 0.00';
-                    }
-
-                    // Update VIP status display (assuming VIP status is in data.data)
-                    if (data.data.vip) { // Assuming VIP status is nested under 'vip' or similar
-                         updateVIPDisplay(data.data.vip); // Pass the relevant part of the data
-                    } else {
-                         // Handle case where no VIP data is available or user is not VIP
-                         updateVIPDisplay(null); // Indicate no active VIP
-                    }
-
-                    // Disable all Buy buttons if user has an active package
-                    const userLevel = data.data && data.data.level ? data.data.level : 'None';
-                    if (userLevel && userLevel !== 'None') {
-                        document.querySelectorAll('.package-card:not([style*="opacity"]) .upgrade-btn').forEach(button => {
-                            button.disabled = true;
-                            button.textContent = 'Active Package';
-                            button.style.opacity = '0.5';
-                            button.style.background = '#bdbdbd';
-                            button.style.color = '#888';
-                            button.style.cursor = 'not-allowed';
-                        });
-                    }
-
-                } else {
-                    throw new Error(data.error || 'Failed to load user data');
+                if (!responseData.success || !responseData.data) {
+                    throw new Error(responseData.message || 'Failed to load user data and VIP status');
                 }
 
+                displayUserData(responseData.data);
+                return responseData.data;
             } catch (error) {
                 console.error('Error loading user data and VIP status:', error);
-                 // Optionally display an error message on the page
+                handleApiError(error);
+                throw error;
             }
         }
 
-        function updateVIPDisplay(vipData) {
-            const cards = document.querySelectorAll('.package-card');
-            cards.forEach(card => {
-                const currentPlan = card.querySelector('.current-plan');
-                if (currentPlan) {
-                    currentPlan.remove();
-                }
-                 // Also reset upgrade button state
-                 const upgradeBtn = card.querySelector('.upgrade-btn');
-                 if (upgradeBtn && !card.style.opacity) { // Don't enable if opacity is set (Coming Soon)
-                      upgradeBtn.textContent = 'Buy';
-                      upgradeBtn.disabled = false;
-                      upgradeBtn.style.opacity = '1';
-                 }
-                 // Remove timer if exists
-                 const timerDiv = card.querySelector('.package-timer');
-                 if (timerDiv) timerDiv.remove();
-            });
-
-            // If there's active VIP data
-            if (vipData && vipData.currentPlan) { // Adjust condition based on actual data structure
-                // Find the card matching the current plan. You might need a data attribute or class that maps to the plan type.
-                // For now, let's assume the plan type is part of the card's classes or data attributes.
-                // Example: <div class="package-card gold pro-plane-03">...</div>
-                // You would need to adjust the selector based on your HTML structure.
-                // As a fallback, let's try matching the package title text content.
-                const currentPlanTitle = vipData.currentPlan; // Adjust based on actual data
-                 let currentCard = null;
-                 cards.forEach(card => {
-                      const titleElement = card.querySelector('.package-title');
-                      if (titleElement && titleElement.textContent.trim() === currentPlanTitle) {
-                           currentCard = card;
-                      }
-                 });
-
-                if (currentCard) {
-                    const currentPlanDiv = document.createElement('div');
-                    currentPlanDiv.className = 'current-plan';
-                    currentPlanDiv.textContent = 'Current Plan';
-                    currentCard.appendChild(currentPlanDiv);
-
-                    const upgradeBtn = currentCard.querySelector('.upgrade-btn');
-                    if (upgradeBtn) {
-                        upgradeBtn.textContent = 'Current Plan';
-                        upgradeBtn.disabled = true;
-                        upgradeBtn.style.opacity = '0.7';
-                    }
-                    // Add timer below the button
-                    let timerDiv = document.createElement('div');
-                    timerDiv.className = 'package-timer';
-                    timerDiv.style.marginTop = '10px';
-                    timerDiv.style.fontWeight = 'bold';
-                    timerDiv.style.color = '#ffb300';
-                    timerDiv.textContent = 'Time left: 01:00';
-                    upgradeBtn.parentNode.insertBefore(timerDiv, upgradeBtn.nextSibling);
-                    startPackageTimer(timerDiv);
-                }
-            } else {
-                 // No active VIP plan, ensure all upgrade buttons are enabled (except Coming Soon)
-                 cards.forEach(card => {
-                      if (!card.style.opacity) { // Check if it's not a 'Coming Soon' card
-                           const upgradeBtn = card.querySelector('.upgrade-btn');
-                           if (upgradeBtn) {
-                               upgradeBtn.textContent = 'Buy';
-                               upgradeBtn.disabled = false;
-                               upgradeBtn.style.opacity = '1';
-                           }
-                      }
-                      // Remove timer if exists
-                      const timerDiv = card.querySelector('.package-timer');
-                      if (timerDiv) timerDiv.remove();
-                 });
+        // Function to safely get element and set text content
+        function setElementText(elementId, text) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = text;
             }
         }
 
-        // Timer logic
-        let packageTimerInterval = null;
-        function startPackageTimer(timerDiv) {
-            if (packageTimerInterval) clearInterval(packageTimerInterval);
-            let timeLeft = 60; // 1 minute in seconds
-            function updateTimer() {
-                const min = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-                const sec = String(timeLeft % 60).padStart(2, '0');
-                timerDiv.textContent = `Time left: ${min}:${sec}`;
+        // Function to display user data
+        function displayUserData(user) {
+            if (!user) {
+                console.error('No user data provided to displayUserData');
+                return;
             }
-            updateTimer();
-            packageTimerInterval = setInterval(async () => {
-                timeLeft--;
-                updateTimer();
-                if (timeLeft <= 0) {
-                    clearInterval(packageTimerInterval);
-                    timerDiv.textContent = 'Cancelling package...';
-                    // Call backend to cancel package
-                    const token = localStorage.getItem('token');
-                    try {
-                        const response = await fetch('/api/vip/cancel', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
-                            }
-                        });
-                        const data = await response.json();
-                        if (data.success) {
-                            timerDiv.textContent = 'Package cancelled.';
-                            setTimeout(() => { loadUserDataAndVIPStatus(); }, 1000);
-                        } else {
-                            timerDiv.textContent = 'Failed to cancel package.';
-                        }
-                    } catch (error) {
-                        timerDiv.textContent = 'Failed to cancel package.';
-                    }
-                }
-            }, 1000);
+
+            // Update user info
+            setElementText('username', user.username || 'N/A');
+            setElementText('currentBalance', formatCurrency(user.balance));
+            setElementText('referralCount', user.referralCount || '0');
+            
+            // Update VIP status and related info
+            const vipLevel = user.vipLevel || 0;
+            setElementText('vipLevel', `VIP ${vipLevel}`);
+            
+            // Update progress bars and other VIP-related elements
+            updateVIPProgress(user);
         }
 
-        async function upgradePackage(packageType, packagePrice) {
-             console.log('Attempting to upgrade to package:', packageType);
+        // Function to update VIP progress
+        function updateVIPProgress(user) {
+            const vipLevel = user.vipLevel || 0;
+            const nextVipRequirements = getVIPRequirements(vipLevel + 1);
+            
+            // Update progress bars
+            const referralProgress = document.getElementById('referralProgress');
+            const balanceProgress = document.getElementById('balanceProgress');
+            
+            if (referralProgress && nextVipRequirements) {
+                const referralPercentage = (user.referralCount / nextVipRequirements.referrals) * 100;
+                referralProgress.style.width = `${Math.min(referralPercentage, 100)}%`;
+                setElementText('referralRequirement', 
+                    `${user.referralCount || 0}/${nextVipRequirements.referrals} Referrals`);
+            }
+            
+            if (balanceProgress && nextVipRequirements) {
+                const balancePercentage = (user.balance / nextVipRequirements.balance) * 100;
+                balanceProgress.style.width = `${Math.min(balancePercentage, 100)}%`;
+                setElementText('balanceRequirement',
+                    `${formatCurrency(user.balance)}/${formatCurrency(nextVipRequirements.balance)} Balance`);
+            }
+        }
 
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'index.html';
+        // Function to get VIP level requirements
+        function getVIPRequirements(level) {
+            const requirements = {
+                1: { referrals: 5, balance: 100 },
+                2: { referrals: 15, balance: 300 },
+                3: { referrals: 30, balance: 600 },
+                4: { referrals: 50, balance: 1000 },
+                5: { referrals: 100, balance: 2000 }
+            };
+            return requirements[level] || null;
+        }
+
+        // Function to handle API errors
+        function handleApiError(error) {
+            console.error('API Error:', error);
+            if (error.status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/login.html';
+                return;
+            }
+            // You can add more specific error handling here
+        }
+
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Force HTTPS in production
+            if (window.location.hostname !== 'localhost' && window.location.protocol !== 'https:') {
+                window.location.href = window.location.href.replace('http:', 'https:');
                 return;
             }
 
             try {
-                // Clear any existing task timer state
-                localStorage.removeItem('taskResetEndTime');
-                
-                const response = await fetch(`${API_URL}/api/vip/upgrade`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ package: packageType })
-                });
-
-                const data = await response.json();
-                if (data.success) {
-                    alert('Successfully upgraded to ' + packageType + ' VIP!');
-                    window.location.href = 'home.html';
-                } else {
-                    alert(data.message || 'Failed to upgrade package');
-                }
+                await loadUserDataAndVIPStatus();
             } catch (error) {
-                console.error('Error upgrading package:', error);
-                alert('Failed to upgrade package. Please try again.');
+                console.error('Error during initialization:', error);
             }
-        }
-
-        // Modify the upgrade buttons to add a click listener
-        document.querySelectorAll('.package-card:not([style*="opacity"]) .upgrade-btn').forEach(button => {
-            const packageCard = button.closest('.package-card');
-            const packageTitleElement = packageCard ? packageCard.querySelector('.package-title') : null;
-            const packagePriceElement = packageCard ? packageCard.querySelector('.package-price') : null;
-            const featuresList = packageCard ? packageCard.querySelectorAll('.package-features li') : [];
-            const packageType = packageTitleElement ? packageTitleElement.textContent.trim() : null;
-            const packagePriceText = packagePriceElement ? packagePriceElement.textContent.trim() : '0 USDT';
-            const packagePrice = parseFloat(packagePriceText.replace(/[^0-9.-]+/g, " "));
-            let dailyIncome = '', validity = '', returnDuration = '';
-            if (featuresList.length > 0) {
-                featuresList.forEach(li => {
-                    if (li.textContent.includes('Daily Income')) dailyIncome = li.textContent.split(':')[1].trim();
-                    if (li.textContent.includes('Validity')) validity = li.textContent.split(':')[1].trim();
-                    if (li.textContent.includes('Return Duration')) returnDuration = li.textContent.split(':')[1].trim();
-                });
-            }
-            if (packageType && packageType !== 'Coming Soon' && !isNaN(packagePrice)) {
-                button.addEventListener('click', () => {
-                    const currentBalanceElement = document.getElementById('currentBalance');
-                    const currentBalanceText = currentBalanceElement ? currentBalanceElement.textContent.trim() : '$ 0.00';
-                    const currentBalance = parseFloat(currentBalanceText.replace(/[^0-9.-]+/g, " "));
-                    if (!isNaN(currentBalance) && currentBalance >= packagePrice) {
-                        // Show modal with package details
-                        document.getElementById('modalPackageTitle').textContent = packageType;
-                        document.getElementById('modalPackagePrice').textContent = packagePriceText;
-                        document.getElementById('modalPackageIncome').textContent = dailyIncome;
-                        document.getElementById('modalPackageValidity').textContent = validity;
-                        document.getElementById('modalPackageReturn').textContent = returnDuration;
-                        document.getElementById('buyModal').style.display = 'flex';
-                        // Store packageType and price for confirmation
-                        document.getElementById('confirmBuyBtn').dataset.packageType = packageType;
-                        document.getElementById('confirmBuyBtn').dataset.packagePrice = packagePrice;
-                    } else {
-                        alert('Insufficient balance. Please recharge.');
-                        window.location.href = 'recharge.html';
-                    }
-                });
-            }
-        });
-
-        // Modal logic
-        const buyModal = document.getElementById('buyModal');
-        const closeBuyModal = document.querySelector('.close-buy-modal');
-        const cancelBuyBtn = document.getElementById('cancelBuyBtn');
-        closeBuyModal.onclick = cancelBuyBtn.onclick = function() {
-            buyModal.style.display = 'none';
-        };
-        // Confirm buy
-        document.getElementById('confirmBuyBtn').onclick = function() {
-            const packageType = this.dataset.packageType;
-            const packagePrice = parseFloat(this.dataset.packagePrice);
-            buyModal.style.display = 'none';
-            upgradePackage(packageType, packagePrice);
-        };
-        // Close modal on outside click
-        window.onclick = function(event) {
-            if (event.target === buyModal) {
-                buyModal.style.display = 'none';
-            }
-        };
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadUserDataAndVIPStatus(); // Load data and VIP status on page load
         });
     </script>
 </body>

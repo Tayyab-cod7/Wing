@@ -762,6 +762,10 @@
 
         // Utility function to get full API URL
         function getApiUrl(endpoint) {
+            // Force HTTPS in production
+            if (!window.location.hostname.includes('localhost')) {
+                return `https://wing-production-232c.up.railway.app/api${endpoint}`;
+            }
             return `${BASE_URL}/api${endpoint}`;
         }
 
@@ -940,7 +944,7 @@
                 // Clear any existing task timer state
                 localStorage.removeItem('taskResetEndTime');
                 
-                const response = await fetch(getApiUrl('/purchase'), {
+                const response = await fetch(getApiUrl('/earning/purchase'), {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -949,9 +953,14 @@
                     credentials: 'include',
                     body: JSON.stringify({ 
                         amount: packagePrice,
-                        packageId: packageType
+                        packageId: packageType.toLowerCase().replace(/\s+/g, '')
                     })
                 });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to upgrade package');
+                }
 
                 const data = await response.json();
                 if (data.success) {
@@ -962,7 +971,7 @@
                 }
             } catch (error) {
                 console.error('Error upgrading package:', error);
-                alert('Failed to upgrade package. Please try again.');
+                alert(error.message || 'Failed to upgrade package. Please try again.');
             }
         }
 

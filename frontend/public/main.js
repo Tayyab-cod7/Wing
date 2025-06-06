@@ -4,6 +4,9 @@ function showLoginForm() {
     document.getElementById('login-form').style.display = 'block';
 }
 
+// Get the API URL from config
+const API_URL = window.APP_CONFIG.API_URL;
+
 // Handle signup form submission
 document.getElementById('signupForm').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -53,7 +56,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
 
         console.log('Sending registration data:', registrationData);
 
-        const response = await fetch('http://localhost:5000/api/auth/register', {
+        const response = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

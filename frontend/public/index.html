@@ -496,6 +496,22 @@
         </div>
     </main>
 
+    <!-- Configuration -->
+    <script>
+        // Check if we're in production based on the URL
+        const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+        // Dynamically load the correct configuration file
+        const configScript = document.createElement('script');
+        configScript.src = isProduction ? '/js/config.production.js' : '/js/config.local.js';
+        document.head.appendChild(configScript);
+    </script>
+    
+    <!-- Your other scripts -->
+    <script>
+        // Example of using the configuration
+        const apiUrl = window.APP_CONFIG.API_URL;
+        const baseUrl = window.APP_CONFIG.BASE_URL;
+    </script>
     <script>
         // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {

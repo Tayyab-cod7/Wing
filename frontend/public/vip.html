@@ -755,10 +755,7 @@
     </div>
 
     <script>
-        // Configuration
-        const BASE_URL = window.location.hostname.includes('localhost')
-            ? 'http://localhost:5000'
-            : 'https://wing-production-232c.up.railway.app';
+        const API_URL = 'https://soothing-exploration-production.up.railway.app'; // Use full backend URL for deployment
 
         // Utility function to get full API URL
         function getApiUrl(endpoint) {
@@ -766,7 +763,7 @@
             if (!window.location.hostname.includes('localhost')) {
                 return `https://wing-production-232c.up.railway.app/api${endpoint}`;
             }
-            return `${BASE_URL}/api${endpoint}`;
+            return `${API_URL}/api${endpoint}`;
         }
 
         // Function to format currency

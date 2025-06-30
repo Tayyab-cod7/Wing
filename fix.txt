@@ -1,7 +1,11 @@
 refferal earning 
 
+admin login 
+
 admin pages 
 
 Online all pages 
 
-Done : sign up ,
+favicon for pages 
+
+Done : sign up.html , login.html , me.html , terms.html , message.html

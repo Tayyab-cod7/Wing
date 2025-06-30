@@ -86,9 +86,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/earnings', earningRoutes);
 
-// Static file handling
-app.use(express.static(path.join(__dirname, '../../frontend/public')));
-
 // API 404 handler for /api routes
 app.all('/api/*', (req, res) => {
     console.log('API 404:', req.method, req.path);
@@ -98,18 +95,6 @@ app.all('/api/*', (req, res) => {
         path: req.path,
         method: req.method
     });
-});
-
-// Catch-all route for SPA - make sure this comes after API routes
-app.get('*', (req, res) => {
-    // Don't serve index.html for API routes
-    if (req.path.startsWith('/api/')) {
-        return res.status(404).json({
-            success: false,
-            error: 'API endpoint not found'
-        });
-    }
-    res.sendFile(path.join(__dirname, '../../frontend/public/index.html'));
 });
 
 // Error handling middleware

@@ -916,35 +916,43 @@
                     throw new Error('Failed to load user data');
                 }
 
-                const userData = await response.json();
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const userData = await response.json();
 
-                if (userData.success && userData.data) {
-                    const balanceElement = document.getElementById('currentBalance');
-                    if (balanceElement && typeof userData.data.balance === 'number') {
-                        balanceElement.textContent = `$ ${userData.data.balance.toFixed(2)}`;
-                    } else if (balanceElement) {
-                        balanceElement.textContent = '$ 0.00';
+                    if (userData.success && userData.data) {
+                        const balanceElement = document.getElementById('currentBalance');
+                        if (balanceElement && typeof userData.data.balance === 'number') {
+                            balanceElement.textContent = `$ ${userData.data.balance.toFixed(2)}`;
+                        } else if (balanceElement) {
+                            balanceElement.textContent = '$ 0.00';
+                        }
+
+                        const usernameElement = document.getElementById('username');
+                        let currentUsername = null; // Variable to store the fetched username
+                        if (usernameElement && userData.data.username) {
+                            currentUsername = userData.data.username; // Store username
+                            usernameElement.textContent = `User : ${currentUsername}`;
+                        }
+
+                        const invitationCodeElement = document.getElementById('invitationCode');
+                        if (invitationCodeElement && userData.data.referralCode) {
+                            invitationCodeElement.textContent = `Referral code : ${userData.data.referralCode}`;
+                        } else if (invitationCodeElement && userData.data.invitationCode) {
+                            invitationCodeElement.textContent = `Referral code : ${userData.data.invitationCode}`;
+                        }
+
+                        // Now, check bonus status from the server
+                        checkBonusStatusFromServer(token);
+
+                    } else {
+                        throw new Error(userData.error || 'Failed to load user data');
                     }
-
-                    const usernameElement = document.getElementById('username');
-                    let currentUsername = null; // Variable to store the fetched username
-                    if (usernameElement && userData.data.username) {
-                        currentUsername = userData.data.username; // Store username
-                        usernameElement.textContent = `User : ${currentUsername}`;
-                    }
-
-                    const invitationCodeElement = document.getElementById('invitationCode');
-                    if (invitationCodeElement && userData.data.referralCode) {
-                        invitationCodeElement.textContent = `Referral code : ${userData.data.referralCode}`;
-                    } else if (invitationCodeElement && userData.data.invitationCode) {
-                        invitationCodeElement.textContent = `Referral code : ${userData.data.invitationCode}`;
-                    }
-
-                    // Now, check bonus status from the server
-                    checkBonusStatusFromServer(token);
 
                 } else {
-                    throw new Error(userData.error || 'Failed to load user data');
+                    const text = await response.text();
+                    console.error('API did not return JSON:', text);
+                    throw new Error('API did not return JSON');
                 }
 
             } catch (error) {
@@ -1192,7 +1200,10 @@
         }
 
         // Close popup when clicking overlay
-        document.getElementById('messageOverlay').addEventListener('click', closeMessagePopup);
+        const messageOverlay = document.getElementById('messageOverlay');
+        if (messageOverlay) {
+            messageOverlay.addEventListener('click', closeMessagePopup);
+        }
 
         // Example messages (you can remove these in production)
         setTimeout(() => {

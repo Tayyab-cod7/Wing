@@ -164,24 +164,24 @@ const login = async (req, res) => {
     try {
         const { phone, password } = req.body;
         console.log('Login attempt for phone:', phone);
-
         // Validate input
         if (!phone || !password) {
+            console.log('Missing phone or password');
             return res.status(400).json({
                 success: false,
                 error: 'Please provide both phone and password'
             });
         }
-
         // Clean phone number
         const cleanedPhone = phone.replace(/[^0-9]/g, '');
+        console.log('Cleaned phone:', cleanedPhone);
         if (cleanedPhone.length < 7 || cleanedPhone.length > 15) {
+            console.log('Invalid phone number format');
             return res.status(400).json({
                 success: false,
                 error: 'Invalid phone number format'
             });
         }
-
         // Find user by cleaned phone number
         const user = await User.findOne({ phone: cleanedPhone }).select('+password');
         if (!user) {
@@ -191,9 +191,10 @@ const login = async (req, res) => {
                 error: 'Invalid credentials'
             });
         }
-
+        console.log('User found:', user.phone, 'isAdmin:', user.isAdmin);
         // Check password
         const isMatch = await user.matchPassword(password);
+        console.log('Password match result:', isMatch);
         if (!isMatch) {
             console.log('Password mismatch for phone:', cleanedPhone);
             return res.status(401).json({
@@ -201,13 +202,10 @@ const login = async (req, res) => {
                 error: 'Invalid credentials'
             });
         }
-
         // Generate token
         const token = user.getSignedJwtToken();
-
         // Remove password from response
         user.password = undefined;
-
         res.status(200).json({
             success: true,
             token,

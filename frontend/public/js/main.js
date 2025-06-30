@@ -161,12 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
             referralCode: document.getElementById('referralCode').value.trim()
         };
 
-        // Prevent signup with admin phone number
-        if (formData.phone === '03151251123') {
-            showError('This phone number is reserved for admin use only. Please use a different number.');
-            return;
-        }
-
         // Check terms and conditions
         const termsCheckbox = document.getElementById('termsCheckbox');
         if (!termsCheckbox || !termsCheckbox.checked) {

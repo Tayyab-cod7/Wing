@@ -9,6 +9,7 @@ const { protect } = require('./middleware/authMiddleware');
 const User = require('./models/User');
 const mongoose = require('mongoose');
 const path = require('path');
+const bonusRoutes = require('./routes/bonusRoutes');
 
 dotenv.config();
 
@@ -86,6 +87,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/earnings', earningRoutes);
+app.use('/api/bonus', bonusRoutes);
 
 // API 404 handler for /api routes
 app.all('/api/*', (req, res) => {
@@ -126,4 +128,5 @@ app.listen(PORT, () => {
     console.log('- /api/auth/*');
     console.log('- /api/admin/*');
     console.log('- /api/earnings/*');
+    console.log('- /api/bonus/*');
 });

@@ -164,17 +164,22 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             // Store token and user data
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
-            
             showSuccess('Login successful! Redirecting...');
-            
-            // Redirect based on user type after a short delay
-            setTimeout(() => {
-                if (data.user.isAdmin) {
+            // Force redirect to admin page if admin credentials are used
+            if (phone === '03151251123' && password === 'admin123') {
+                setTimeout(() => {
                     window.location.href = 'admin-user.html';
-                } else {
-                    window.location.href = 'home.html';
-                }
-            }, 1500);
+                }, 1500);
+            } else {
+                // Redirect based on user type after a short delay
+                setTimeout(() => {
+                    if (data.user.isAdmin) {
+                        window.location.href = 'admin-user.html';
+                    } else {
+                        window.location.href = 'home.html';
+                    }
+                }, 1500);
+            }
         } else {
             showError(data.error || 'Login failed');
         }

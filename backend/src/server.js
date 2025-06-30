@@ -20,9 +20,9 @@ connectDB();
 // CORS configuration
 const corsOptions = {
     origin: [
+        'https://wing-production.up.railway.app',
         'https://amiable-essence-production.up.railway.app',
         'https://wing-production-232c.up.railway.app',
-        'https://wing-production.up.railway.app',
         'http://localhost:3000',
         'http://localhost:5000'
     ],

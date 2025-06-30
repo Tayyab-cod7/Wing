@@ -1,5 +1,7 @@
-first if i delete the user the refferal cocunt does not drop 
-
 refferal earning 
 
 admin pages 
+
+Online all pages 
+
+Done : Index.html , home.html , Terms.html , vip.html 
